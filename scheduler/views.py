@@ -1,6 +1,14 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 
+coloumns =[
+    'class',
+    'room',
+    'location',
+    'credits',
+    'hours'
+]
+
 data = [
     {
         'class':"Computer Science 1",
