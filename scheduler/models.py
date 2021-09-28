@@ -45,7 +45,6 @@ class Meeting_Times(models.Model):
 
 # Rooms table
 class Rooms(models.Model):
-
     campus = models.TextField()
     building = models.TextField()
     room_num = models.TextField()
