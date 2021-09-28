@@ -61,3 +61,5 @@ class Instructors(models.Model):
     department = models.CharField(max_length=4)
     schedule = models.JSONField()
 
+def fields(self):
+    return [ f.name for f in self._meta.fields + self._meta.many_to_many ]

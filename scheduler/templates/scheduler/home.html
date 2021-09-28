@@ -21,24 +21,20 @@
                             <thead>
                                 <tr>
                                     <th style="display: none;">#</th>
-                                    <th>Course name</th>
-                                    <th>Room number</th>
-                                    <th>Time</th>
-                                    <th>Location</th>
-                                    <th>Credits</th>
-                                    <th>Hours</th>
+                                    {% for y in col %}
+                                        <th>{{y}}</th> 
+                                    {% endfor %}
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for x in input %}
                                 <tr>
-                                    <td class="pt-3-half" contenteditable="true">{{x.class}}</td>
-                                    <td class="pt-3-half" contenteditable="true">{{x.room}}</td>
-                                    <td class="pt-3-half" contenteditable="true">{{x.time}}</td>
-                                    <td class="pt-3-half" contenteditable="true">{{x.location}}</td>
-                                    <td class="pt-3-half" contenteditable="true">{{x.credits}}</td>
-                                    <td class="pt-3-half" contenteditable="true">{{x.hours}}</td>
-                                    </tr>
+                                    {% for y in col %}
+                                        {% with 'x.'|add:y as tmp %}
+                                        <td class="pt-3-half" contenteditable="true"> {{ tmp }} </td>
+                                        {% endwith %}
+                                    {% endfor %}
+                                </tr>
                                 {% endfor %}
                             </tbody>
                         </table>

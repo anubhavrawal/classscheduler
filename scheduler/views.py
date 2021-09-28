@@ -1,5 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.contrib.auth.models import User
+from scheduler.models import Instructors
+from scheduler.models import fields
 
 coloumns =[
     'class',
@@ -8,6 +11,10 @@ coloumns =[
     'credits',
     'hours'
 ]
+
+
+data2 = list(Instructors.objects.values())
+colums_info = fields(Instructors)
 
 data = [
     {
@@ -31,6 +38,7 @@ data = [
 # Create your views here.
 def main_page(request):
     context = {
-        'input': data
+        'input': data2,
+        'col': colums_info
     }
     return render(request, 'scheduler/home.html', context)
