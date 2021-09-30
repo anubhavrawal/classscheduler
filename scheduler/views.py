@@ -13,7 +13,7 @@ coloumns =[
 ]
 
 
-data2 = list(Instructors.objects.values())
+data2 = list(Instructors.objects.values_list())
 colums_info = fields(Instructors)
 
 data = [
