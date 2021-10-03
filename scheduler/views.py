@@ -42,3 +42,9 @@ def main_page(request):
         'col': colums_info
     }
     return render(request, 'scheduler/home.html', context)
+
+def room_page(request):
+    context = {
+
+    }
+    return render(request, 'scheduler/rooms.html', context)
