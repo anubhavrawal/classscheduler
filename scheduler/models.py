@@ -53,7 +53,6 @@ class Rooms(models.Model):
 
 # Instructors table
 class Instructors(models.Model):
-
     last_name = models.TextField()
     first_name = models.TextField()
     status = models.CharField(max_length=2)

@@ -29,8 +29,8 @@
                             <tbody>
                                 {% for x in input %}
                                 <tr>
-                                    {% for field, value in x %}
-                                        <td class="pt-3-half" contenteditable="true"> {{ field }} </td>
+                                    {% for y in col %}
+                                        <td class="pt-3-half" contenteditable="true"> {{ x.y }} </td>
                                     {% endfor %}
                                 </tr>
                                 {% endfor %}

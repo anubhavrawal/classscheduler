@@ -9,7 +9,6 @@ conn = sqlite3.connect("db.sqlite3")
 
 cursor = conn.cursor()
 
-
 mode = sys.argv[1]
 
 if (mode ==  '-t' ):

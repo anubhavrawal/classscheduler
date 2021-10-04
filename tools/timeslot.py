@@ -14,12 +14,13 @@ path = DATA_DIR / "./timeslots.xlsx"
 df = pd.read_excel(path, 
                     sheet_name= 'timeslots',
                     header=0,
-                    usecols='A:E')
+                    usecols='A:C')
 
-df.columns = map(str.lower, df.columns)
+#df.columns = map(str.lower, df.columns)
+df = df.rename(columns={"Start": "start_time", "End": "end_time", "Days": "days"})
 
-df.to_sql(name='scheduler_rooms',if_exists='append', index_label='id', con =conn)
-df3 = pd.read_sql('select * from scheduler_rooms', conn) #scheduler_rooms scheduler_meeting_times
+df.to_sql(name='scheduler_meeting_times',if_exists='append', index_label='id', con =conn)
+df3 = pd.read_sql('select * from scheduler_meeting_times', conn) #scheduler_rooms scheduler_meeting_times
 conn.close()
 
 print(df3.head())
