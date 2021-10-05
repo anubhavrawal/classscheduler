@@ -8,7 +8,7 @@
 {% block content %}
 div class="container mt-100">
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-8 mx-auto">
             <div class="card">
                 <h3 class="card-header text-center font-weight-bold text-uppercase py-4">CS Room List</h3>
                     <div class="card-body">
@@ -29,7 +29,6 @@ div class="container mt-100">
                             <tbody>
                                 {% for x in input %}
                                 <tr>
-                                    <td class="pt-3-half" contenteditable="true"> {{ x.id }} </td>
                                     <td class="pt-3-half" contenteditable="true"> {{ x.campus }} </td>
                                     <td class="pt-3-half" contenteditable="true"> {{ x.building }} </td>
                                     <td class="pt-3-half" contenteditable="true"> {{ x.room_num }} </td>
