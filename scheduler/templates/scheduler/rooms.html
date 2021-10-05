@@ -6,7 +6,46 @@
 {% endblock page_css%}
 
 {% block content %}
-<h1>Hello</h1>
+div class="container mt-100">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <h3 class="card-header text-center font-weight-bold text-uppercase py-4">CS Room List</h3>
+                    <div class="card-body">
+                        <div id="table" class="table-editable">
+                            <span class="table-add float-right mb-3 mr-2"
+                            ><a href="#!" class="text-success"
+                                ><i class="fas fa-plus fa-2x" aria-hidden="true"></i></a
+                            ></span>
+                            <table class="table table-bordered table-responsive-md table-striped text-center">
+                            <thead>
+                                <tr>
+                                    <th style="display: none;">#</th>
+                                    {% for y in col %}
+                                        <th>{{y}}</th> 
+                                    {% endfor %}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for x in input %}
+                                <tr>
+                                    <td class="pt-3-half" contenteditable="true"> {{ x.id }} </td>
+                                    <td class="pt-3-half" contenteditable="true"> {{ x.campus }} </td>
+                                    <td class="pt-3-half" contenteditable="true"> {{ x.building }} </td>
+                                    <td class="pt-3-half" contenteditable="true"> {{ x.room_num }} </td>
+                                    <td class="pt-3-half" contenteditable="true"> {{ x.capacity }} </td>
+                                    <td class="pt-3-half" contenteditable="true"> {{ x.room_type }} </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock content %}
 
 {% block bootstrapJS %}
