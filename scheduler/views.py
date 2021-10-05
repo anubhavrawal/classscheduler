@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.auth.models import User
-from scheduler.models import Instructors
+from scheduler.models import Instructors, Rooms
 from scheduler.models import fields
 
 coloumns =[
@@ -45,6 +45,10 @@ def main_page(request):
 
 def room_page(request):
     context = {
-
+        #'input': Rooms.objects.filter(
+            #first_name__startswith='R'
+            #).values('first_name', 'last_name')
+        'input': Rooms.objects.all() ,
+        'col': fields(Rooms)
     }
     return render(request, 'scheduler/rooms.html', context)

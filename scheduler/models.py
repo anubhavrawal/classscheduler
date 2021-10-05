@@ -45,6 +45,7 @@ class Meeting_Times(models.Model):
 
 # Rooms table
 class Rooms(models.Model):
+    #department =  models.TextField()
     campus = models.TextField()
     building = models.TextField()
     room_num = models.TextField()
@@ -61,3 +62,13 @@ class Instructors(models.Model):
 
 def fields(self):
     return [ f.name for f in self._meta.fields + self._meta.many_to_many ]
+
+
+'''
+class Column_Names (modes.Model):
+    page_name = models.TextField()
+    column_name = models.TextField()
+    modeified_date = models.DateField()
+
+
+'''
