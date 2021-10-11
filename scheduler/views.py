@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+# from django.http import HttpResponse
 from django.contrib.auth.models import User
 from scheduler.models import Instructors, Rooms
 from scheduler.models import fields
@@ -52,3 +52,10 @@ def room_page(request):
         'col': fields(Rooms)[1:]
     }
     return render(request, 'scheduler/home.html', context)
+
+def instructor_page(request):
+    context = {
+        'input': Instructors.objects.all(),
+        'col': fields(Instructors)[1:]
+    }
+    return render(request, 'scheduler/instructors.html', context)

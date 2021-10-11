@@ -1,0 +1,41 @@
+{% comment %} 
+* last_name = models.TextField()
+* first_name = models.TextField()
+* status = models.CharField(max_length=2)
+* department = models.CharField(max_length=4)
+* schedule = models.JSONField() 
+{% endcomment %}
+{%extends 'scheduler/base.html' %}
+{% load static %}
+
+{% block page_css%}
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="{% static 'scheduler/home.css' %}"
+/>
+{% endblock page_css%}
+
+{% block content %}
+<h1>Instructors</h1>
+<div>
+  <div class="row">
+    <div class="col-md-12">
+      <h1>Welcome to the Scheduler</h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <p>This is the Scheduler.</p>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
+
+{% block bootstrapJS %}
+<script
+  type="text/javascript"
+  src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"
+></script>
+{% endblock bootstrapJS %}
