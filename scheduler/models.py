@@ -28,8 +28,7 @@ class Semester(models.Model):
     meeting_type = models.CharField(max_length= 5)
     begin_date = models.DateField()
     end_date = models.DateField()
-    days = models.CharField(max_length=8)                               # Check to make sure time and days exist in meeting_time
-    time = models.IntegerField()                                        # Check for valid time in meeting_time
+    meet_time = models.IntegerField()                                   # Check for valid time in meeting_time
     location = models.IntegerField()                                    # Check for valid location in location table
     site_code = models.CharField(max_length=5)
     primary_instructor = models.IntegerField()                          # Check for valid teacher in teacher table
