@@ -5,6 +5,7 @@
     <link rel="stylesheet" type = "text/css" href= "{% static 'scheduler/home.css' %}" >
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.2.4/css/buttons.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 {% endblock page_css%}
 
 {% block content %}
@@ -17,16 +18,13 @@
                     <div class="card-body">
                     
                         <div id="table" class="table-editable">
-                            <span class="table-add float-right mb-3 mr-2"
-                            ><a href="#!" class="text-success"
-                                ><i class="fas fa-plus fa-2x" aria-hidden="true"></i></a
-                            ></span>
                             <table id="DataTab" class="table table-bordered table-responsive-md table-striped text-center">
                             <thead>
                                 <tr>
                                     {% for y in col %}
                                         <th>{{y}}</th> 
                                     {% endfor %}
+                                    <th></th> 
                                 </tr>
                             </thead>
                             <tbody>
@@ -37,6 +35,7 @@
                                     <td class="pt-3-half" contenteditable="true"> {{ x.room_num }} </td>
                                     <td class="pt-3-half" contenteditable="true"> {{ x.capacity }} </td>
                                     <td class="pt-3-half" contenteditable="true"> {{ x.room_type }} </td>
+                                    <td> </td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -71,9 +70,37 @@
     <script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
     
     <script>
-        $(document).ready(function() {
-            $('#DataTab').DataTable();
+        var editor;
+        $('#DataTab').on('click', 'td.editor-delete', function (e) {
+            //e.preventDefault();
+    
+            $(this).closest('tr').remove(), {
+                title: 'Delete record',
+                message: 'Are you sure you wish to remove this record?',
+                buttons: 'Delete'
+            };
         } );
+
+        $(document).ready(function() {
+            $('#DataTab').DataTable({
+                columns:[
+                    {data: "Campus"},
+                    {data: "Building"},
+                    {data: "Room number #"},
+                    {data: "Capacity"},
+                    {data: "Room Type"},
+                    {
+                        data: null,
+                        className: "pt-1-half editor-delete",
+                        defaultContent: "<i class='fa fa-trash'/>",
+                        orderable: false
+                    }
+                ]
+            }
+
+            );
+        } );
+
     </script>
     
 {% endblock bootstrapJS %} 
