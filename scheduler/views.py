@@ -49,6 +49,6 @@ def room_page(request):
             #first_name__startswith='R'
             #).values('first_name', 'last_name')
         'input': Rooms.objects.all() ,
-        'col': fields(Rooms)
+        'col': fields(Rooms)[1:]
     }
     return render(request, 'scheduler/rooms.html', context)
