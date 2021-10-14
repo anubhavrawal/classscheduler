@@ -1,4 +1,8 @@
+import builtins
 from django.db import models
+from django.contrib.auth.models import User
+from django.db.models.fields import CharField, TextField
+from django.db.models.fields.json import JSONField
 
 
 class Semester(models.Model):  # All of the items that create a semester

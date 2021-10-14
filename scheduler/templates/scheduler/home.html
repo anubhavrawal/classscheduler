@@ -1,7 +1,8 @@
 {% extends "scheduler/base.html" %}
+{% load static %}
 
 {% block page_css%}
-    <link rel="stylesheet" type = "text/css" href= '/static/scheduler/home.css'>
+    <link rel="stylesheet" type = "text/css" href= "{% static 'scheduler/home.css' %}" >
 {% endblock page_css%}
 
 {% block content %}
@@ -9,45 +10,30 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header">
-                    <h5>Edit row with Click</h5> <span>Click on row to perform edit action then Enter for save</span>
-                </div>
-                <div class="card-block">
-                    <div class="table-responsive">
-                        <table class="table table-striped table-bordered" id="example-1">
+                <h3 class="card-header text-center font-weight-bold text-uppercase py-4">Class List</h3>
+                    <div class="card-body">
+                        <div id="table" class="table-editable">
+                            <span class="table-add float-right mb-3 mr-2"
+                            ><a href="#!" class="text-success"
+                                ><i class="fas fa-plus fa-2x" aria-hidden="true"></i></a
+                            ></span>
+                            <table class="table table-bordered table-responsive-md table-striped text-center">
                             <thead>
                                 <tr>
                                     <th style="display: none;">#</th>
-                                    <th>First</th>
-                                    <th>Last</th>
-                                    <th>About</th>
+                                    {% for y in col %}
+                                        <th>{{y}}</th> 
+                                    {% endfor %}
                                 </tr>
                             </thead>
                             <tbody>
+                                {% for x in input %}
                                 <tr>
-                                    <th scope="row" style="display: none;">1</th>
-                                    <td class="tabledit-view-mode" style="cursor: pointer;"><span class="tabledit-span">Sam </span><input class="tabledit-input form-control input-sm" type="text" name="First Name" value="Mark
-" style="display: none;" disabled=""></td>
-                                    <td class="tabledit-view-mode" style="cursor: pointer;"><span class="tabledit-span" style="">Motto </span><input class="tabledit-input form-control input-sm fill" type="text" name="Last Name" value="Otto
-" style="display: none;" disabled=""></td>
-                                    <td class="tabledit-view-mode"><span class="tabledit-span">Android Developer</span> </td>
+                                    {% for y in col %}
+                                        <td class="pt-3-half" contenteditable="true"> {{ x.y }} </td>
+                                    {% endfor %}
                                 </tr>
-                                <tr>
-                                    <th scope="row" style="display: none;">2</th>
-                                    <td class="tabledit-view-mode" style="cursor: pointer;"><span class="tabledit-span">Mark </span><input class="tabledit-input form-control input-sm" type="text" name="First Name" value="Jacob
-" style="display: none;" disabled=""></td>
-                                    <td class="tabledit-view-mode" style="cursor: pointer;"><span class="tabledit-span">Henry </span><input class="tabledit-input form-control input-sm" type="text" name="Last Name" value="Thorntonkk
-" style="display: none;" disabled=""></td>
-                                    <td class="tabledit-view-mode"><span class="tabledit-span">Java Developer</span> </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row" style="display: none;">3</th>
-                                    <td class="tabledit-view-mode" style="cursor: pointer;"><span class="tabledit-span">Larry </span><input class="tabledit-input form-control input-sm" type="text" name="First Name" value="Larry
-" style="display: none;" disabled=""></td>
-                                    <td class="tabledit-view-mode" style="cursor: pointer;"><span class="tabledit-span">Pingor </span><input class="tabledit-input form-control input-sm" type="text" name="Last Name" value="the Bird
-" style="display: none;" disabled=""></td>
-                                    <td class="tabledit-view-mode"><span class="tabledit-span">Hybris Developer</span> </td>
-                                </tr>
+                                {% endfor %}
                             </tbody>
                         </table>
                     </div>
@@ -59,20 +45,5 @@
 {% endblock content %}
 
 {% block bootstrapJS %}
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/jquery.tabledit.js"></script>
     <script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
-    <script type='text/javascript'>$(document).ready(function(){
-// example.php will be used to send the data to the sever database
-$('#example-1').Tabledit({
-url: 'example.php',
-editButton: false,
-deleteButton: false,
-hideIdentifier: true,
-columns: {
-identifier: [0, 'id'],
-editable: [[2, 'first'], [3, 'last'],[3, 'nickname']]
-}
-});
- 
-});</script>
 {% endblock bootstrapJS %} 
