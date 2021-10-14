@@ -28,8 +28,7 @@ class Semester(models.Model):
     meeting_type = models.CharField(max_length= 5)
     begin_date = models.DateField()
     end_date = models.DateField()
-    days = models.CharField(max_length=8)                               # Check to make sure time and days exist in meeting_time
-    time = models.IntegerField()                                        # Check for valid time in meeting_time
+    meet_time = models.IntegerField()                                   # Check for valid time in meeting_time
     location = models.IntegerField()                                    # Check for valid location in location table
     site_code = models.CharField(max_length=5)
     primary_instructor = models.IntegerField()                          # Check for valid teacher in teacher table
@@ -45,6 +44,7 @@ class Meeting_Times(models.Model):
 
 # Rooms table
 class Rooms(models.Model):
+    #department =  models.TextField()
     campus = models.TextField()
     building = models.TextField()
     room_num = models.TextField()
@@ -61,3 +61,13 @@ class Instructors(models.Model):
 
 def fields(self):
     return [ f.name for f in self._meta.fields + self._meta.many_to_many ]
+
+
+'''
+class Column_Names (modes.Model):
+    page_name = models.TextField()
+    column_name = models.TextField()
+    modeified_date = models.DateField()
+
+
+'''
