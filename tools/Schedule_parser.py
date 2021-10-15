@@ -31,7 +31,20 @@ df = df.drop(columns=['unnamed: 18'])
 # for col in df.columns:
 #     print(col)
 #print(df['unnamed: 18'])
-print(df.head())
+
+entries = 0
+classes = []
+temp = []
+
+for index, row in df.iterrows():
+    if(not pd.isna(row['crn'])):
+        entries += 1
+        
+    else:
+        entries += 0
+
+
+print(entries)
 
 #scheduler_semester
 conn.close()
