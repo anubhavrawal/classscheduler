@@ -70,19 +70,22 @@
     <script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
     
     <script>
-        var editor;
+        var track_delete;
         $('#DataTab').on('click', 'td.editor-delete', function (e) {
-            //e.preventDefault();
-    
-            $(this).closest('tr').remove(), {
-                title: 'Delete record',
-                message: 'Are you sure you wish to remove this record?',
-                buttons: 'Delete'
-            };
+            e.preventDefault();
+            if (confirm("Are you sure you want to delete the row?")) {
+                $(this).closest('tr').remove();
+            }
+            return false;
         } );
 
         $(document).ready(function() {
             $('#DataTab').DataTable({
+                aLengthMenu: [
+                    [25, 50, -1, 200, "All"],
+                    [25, 50, 100, 200, "All"]
+                ],
+                iDisplayLength: -1,
                 columns:[
                     {data: "Campus"},
                     {data: "Building"},
