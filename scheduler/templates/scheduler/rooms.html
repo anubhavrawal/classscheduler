@@ -16,7 +16,7 @@
             <div class="card">
                 <h3 class="card-header text-center font-weight-bold text-uppercase py-4">CS Room List</h3>
                     <div class="card-body">
-                    
+
                         <div id="table" class="table-editable">
                             <table id="DataTab" class="table table-bordered table-responsive-md table-striped text-center">
                             <thead>
@@ -39,7 +39,14 @@
                                 </tr>
                                 {% endfor %}
                             </tbody>
+                            <span  class="table-add float-right mb-3 mr-2">
+                                <div class "AddMe">
+                                <i id="EditorAdd" class="fa fa-plus" aria-hidden="true"></i> 
+                                </div>
+                            </span>
+
                         </table>
+
                     </div>
                 </div>
             </div>
@@ -71,6 +78,25 @@
     
     <script>
         var track_delete;
+        var counter = 0;
+        $("#EditorAdd").on("click", function (e) {
+            var newRow = $("<tr class='table-warning'>");
+            var cols = "";
+            cols += '<td class="pt-3-half" contenteditable="true">  Parkview  </td>';
+            cols += '<td class="pt-3-half" contenteditable="true">  Floyd  </td>';
+            cols += '<td class="pt-3-half" contenteditable="true">  Z000  </td>';
+            cols += '<td class="pt-3-half" contenteditable="true"> 40 </td>';
+            cols += '<td class="pt-3-half" contenteditable="true"> S </td>';
+            cols += '<td class=" pt-1-half editor-delete"><i class="fa fa-trash"></i></td>';
+            cols +="</tr>";
+            newRow.append(cols);
+            $("#DataTab").append(newRow);
+            
+            counter++;
+
+            //$(this).closest('tr').;
+        } );
+
         $('#DataTab').on('click', 'td.editor-delete', function (e) {
             e.preventDefault();
             if (confirm("Are you sure you want to delete the row?")) {
