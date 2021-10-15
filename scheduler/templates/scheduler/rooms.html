@@ -83,7 +83,7 @@
         var track_delete;
         var counter = 0;
         $("#EditorAdd").on("click", function (e) {
-            var newRow = $("<tr class='table-warning'>");
+            var newRow = $("<tr class='table-success'>");
             var cols = "";
             cols += '<td class="pt-3-half" contenteditable="true">  Parkview  </td>';
             cols += '<td class="pt-3-half" contenteditable="true">  Floyd  </td>';
@@ -123,7 +123,7 @@
                     {data: "Room Type"},
                     {
                         data: null,
-                        className: "pt-1-half editor-delete",
+                        className: "pt-1-half table-warning editor-delete ",
                         defaultContent: "<i class='fa fa-trash'/>",
                         orderable: false
                     }
