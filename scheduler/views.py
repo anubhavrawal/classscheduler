@@ -7,8 +7,8 @@ from .models import fields
 
 def main_page(request):
     context = {
-        'input': Semester.objects.all(),
-        'col': fields(Semester)[1:]
+        # 'input': Semester.objects.all(),
+        # 'col': fields(Semester)[1:]
     }
     return render(request, 'scheduler/home.html', context)
 
