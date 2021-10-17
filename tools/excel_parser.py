@@ -10,8 +10,6 @@ conn = sqlite3.connect("db.sqlite3")
 
 cur = conn.cursor()
 
-
-
 DATA_DIR =  Path.cwd() / 'tools'
 # Give the location of the file
 path = DATA_DIR / "./demo.xlsx"

@@ -16,7 +16,7 @@
             <div class="card">
                 <h3 class="card-header text-center font-weight-bold text-uppercase py-4">CS Room List</h3>
                     <div class="card-body">
-                    
+
                         <div id="table" class="table-editable">
                             <table id="DataTab" class="table table-bordered table-responsive-md table-striped text-center">
                             <thead>
@@ -39,7 +39,17 @@
                                 </tr>
                                 {% endfor %}
                             </tbody>
+                            <span  class="table-add float-right mb-3 mr-2">
+                                <a href="#bottom" id="EditorAdd">
+                                    <i  class="fa fa-plus" aria-hidden="true"></i> 
+                                    New Row
+                                </a>
+                            </span>
+
                         </table>
+
+                        <div id="bottom"> 
+                        </div>
                     </div>
                 </div>
             </div>
@@ -70,19 +80,41 @@
     <script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
     
     <script>
-        var editor;
+        var track_delete;
+        var counter = 0;
+        $("#EditorAdd").on("click", function (e) {
+            var newRow = $("<tr class='table-success'>");
+            var cols = "";
+            cols += '<td class="pt-3-half" contenteditable="true">  Parkview  </td>';
+            cols += '<td class="pt-3-half" contenteditable="true">  Floyd  </td>';
+            cols += '<td class="pt-3-half" contenteditable="true">  Z000  </td>';
+            cols += '<td class="pt-3-half" contenteditable="true"> 40 </td>';
+            cols += '<td class="pt-3-half" contenteditable="true"> S </td>';
+            cols += '<td class=" pt-1-half editor-delete"><i class="fa fa-trash"></i></td>';
+            cols +="</tr>";
+            newRow.append(cols);
+            $("#DataTab").append(newRow);
+            
+            counter++;
+
+            //$(this).closest('tr').;
+        } );
+
         $('#DataTab').on('click', 'td.editor-delete', function (e) {
-            //e.preventDefault();
-    
-            $(this).closest('tr').remove(), {
-                title: 'Delete record',
-                message: 'Are you sure you wish to remove this record?',
-                buttons: 'Delete'
-            };
+            e.preventDefault();
+            if (confirm("Are you sure you want to delete the row?")) {
+                $(this).closest('tr').remove();
+            }
+            return false;
         } );
 
         $(document).ready(function() {
             $('#DataTab').DataTable({
+                aLengthMenu: [
+                    [25, 50, -1, 200, "All"],
+                    [25, 50, 100, 200, "All"]
+                ],
+                iDisplayLength: -1,
                 columns:[
                     {data: "Campus"},
                     {data: "Building"},
@@ -91,7 +123,7 @@
                     {data: "Room Type"},
                     {
                         data: null,
-                        className: "pt-1-half editor-delete",
+                        className: "pt-1-half table-warning editor-delete ",
                         defaultContent: "<i class='fa fa-trash'/>",
                         orderable: false
                     }
