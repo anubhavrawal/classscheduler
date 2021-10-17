@@ -5,9 +5,9 @@ import sqlite3
 import sys
 
 def usage():
-    print("Usage: Python3 tools/database_lookup.py [-t] [-v] [tablename]")
+    print("Usage: Python3 tools/database_lookup.py [-t] [-v tablename]")
     print("[-t] : shows all the tables in the database")
-    print("[-v] [tablename]: shows few table for the given table")
+    print("[-v tablename]: shows few table for the given table")
 
 
 conn = sqlite3.connect("db.sqlite3")

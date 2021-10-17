@@ -31,7 +31,41 @@ df = df.drop(columns=['unnamed: 18'])
 # for col in df.columns:
 #     print(col)
 #print(df['unnamed: 18'])
-print(df.head())
+
+classes = []
+temp = []
+dayCol = 19
+commentCol = 25
+
+# Loop through each row in the content table 
+for index, row in df.iterrows():
+
+    # Check for an actual CRN
+    if(not pd.isna(row['crn'])):
+        classes.append(temp)
+        temp = []
+
+        # Iterate through each column in the courses and add it to the temporary class
+        for col in range(len(row)):
+            if(not pd.isna(row[col])):
+                temp.append(row[col])
+            else:
+                temp.append("")
+    
+    # If the same CRN as last, then append the days and append the comment. Col 19 is rows, col 25 is comment
+    else:
+
+        # Add any extra days
+        if(not pd.isna(row['days'])):
+            temp[dayCol] = str(temp[dayCol]) + str(row['days'])
+
+        # Add any extra comments
+        if(not pd.isna(row[commentCol])):
+            temp[commentCol] = str(temp[commentCol]) + " " +  str(row[commentCol])
+
+#classes[0] = [""]
+#df = pd.DataFrame(classes[1:], columns=classes[0])
+#print(classes)
 
 #scheduler_semester
 conn.close()
