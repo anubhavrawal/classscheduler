@@ -34,6 +34,14 @@ class Semester(models.Model):
     primary_instructor = models.IntegerField()                          # Check for valid teacher in teacher table
     fee = models.IntegerField()
     comment = models.TextField()
+    deleted =  models.BooleanField(default=False)
+
+class Header_Map(models.Model):
+    PageName = models.CharField(max_length=32)
+    CSVheader =  models.CharField(max_length=32)
+    DBheader = models.CharField(max_length=32)
+    created_date = models.DateTimeField()
+    modified_date = models.DateTimeField()
 
 # Meeting times table
 class Meeting_Times(models.Model):

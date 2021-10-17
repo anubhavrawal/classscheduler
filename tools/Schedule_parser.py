@@ -62,7 +62,11 @@ for index, row in df.iterrows():
         # Add any extra comments
         if(not pd.isna(row[commentCol])):
             temp[commentCol] = str(temp[commentCol]) + " " +  str(row[commentCol])
-        
+
+#classes[0] = [""]
+#df = pd.DataFrame(classes[1:], columns=classes[0])
+#print(classes)
+
 #scheduler_semester
 conn.close()
 
