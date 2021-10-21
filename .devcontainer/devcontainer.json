@@ -39,6 +39,7 @@
 		"ms-python.vscode-pylance",
 		"donjayamanne.python-extension-pack",
 		"njpwerner.autodocstring",
+		"github.copilot",
 	],
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.

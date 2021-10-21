@@ -37,11 +37,12 @@ class Semester(models.Model):  # Semester table
     primary_instructor = models.IntegerField()
     fee = models.IntegerField()
     comment = models.TextField()
-    deleted =  models.BooleanField(default=False)
+    deleted = models.BooleanField(default=False)
+
 
 class Header_Map(models.Model):
     PageName = models.CharField(max_length=32)
-    CSVheader =  models.CharField(max_length=32)
+    CSVheader = models.CharField(max_length=32)
     DBheader = models.CharField(max_length=32)
     created_date = models.DateTimeField()
     modified_date = models.DateTimeField()
@@ -66,7 +67,7 @@ class Instructors(models.Model):  # Instructors table
     last_name = models.TextField()
     first_name = models.TextField()
     status = models.CharField(max_length=2)
-    department = models.CharField(max_length=4)
+    department = models.JSONField()
     schedule = models.JSONField()
 
 

@@ -23,7 +23,7 @@ def room_page(request):
 
 def instructor_page(request):
     context = {
-        'input': Instructors.objects.all(),
-        'col': fields(Instructors)[1:]
+        'instructors': Instructors.objects.all(),
+        # 'columns': fields(Instructors)[1:]
     }
     return render(request, 'scheduler/instructors.html', context)

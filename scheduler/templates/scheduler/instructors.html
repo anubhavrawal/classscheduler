@@ -10,12 +10,11 @@
 {% endblock page_css%}
 
 {% block content %}
-<h1>Instructors</h1>
 <div class="container mt-100">
     <div class="row">
         <div class="col-md-8 mx-auto">
             <div class="card">
-                <h3 class="card-header text-center font-weight-bold text-uppercase py-4">CS Room List</h3>
+                <h3 class="card-header text-center font-weight-bold text-uppercase py-4">Instructors</h3>
                     <div class="card-body">
                         <div id="table" class="table-editable">
                             <span class="table-add float-right mb-3 mr-2"
@@ -25,20 +24,57 @@
                             <table class="table table-bordered table-responsive-md table-striped text-center">
                             <thead>
                                 <tr>
-                                    <th style="display: none;">#</th>
-                                    {% for y in col %}
-                                        <th>{{y}}</th> 
-                                    {% endfor %}
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Status</th>
+                                    <th>Dept</th>
+                                    <th>Monday</th>
+                                    <th>Tuesday</th>
+                                    <th>Wednesday</th>
+                                    <th>Thursday</th>
+                                    <th>Friday</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for x in input %}
+                                {% for instructor in instructors %}
                                 <tr>
-                                    <td class="pt-3-half" contenteditable="true"> {{ x.firstname }} </td>
-                                    <td class="pt-3-half" contenteditable="true"> {{ x.last_name }} </td>
-                                    <td class="pt-3-half" contenteditable="true"> {{ x.status }} </td>
-                                    <td class="pt-3-half" contenteditable="true"> {{ x.department }} </td>
-                                    <td class="pt-3-half" contenteditable="true"> {{ x.schedule }} </td> {% comment %} need to fix this to display json properly {% endcomment %}
+                                    <td class="pt-3-half" contenteditable="true">{{ instructor.first_name }}</td>
+                                    <td class="pt-3-half" contenteditable="true">{{ instructor.last_name }}</td>
+                                    <td class="pt-3-half" contenteditable="true">{{ instructor.status }}</td>
+                                    <td class="pt-3-half text-uppercase" contenteditable="true">{{ instructor.department }}</td>
+                                    <td class="pt-3-half" contenteditable="true">
+                                        {% if instructor.schedule.Monday != Null %}
+                                            {% for block in instructor.schedule.Monday %}
+                                                {{ block.start }} - {{ block.end }};
+                                            {% endfor %}
+                                        {% else %}#
+                                        {% endif %}
+                                    </td> 
+                                    <td class="pt-3-half" contenteditable="true">
+                                        {% if instructor.schedule.Tuesday != Null %}
+                                            {{ instructor.schedule.Tuesday }}
+                                        {% else %}#
+                                        {% endif %}
+                                    </td> 
+                                    <td class="pt-3-half" contenteditable="true">
+                                        {% if instructor.schedule.Wednesday != Null %}
+                                            {{ instructor.schedule.Wednesday }}
+                                        {% else %}#
+                                        {% endif %}
+                                    </td> 
+                                    <td class="pt-3-half" contenteditable="true">
+                                        {% if instructor.schedule.Thursday != Null %}
+                                            {{ instructor.schedule.Thursday }}
+                                        {% else %}#
+                                        {% endif %}
+                                    </td> 
+                                    <td class="pt-3-half" contenteditable="true">
+                                        {% if instructor.schedule.Friday != Null %}
+                                            {{ instructor.schedule.Friday }}
+                                        {% else %}#
+                                        {% endif %}
+                                    </td> 
+                                    {% comment %} {% for time in schedule %}{% endfor %} {% endcomment %}
                                 </tr>
                                 {% endfor %}
                             </tbody>
