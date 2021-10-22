@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 from .models import Instructors, Rooms, Semester
 from .models import fields
 
+from enum import IntEnum
+
 
 def main_page(request):
     context = {
@@ -24,6 +26,6 @@ def room_page(request):
 def instructor_page(request):
     context = {
         'instructors': Instructors.objects.all(),
-        # 'columns': fields(Instructors)[1:]
+        'weekdays': ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
     }
     return render(request, 'scheduler/instructors.html', context)
