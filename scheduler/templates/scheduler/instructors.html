@@ -10,17 +10,13 @@
 {% endblock page_css%}
 
 {% block content %}
-<div class="container mt-100">
+<!--<div class="container mt-100">-->
     <div class="row">
         <div class="col-md-8 mx-auto">
             <div class="card">
                 <h3 class="card-header text-center font-weight-bold text-uppercase py-4">Instructors</h3>
                     <div class="card-body">
                         <div id="table" class="table-editable">
-                            <span class="table-add float-right mb-3 mr-2"
-                            ><a href="#!" class="text-success"
-                                ><i class="fas fa-plus fa-2x" aria-hidden="true"></i></a
-                            ></span>
                             <table class="table table-bordered table-responsive-md table-striped text-center">
                             <thead>
                                 <tr>
@@ -28,11 +24,10 @@
                                     <th>Last Name</th>
                                     <th>Status</th>
                                     <th>Dept</th>
-                                    <th>Monday</th>
-                                    <th>Tuesday</th>
-                                    <th>Wednesday</th>
-                                    <th>Thursday</th>
-                                    <th>Friday</th>
+                                    {% comment %} <th>Schedule</th> {% endcomment %}
+                                    {% for day in weekdays %}
+                                    <th>{{day}}</th>
+                                    {% endfor %}
                                 </tr>
                             </thead>
                             <tbody>
@@ -42,39 +37,54 @@
                                     <td class="pt-3-half" contenteditable="true">{{ instructor.last_name }}</td>
                                     <td class="pt-3-half" contenteditable="true">{{ instructor.status }}</td>
                                     <td class="pt-3-half text-uppercase" contenteditable="true">{{ instructor.department }}</td>
+                                    {% comment %} 
+                                    {% for day in weekdays %}
+                                        <td class="pt-3-half" contenteditable="true">
+                                            {% if instructor.schedule.day == day %}
+                                                {% for block in instructor.schedule.day %}
+                                                    {{ block.start|slice:":5" }} - {{ block.end|slice:":5" }};
+                                                {% endfor %}
+                                            {% else %}#
+                                            {% endif %}
+                                        </td> 
+                                    {% endfor %} 
+                                    {% endcomment %}
                                     <td class="pt-3-half" contenteditable="true">
                                         {% if instructor.schedule.Monday != Null %}
                                             {% for block in instructor.schedule.Monday %}
-                                                {{ block.start }} - {{ block.end }};
+                                                {{ block.start|slice:":5" }} - {{ block.end|slice:":5" }};
+                                            {% endfor %}
+                                        {% else %}#
+                                        {% endif %}
+                                    </td> <td class="pt-3-half" contenteditable="true">
+                                        {% if instructor.schedule.Tuesday != Null %}
+                                            {% for block in instructor.schedule.Tuesday %}
+                                                {{ block.start|slice:":5" }} - {{ block.end|slice:":5" }};
+                                            {% endfor %}
+                                        {% else %}#
+                                        {% endif %}
+                                    </td> <td class="pt-3-half" contenteditable="true">
+                                        {% if instructor.schedule.Wednesday != Null %}
+                                            {% for block in instructor.schedule.Wednesday %}
+                                                {{ block.start|slice:":5" }} - {{ block.end|slice:":5" }};
+                                            {% endfor %}
+                                        {% else %}#
+                                        {% endif %}
+                                    </td> <td class="pt-3-half" contenteditable="true">
+                                        {% if instructor.schedule.Thursday != Null %}
+                                            {% for block in instructor.schedule.Thursday %}
+                                                {{ block.start|slice:":5" }} - {{ block.end|slice:":5" }};
+                                            {% endfor %}
+                                        {% else %}#
+                                        {% endif %}
+                                    </td> <td class="pt-3-half" contenteditable="true">
+                                        {% if instructor.schedule.Friday != Null %}
+                                            {% for block in instructor.schedule.Friday %}
+                                                {{ block.start|slice:":5" }} - {{ block.end|slice:":5" }};
                                             {% endfor %}
                                         {% else %}#
                                         {% endif %}
                                     </td> 
-                                    <td class="pt-3-half" contenteditable="true">
-                                        {% if instructor.schedule.Tuesday != Null %}
-                                            {{ instructor.schedule.Tuesday }}
-                                        {% else %}#
-                                        {% endif %}
-                                    </td> 
-                                    <td class="pt-3-half" contenteditable="true">
-                                        {% if instructor.schedule.Wednesday != Null %}
-                                            {{ instructor.schedule.Wednesday }}
-                                        {% else %}#
-                                        {% endif %}
-                                    </td> 
-                                    <td class="pt-3-half" contenteditable="true">
-                                        {% if instructor.schedule.Thursday != Null %}
-                                            {{ instructor.schedule.Thursday }}
-                                        {% else %}#
-                                        {% endif %}
-                                    </td> 
-                                    <td class="pt-3-half" contenteditable="true">
-                                        {% if instructor.schedule.Friday != Null %}
-                                            {{ instructor.schedule.Friday }}
-                                        {% else %}#
-                                        {% endif %}
-                                    </td> 
-                                    {% comment %} {% for time in schedule %}{% endfor %} {% endcomment %}
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -84,7 +94,7 @@
             </div>
         </div>
     </div>
-</div>
+<!--</div>-->
 
 {% endblock content %}
 
