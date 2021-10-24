@@ -9,7 +9,6 @@ class Semester(models.Model):
 
     # All of the items that create a semester
     crn = models.IntegerField(unique = True)
-    dept = models.CharField(max_length= 4)
     course_id = models.CharField(max_length=9)
     section = models.IntegerField()
     status = models.CharField(max_length= 1)
@@ -28,18 +27,19 @@ class Semester(models.Model):
     meeting_type = models.CharField(max_length= 5)
     begin_date = models.DateField()
     end_date = models.DateField()
-    meet_time = models.IntegerField()                                   # Check for valid time in meeting_time
     location = models.IntegerField()                                    # Check for valid location in location table
     site_code = models.CharField(max_length=5)
     primary_instructor = models.IntegerField()                          # Check for valid teacher in teacher table
     fee = models.IntegerField()
     comment = models.TextField()
+    meet_time = models.IntegerField()                                   # Check for valid time in meeting_time
+    dept = models.CharField(max_length= 4)
 
 # Meeting times table
 class Meeting_Times(models.Model):
 
-    start_time = models.TimeField()
-    end_time = models.TimeField()
+    start_time = models.TimeField('%H:%M')
+    end_time = models.TimeField('%H:%M')
     days = models.CharField(max_length=8)
 
 # Rooms table
