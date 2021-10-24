@@ -129,6 +129,8 @@ for index, row in df.iterrows():
             temp_times = ""
             adjust_department(temp[1])
             classes.append(temp)
+        else:
+            classes.append(temp)
         temp = []
 
         # Iterate through each column in the courses and add it to the temporary class

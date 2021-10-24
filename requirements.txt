@@ -1,1 +1,2 @@
-django_tables2
+Django==3.2.8
+django-tables2==2.4.1
