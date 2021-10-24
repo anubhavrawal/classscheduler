@@ -1,5 +1,7 @@
 # import builtins
 from django.db import models
+from django.utils.datetime_safe import datetime
+
 # from django.contrib.auth.models import User
 # from django.db.models.fields import CharField, TextField
 # from django.db.models.fields.json import JSONField
@@ -33,7 +35,15 @@ class Semester(models.Model):
     comment = models.TextField()
     meet_time = models.IntegerField()                                   # Check for valid time in meeting_time
     dept = models.CharField(max_length= 4)
-
+    deleted =  models.BooleanField(default=False)
+    
+class Header_Map(models.Model):
+    PageName = models.CharField(max_length=32)
+    CSVheader =  models.CharField(max_length=32)
+    DBheader = models.CharField(max_length=32)
+    created_date = models.DateTimeField(default=datetime.now, blank=True )
+    modified_date = models.DateTimeField(default=datetime.now, blank=True)
+    
 class Meeting_Times(models.Model):  # Meeting times table
 
     start_time = models.TimeField('%H:%M')
