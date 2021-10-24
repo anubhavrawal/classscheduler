@@ -19,25 +19,37 @@ df = pd.read_excel(path,
                     usecols='A:AA',
                     skipfooter=2,
                     dtype={'Shed Type':'object'} )
-df.columns = map(str.lower, df.columns)
+#df.columns = map(str.lower, df.columns)
+df = df.drop(columns=['Unnamed: 18'])
+
+new = list(df.columns)
+#print (new)
+excel_col = new[0:17] +['Day/Time']+ new[21:26]
+print(excel_col)
 
 
+data=cur.execute('''SELECT * FROM scheduler_semester''')
+print([col[0] for col in data.description][1:])
 
+data=cur.execute('''SELECT * FROM scheduler_header_map''')
+print([col[0] for col in data.description][1:])
+
+'''
 df2 = pd.read_excel(path, 
                     sheet_name= 'CS',
                     header=3,
                     usecols='Q:W',
                     skipfooter=2,
                     dtype={'Shed Type':'object'} )
-
-df = df.dropna(axis=0, how='all')
+'''
+#df = df.dropna(axis=0, how='all')
 
 
 #df.to_sql(name='test', con =conn)
 
 #df3 = pd.read_sql('select * from scheduler_semester', conn)
 #df.at[0, 'crn'] = 12
-print(df.head())
+#print(df.head())
 
 
 #scheduler_semester

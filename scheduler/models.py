@@ -1,5 +1,7 @@
 # import builtins
 from django.db import models
+from django.utils.datetime_safe import datetime
+
 # from django.contrib.auth.models import User
 # from django.db.models.fields import CharField, TextField
 # from django.db.models.fields.json import JSONField
@@ -43,8 +45,8 @@ class Header_Map(models.Model):
     PageName = models.CharField(max_length=32)
     CSVheader =  models.CharField(max_length=32)
     DBheader = models.CharField(max_length=32)
-    created_date = models.DateTimeField()
-    modified_date = models.DateTimeField()
+    created_date = models.DateTimeField(default=datetime.now, blank=True )
+    modified_date = models.DateTimeField(default=datetime.now, blank=True)
 
 
 class Meeting_Times(models.Model):  # Meeting times table
