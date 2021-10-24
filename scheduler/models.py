@@ -7,9 +7,9 @@ from django.utils.datetime_safe import datetime
 # from django.db.models.fields.json import JSONField
 
 
-class Semester(models.Model):  # Semester table
-    crn = models.IntegerField(unique=True)
-    dept = models.CharField(max_length=4)
+    # All of the items that create a semester
+class Semester(models.Model):
+    crn = models.IntegerField(unique = True)
     course_id = models.CharField(max_length=9)
     section = models.IntegerField()
     status = models.CharField(max_length=1)
@@ -28,31 +28,26 @@ class Semester(models.Model):  # Semester table
     meeting_type = models.CharField(max_length=5)
     begin_date = models.DateField()
     end_date = models.DateField()
-    # Check to make sure time and days exist in meeting_time
-    days = models.CharField(max_length=8)
-    # Check for valid time in meeting_time
-    time = models.IntegerField()
-    # Check for valid location in location table
-    location = models.IntegerField()
+    location = models.IntegerField()                                    # Check for valid location in location table
     site_code = models.CharField(max_length=5)
-    # Check for valid teacher in teacher table
-    primary_instructor = models.IntegerField()
+    primary_instructor = models.IntegerField()                          # Check for valid teacher in teacher table
     fee = models.IntegerField()
     comment = models.TextField()
+    meet_time = models.IntegerField()                                   # Check for valid time in meeting_time
+    dept = models.CharField(max_length= 4)
     deleted =  models.BooleanField(default=False)
-
+    
 class Header_Map(models.Model):
     PageName = models.CharField(max_length=32)
     CSVheader =  models.CharField(max_length=32)
     DBheader = models.CharField(max_length=32)
     created_date = models.DateTimeField(default=datetime.now, blank=True )
     modified_date = models.DateTimeField(default=datetime.now, blank=True)
-
-
+    
 class Meeting_Times(models.Model):  # Meeting times table
 
-    start_time = models.TimeField()
-    end_time = models.TimeField()
+    start_time = models.TimeField('%H:%M')
+    end_time = models.TimeField('%H:%M')
     days = models.CharField(max_length=8)
 
 
