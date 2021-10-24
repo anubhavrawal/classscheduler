@@ -24,7 +24,9 @@ df = df.drop(columns=['Unnamed: 18'])
 
 new = list(df.columns)
 #print (new)
-excel_col = new[0:17] +['Day/Time']+ new[21:26]
+#excel_col = new[0:17] +['Day/Time']+ new[21:26]
+excel_col =  new[0:17] +['Begin Date',"End Date"]+ new[21:26]+ ["Meeting Time","Department"]
+
 print(excel_col)
 
 
@@ -32,7 +34,7 @@ data=cur.execute('''SELECT * FROM scheduler_semester''')
 print([col[0] for col in data.description][1:])
 
 data=cur.execute('''SELECT * FROM scheduler_header_map''')
-print([col[0] for col in data.description][1:])
+#print([col[0] for col in data.description][1:])
 
 '''
 df2 = pd.read_excel(path, 

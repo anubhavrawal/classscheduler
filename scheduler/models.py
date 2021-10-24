@@ -35,7 +35,7 @@ class Semester(models.Model):
     comment = models.TextField()
     meet_time = models.IntegerField()                                   # Check for valid time in meeting_time
     dept = models.CharField(max_length= 4)
-    deleted =  models.BooleanField(default=False)
+    deleted =  models.BooleanField(default=False, null=True, blank=True)
     
 class Header_Map(models.Model):
     PageName = models.CharField(max_length=32)

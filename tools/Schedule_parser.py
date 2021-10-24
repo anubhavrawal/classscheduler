@@ -13,19 +13,19 @@ time_col = 20
 comment_col = 24
 
 ### Methods ###
-def do_adjustment(col, line):
+def do_adjustment(conn, col, line):
     if (col == 18):
         adjust_dates(line)
     elif (col == 21):
-        adjust_room(line)
+        adjust_room(conn, line)
     else:
-        adjust_instructors(line)
+        adjust_instructors(conn,line)
 
 def adjust_department(line):
     temp.append(line[0:2])
     return
 
-def adjust_instructors(line):
+def adjust_instructors(conn, line):
     if(pd.isna(line)):
         line = ""
     names = line.split(" ")
@@ -41,7 +41,7 @@ def adjust_instructors(line):
 
     return
 
-def adjust_meeting_times(days,time):
+def adjust_meeting_times(conn, days,time):
     if(pd.isna(days)):
         days = ""
     if(pd.isna(time)):
@@ -69,7 +69,7 @@ def adjust_meeting_times(days,time):
     else:
         temp.append(0)
 
-def adjust_room(line):
+def adjust_room(conn, line):
     if(pd.isna(line)):
         line = "0000"
     rooms_df = pd.read_sql("SELECT room_num, building, id FROM scheduler_rooms WHERE room_num ='" +line[0:4]+"';", conn)
@@ -87,95 +87,103 @@ def adjust_dates(line):
     temp.append(dates[1])                   # Appends End date
     return
 
-### Database connection ###
-conn = sqlite3.connect("db.sqlite3")
+def main ():
+    global classes
+    global temp  
+    global temp_days
+    global temp_times
 
-cur = conn.cursor()
+    ### Database connection ###
+    conn = sqlite3.connect("db.sqlite3")
 
-DATA_DIR =  Path.cwd() / 'tools'
-# Give the location of the file
-path = DATA_DIR / "./demo.xlsx"
-df = pd.read_excel(path, 
-                    sheet_name= 'CS',
-                    header=4,
-                    usecols='A:AA',
-                    skipfooter=2,
-                    dtype={'Shed Type':'object'} )
-df.columns = map(str.lower, df.columns)
+    cur = conn.cursor()
 
-df = df.drop(columns=['unnamed: 18'])
+    DATA_DIR =  Path.cwd() / 'tools'
+    # Give the location of the file
+    path = DATA_DIR / "./demo.xlsx"
+    df = pd.read_excel(path, 
+                        sheet_name= 'CS',
+                        header=4,
+                        usecols='A:AA',
+                        skipfooter=2,
+                        dtype={'Shed Type':'object'} )
+    df.columns = map(str.lower, df.columns)
 
-#df = df.dropna(axis=0, how='all')
+    df = df.drop(columns=['unnamed: 18'])
 
+    ### Parser ###
+    tmp_col_list = list(df.columns)
+    excel_col =  tmp_col_list[0:17] +['Begin Date',"End Date"]+ tmp_col_list[21:26]+ ["Meeting Time","Department"]
 
-#df.to_sql(name='test', con =conn)
+    db=cur.execute('''SELECT * FROM scheduler_semester''')
+    db_col_list =  [col[0] for col in db.description][1:-1]
+    match_header = ['crn'] + db_col_list[2:] + ['dept'] 
+    #print(match_header)
 
-#df3 = pd.read_sql('select * from scheduler_semester', conn)
-#df.at[0, 'crn'] = 12
-#print(df.head())
-# for col in df.columns:
-#     print(col)
-#print(df['unnamed: 18'])
+    # Loop through each row in the content table 
+    for index, row in df.iterrows():
+        # Check for an actual CRN
+        if(not pd.isna(row['crn'])):
+            if(index != 0):
+                adjust_meeting_times(conn,temp_days, temp_times)
+                temp_days = ""
+                temp_times = ""
+                adjust_department( temp[1])
+                classes.append(temp)
+            #else:
+            #    classes.append(temp)
+            temp = []
 
-### Parser ###
+            # Iterate through each column in the courses and add it to the temporary class
+            for col in range(len(row)):
+                
+                
+                if(col in [18,21,23]):                                                          # Check for dates, meeting_times, instructors, and location(18,21,23)
+                    do_adjustment(conn, col,row[col])
+                
+                elif(col == 19):                                                                # Checks for the days column 
+                    if(not pd.isna(row[col])):
+                        temp_days = row[col]
+                    else:
+                        temp_days = ""
 
-# Loop through each row in the content table 
-for index, row in df.iterrows():
-    # Check for an actual CRN
-    if(not pd.isna(row['crn'])):
-        if(index != 0):
-            adjust_meeting_times(temp_days, temp_times)
-            temp_days = ""
-            temp_times = ""
-            adjust_department(temp[1])
-            classes.append(temp)
-        else:
-            classes.append(temp)
-        temp = []
+                elif(col == 20):                                                                # Checks for the times column
+                    if(not pd.isna(row[col])):
+                        temp_times = row[col]
+                    else:
+                        temp_times = ""
 
-        # Iterate through each column in the courses and add it to the temporary class
-        for col in range(len(row)):
-            
-            
-            if(col in [18,21,23]):                                                          # Check for dates, meeting_times, instructors, and location(18,21,23)
-                do_adjustment(col,row[col])
-            
-            elif(col == 19):                                                                # Checks for the days column 
-                if(not pd.isna(row[col])):
-                    temp_days = row[col]
-                else:
-                    temp_days = ""
+                elif(col == 17):                                                                # Skips the description of meeting type
+                    pass
 
-            elif(col == 20):                                                                # Checks for the times column
-                if(not pd.isna(row[col])):
-                    temp_times = row[col]
-                else:
-                    temp_times = ""
+                elif(not pd.isna(row[col])):                                                    # Appends information that are real values
+                    temp.append(row[col])
 
-            elif(col == 17):                                                                # Skips the description of meeting type
-                pass
-
-            elif(not pd.isna(row[col])):                                                    # Appends information that are real values
-                temp.append(row[col])
-
-            else:                                                                           # If not a real value, then it will append an empty string in that place
-                temp.append("")
-    
-    # If the same CRN as last, then append the days and append the comment. Col 19 is days, col 25 is comment
-    else:
-
-        # Add any extra days
-        if(not pd.isna(row['days'])):
-            temp_days = str(temp_days) + str(row['days'])
-
-        # Add any extra comments
-        if(not pd.isna(row[comment_col])):
-            temp.append(str(temp[comment_col]) + " " +  str(row[comment_col]))
+                else:                                                                           # If not a real value, then it will append an empty string in that place
+                    temp.append("")
         
-for row in classes:
-    print(row)
+        # If the same CRN as last, then append the days and append the comment. Col 19 is days, col 25 is comment
+        else:
 
-#scheduler_semester
-conn.close()
+            # Add any extra days
+            if(not pd.isna(row['days'])):
+                temp_days = str(temp_days) + str(row['days'])
 
+            # Add any extra comments
+            if(not pd.isna(row[comment_col])):
+                temp.append(str(temp[comment_col]) + " " +  str(row[comment_col]))
+            
+    #for row in classes:
+    #    print(row)
 
+    new_df = pd.DataFrame(classes, columns=match_header)
+    
+
+    #new_df = new_df.reset_index()
+    #print(new_df.columns)
+    new_df.to_sql(name='scheduler_semester',if_exists='append', index_label='id', con =conn)
+    
+    #scheduler_semester
+    conn.close()
+
+main()
