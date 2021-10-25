@@ -119,10 +119,11 @@ def main ():
     db_col_list = ['crn'] + tmp_db[2:] + ['dept']
 
     header_map_df = pd.DataFrame()
-    header_map_df.insert (0, "PageName", ['Semesster'] * len(excel_col))
+    header_map_df.insert (0, "PageName", ['scheduler_semester'] * len(excel_col))
     header_map_df.insert (1, "CSVheader", excel_col )
     header_map_df.insert (1, "DBheader", db_col_list )
 
+    print("Processing excel header information")
     try:
         header_map_df.to_sql(name='scheduler_header_map',if_exists='append', index_label='id', con =conn)
         print("Sucessfully Added excel header information")
@@ -191,6 +192,8 @@ def main ():
 
     #new_df = new_df.reset_index()
     #print(new_df.columns)
+    
+    print("Processing excel header information")
     try:
         new_df.to_sql(name='scheduler_semester',if_exists='append', index_label='id', con =conn)
         print("Sucessfully Added ")
