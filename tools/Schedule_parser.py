@@ -107,19 +107,30 @@ def main ():
                         usecols='A:AA',
                         skipfooter=2,
                         dtype={'Shed Type':'object'} )
+
+    df = df.drop(columns=['Unnamed: 18'])
+    tmp_col_list = list(df.columns)
     df.columns = map(str.lower, df.columns)
 
-    df = df.drop(columns=['unnamed: 18'])
+    #---------------------------Formating header for header_map db---------------------------
+    excel_col =  tmp_col_list[0:17] +['Begin Date',"End Date"]+ tmp_col_list[21:26]+ ["Meeting Time","Department"]
+    db=cur.execute('''SELECT * FROM scheduler_semester''')
+    tmp_db =  [col[0] for col in db.description][1:-1]
+    db_col_list = ['crn'] + tmp_db[2:] + ['dept']
+
+    header_map_df = pd.DataFrame()
+    header_map_df.insert (0, "PageName", ['Semesster'] * len(excel_col))
+    header_map_df.insert (1, "CSVheader", excel_col )
+    header_map_df.insert (1, "DBheader", db_col_list )
+
+    try:
+        header_map_df.to_sql(name='scheduler_header_map',if_exists='append', index_label='id', con =conn)
+        print("Sucessfully Added excel header information")
+    except Exception as e :
+        print("Failed to add excel header information to database....\n Error Message: " + str(e) )
+    #--------------------------------Formatting End here-----------------------------------------
 
     ### Parser ###
-    tmp_col_list = list(df.columns)
-    excel_col =  tmp_col_list[0:17] +['Begin Date',"End Date"]+ tmp_col_list[21:26]+ ["Meeting Time","Department"]
-
-    db=cur.execute('''SELECT * FROM scheduler_semester''')
-    db_col_list =  [col[0] for col in db.description][1:-1]
-    match_header = ['crn'] + db_col_list[2:] + ['dept'] 
-    #print(match_header)
-
     # Loop through each row in the content table 
     for index, row in df.iterrows():
         # Check for an actual CRN
@@ -175,14 +186,17 @@ def main ():
             
     #for row in classes:
     #    print(row)
-
-    new_df = pd.DataFrame(classes, columns=match_header)
-    
+    #print( [ ,excel_col, db_col_list] )
+    new_df = pd.DataFrame(classes, columns=db_col_list)
 
     #new_df = new_df.reset_index()
     #print(new_df.columns)
-    new_df.to_sql(name='scheduler_semester',if_exists='append', index_label='id', con =conn)
-    
+    try:
+        new_df.to_sql(name='scheduler_semester',if_exists='append', index_label='id', con =conn)
+        print("Sucessfully Added ")
+    except Exception as e :
+        print("Failed to add excel information to database....\n Error Message: " + str(e) )
+
     #scheduler_semester
     conn.close()
 
