@@ -2,6 +2,7 @@ import openpyxl
 import pandas as pd
 from pathlib import Path
 import sqlite3
+import datetime
 
 ### Variables ###
 classes = []
@@ -83,8 +84,8 @@ def adjust_room(conn, line):
 
 def adjust_dates(line):
     dates = line.split('-')
-    temp.append(dates[0])                   # Appends Start date
-    temp.append(dates[1])                   # Appends End date
+    temp.append(datetime.datetime.strptime(dates[0], "%m/%d").date())                   # Appends Start date
+    temp.append(datetime.datetime.strptime(dates[1], "%m/%d").date())                   # Appends End date
     return
 
 def main ():
