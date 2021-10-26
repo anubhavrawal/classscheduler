@@ -35,14 +35,14 @@ class Semester(models.Model):
     comment = models.TextField()
     meet_time = models.IntegerField()                                   # Check for valid time in meeting_time
     dept = models.CharField(max_length= 4)
-    deleted =  models.BooleanField(default=False, null=True, blank=True)
+    deleted =  models.BooleanField(default=False, null=False)
     
 class Header_Map(models.Model):
     PageName = models.CharField(max_length=32)
     CSVheader =  models.CharField(max_length=32)
     DBheader = models.CharField(max_length=32)
-    created_date = models.DateTimeField(default=datetime.now, null=True, blank=True )
-    modified_date = models.DateTimeField(default=datetime.now, null=True, blank=True)
+    created_date = models.DateTimeField(default=datetime.now, null=False )
+    modified_date = models.DateTimeField(default=datetime.now, null=False)
     
 class Meeting_Times(models.Model):  # Meeting times table
 
@@ -64,7 +64,6 @@ class Instructors(models.Model):  # Instructors table
     first_name = models.TextField()
     status = models.CharField(max_length=2)
     department = models.CharField(max_length=4)
-    schedule = models.JSONField()
 
 
 def fields(self):

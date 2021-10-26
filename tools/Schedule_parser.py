@@ -192,7 +192,7 @@ def main ():
 
     #new_df = new_df.reset_index()
     #print(new_df.columns)
-    
+
     print("Processing excel header information")
     try:
         new_df.to_sql(name='scheduler_semester',if_exists='append', index_label='id', con =conn)
