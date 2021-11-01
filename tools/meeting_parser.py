@@ -36,7 +36,7 @@ try:
 except Exception as e :
     print("Failed to add excel header information to database....\n Error Message: " + str(e) )
 
-
+'''
 df.rename(columns= columns, inplace=True)
 try:
     df.to_sql(name='scheduler_rooms',if_exists='append', index_label='id', con =conn)
@@ -45,6 +45,8 @@ except Exception as e :
     print("Failed to add excel information to database....\n Error Message: " + str(e) )
 
 #df3 = pd.read_sql('select * from scheduler_rooms', conn) #scheduler_rooms scheduler_meeting_times
+'''
+
 conn.close()
 
 #print(df3.head())

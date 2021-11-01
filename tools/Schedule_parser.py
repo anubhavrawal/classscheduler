@@ -97,7 +97,7 @@ def main ():
 
     ### Database connection ###
     engine = create_engine("mysql://djangouser:password@127.0.0.1/SCHEDULER")
-    cur = engine.connect()
+    conn = engine.connect()
 
     #cur = conn.cursor()
 
@@ -116,17 +116,24 @@ def main ():
     df.columns = map(str.lower, df.columns)
 
     #---------------------------Formating header for header_map db---------------------------
-    excel_col =  tmp_col_list[0:17] +['Begin Date',"End Date"]+ tmp_col_list[21:26]+ ["Meeting Time","Department"]
-    db=cur.execute('''SELECT * FROM scheduler_semester''')
-    tmp_db =  [col[0] for col in db.description][1:-1]
-    db_col_list = ['crn'] + tmp_db[2:] + ['dept', 'deleted']
+    excel_col =  tmp_col_list[0:17] +['Begin Date',"End Date", "Meeting Time"]+ tmp_col_list[21:26]+ ["Department"]
+    db=conn.execute('''SELECT * FROM scheduler_semester''')
+
+    tmp_db =  list(db.keys())[1:-1]
+    print(excel_col)
+    print(len(excel_col))
+    
+    db_col_list = ['crn'] + tmp_db[2:] + ['dept']
+    print(db_col_list)
+    print(len(db_col_list))
 
     header_map_df = pd.DataFrame()
     header_map_df.insert (0, "PageName", ['scheduler_semester'] * len(excel_col))
     header_map_df.insert (1, "CSVheader", excel_col )
     header_map_df.insert (1, "DBheader", db_col_list )
 
-    print("Processing excel header information")
+    #print("Processing excel header information")
+    
     '''
     try:
         header_map_df.to_sql(name='scheduler_header_map',if_exists='append', index_label='id', con =conn)
@@ -134,6 +141,7 @@ def main ():
     except Exception as e :
         print("Failed to add excel header information to database....\n Error Message: " + str(e) )
     '''
+    
     #--------------------------------Formatting End here-----------------------------------------
 
     ### Parser ###
@@ -208,6 +216,8 @@ def main ():
         print("Failed to add excel information to database....\n Error Message: " + str(e) )
 
     #scheduler_semester
+    
+
     conn.close()
 
 main()
