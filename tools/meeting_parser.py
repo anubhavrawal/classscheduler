@@ -2,11 +2,11 @@ import openpyxl
 import pandas as pd
 from pathlib import Path
 import sqlite3
+from sqlalchemy import create_engine
 
 
-conn = sqlite3.connect("db.sqlite3")
-
-cur = conn.cursor()
+engine = create_engine("mysql://djangouser:password@127.0.0.1/SCHEDULER")
+conn = engine.connect()
 
 DATA_DIR =  Path.cwd() / 'Extras'
 # Give the location of the file
@@ -38,8 +38,12 @@ except Exception as e :
 
 
 df.rename(columns= columns, inplace=True)
+try:
+    df.to_sql(name='scheduler_rooms',if_exists='append', index_label='id', con =conn)
+    print("Sucessfully Added excel information")
+except Exception as e :
+    print("Failed to add excel information to database....\n Error Message: " + str(e) )
 
-#df.to_sql(name='scheduler_rooms',if_exists='append', index_label='id', con =conn)
 #df3 = pd.read_sql('select * from scheduler_rooms', conn) #scheduler_rooms scheduler_meeting_times
 conn.close()
 

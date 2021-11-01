@@ -3,6 +3,7 @@ import pandas as pd
 from pathlib import Path
 import sqlite3
 import datetime
+from sqlalchemy import create_engine
 
 ### Variables ###
 classes = []
@@ -95,9 +96,10 @@ def main ():
     global temp_times
 
     ### Database connection ###
-    conn = sqlite3.connect("db.sqlite3")
+    engine = create_engine("mysql://djangouser:password@127.0.0.1/SCHEDULER")
+    cur = engine.connect()
 
-    cur = conn.cursor()
+    #cur = conn.cursor()
 
     DATA_DIR =  Path.cwd() / 'tools'
     # Give the location of the file
@@ -117,7 +119,7 @@ def main ():
     excel_col =  tmp_col_list[0:17] +['Begin Date',"End Date"]+ tmp_col_list[21:26]+ ["Meeting Time","Department"]
     db=cur.execute('''SELECT * FROM scheduler_semester''')
     tmp_db =  [col[0] for col in db.description][1:-1]
-    db_col_list = ['crn'] + tmp_db[2:] + ['dept']
+    db_col_list = ['crn'] + tmp_db[2:] + ['dept', 'deleted']
 
     header_map_df = pd.DataFrame()
     header_map_df.insert (0, "PageName", ['scheduler_semester'] * len(excel_col))
@@ -125,11 +127,13 @@ def main ():
     header_map_df.insert (1, "DBheader", db_col_list )
 
     print("Processing excel header information")
+    '''
     try:
         header_map_df.to_sql(name='scheduler_header_map',if_exists='append', index_label='id', con =conn)
         print("Sucessfully Added excel header information")
     except Exception as e :
         print("Failed to add excel header information to database....\n Error Message: " + str(e) )
+    '''
     #--------------------------------Formatting End here-----------------------------------------
 
     ### Parser ###
@@ -185,10 +189,12 @@ def main ():
             # Add any extra comments
             if(not pd.isna(row[comment_col])):
                 temp.append(str(temp[comment_col]) + " " +  str(row[comment_col]))
-            
+
+    print( len(db_col_list) )
     #for row in classes:
     #    print(row)
-    #print( [ ,excel_col, db_col_list] )
+    #print( [ ,excel_col, db_col_list] 
+    
     new_df = pd.DataFrame(classes, columns=db_col_list)
 
     #new_df = new_df.reset_index()

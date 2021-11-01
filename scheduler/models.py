@@ -26,8 +26,8 @@ class Semester(models.Model):
     waitlist_cap = models.IntegerField()
     spec_appr = models.CharField(max_length=5)
     meeting_type = models.CharField(max_length=5)
-    begin_date = models.DateField()
-    end_date = models.DateField()
+    begin_date = models.DateField('%m/%d')
+    end_date = models.DateField('%m/%d')
     location = models.IntegerField()                                    # Check for valid location in location table
     site_code = models.CharField(max_length=5)
     primary_instructor = models.IntegerField()                          # Check for valid teacher in teacher table
@@ -35,7 +35,7 @@ class Semester(models.Model):
     comment = models.TextField()
     meet_time = models.IntegerField()                                   # Check for valid time in meeting_time
     dept = models.CharField(max_length= 4)
-    deleted =  models.BooleanField(default=False, null=False)
+    deleted =  models.BooleanField(default=False, blank=True, null = False)
     
 class Header_Map(models.Model):
     PageName = models.CharField(max_length=32)
