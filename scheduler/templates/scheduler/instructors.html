@@ -2,11 +2,10 @@
 {% load static %}
 
 {% block page_css%}
-<link
-  rel="stylesheet"
-  type="text/css"
-  href="{% static 'scheduler/home.css' %}"
-/>
+    <link rel="stylesheet" type = "text/css" href= "{% static 'scheduler/home.css' %}" >
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.2.4/css/buttons.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 {% endblock page_css%}
 
 {% block content %}
@@ -24,10 +23,9 @@
                                     <th>Last Name</th>
                                     <th>Status</th>
                                     <th>Dept</th>
-                                    {% comment %} <th>Schedule</th> {% endcomment %}
-                                    {% for day in weekdays %}
+                                    {% comment %} {% for day in weekdays %}
                                     <th>{{day}}</th>
-                                    {% endfor %}
+                                    {% endfor %} {% endcomment %}
                                 </tr>
                             </thead>
                             <tbody>
@@ -37,7 +35,7 @@
                                     <td class="pt-3-half" contenteditable="true">{{ instructor.last_name }}</td>
                                     <td class="pt-3-half" contenteditable="true">{{ instructor.status }}</td>
                                     <td class="pt-3-half text-uppercase" contenteditable="true">{{ instructor.department }}</td>
-                                    {% for day in weekdays %}
+                                    {% comment %} {% for day in weekdays %}
                                         <td class="pt-3-half" contenteditable="true">
                                             {% cycle instructor.schedule.Monday instructor.schedule.Tuesday instructor.schedule.Wednesday instructor.schedule.Thursday instructor.schedule.Friday as daily silent %}
                                             {% for block in daily %}
@@ -45,42 +43,7 @@
                                             {% endfor %}
                                         </td> 
                                     {% endfor %} 
-                                    {% comment %} <td class="pt-3-half" contenteditable="true">
-                                        {% if instructor.schedule.Monday != Null %}
-                                            {% for block in instructor.schedule.Monday %}
-                                                {{ block.start|slice:":5" }} - {{ block.end|slice:":5" }}<br>
-                                            {% endfor %}
-                                        {% else %}#
-                                        {% endif %}
-                                    </td> <td class="pt-3-half" contenteditable="true">
-                                        {% if instructor.schedule.Tuesday != Null %}
-                                            {% for block in instructor.schedule.Tuesday %}
-                                                {{ block.start|slice:":5" }} - {{ block.end|slice:":5" }}<br>
-                                            {% endfor %}
-                                        {% else %}#
-                                        {% endif %}
-                                    </td> <td class="pt-3-half" contenteditable="true">
-                                        {% if instructor.schedule.Wednesday != Null %}
-                                            {% for block in instructor.schedule.Wednesday %}
-                                                {{ block.start|slice:":5" }} - {{ block.end|slice:":5" }}<br>
-                                            {% endfor %}
-                                        {% else %}#
-                                        {% endif %}
-                                    </td> <td class="pt-3-half" contenteditable="true">
-                                        {% if instructor.schedule.Thursday != Null %}
-                                            {% for block in instructor.schedule.Thursday %}
-                                                {{ block.start|slice:":5" }} - {{ block.end|slice:":5" }}<br>
-                                            {% endfor %}
-                                        {% else %}#
-                                        {% endif %}
-                                    </td> <td class="pt-3-half" contenteditable="true">
-                                        {% if instructor.schedule.Friday != Null %}
-                                            {% for block in instructor.schedule.Friday %}
-                                                {{ block.start|slice:":5" }} - {{ block.end|slice:":5" }}<br>
-                                            {% endfor %}
-                                        {% else %}#
-                                        {% endif %}
-                                    </td> {% endcomment %}
+                                    <td> </td> {% endcomment %}
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -102,10 +65,25 @@
 {% endblock content %}
 
 {% block bootstrapJS %}
-<script
-  type="text/javascript"
-  src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"
-></script>
+       <!--Import jQuery before export.js-->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+
+
+    <!--Data Table-->
+    <script type="text/javascript"  src=" https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript"  src=" https://cdn.datatables.net/buttons/1.2.4/js/dataTables.buttons.min.js"></script>
+
+    <!--Export table buttons-->
+    <script type="text/javascript"  src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.24/build/pdfmake.min.js" ></script>
+    <script type="text/javascript"  src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.24/build/vfs_fonts.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.2.4/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.2.1/js/buttons.print.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+    
     <script>
         var track_delete;
         var counter = 0;
@@ -161,5 +139,5 @@
         } );
 
     </script>
-
+    
 {% endblock bootstrapJS %}
