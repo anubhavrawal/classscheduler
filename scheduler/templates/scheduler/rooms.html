@@ -21,9 +21,11 @@
                             <table id="DataTab" class="table table-bordered table-responsive-md table-striped text-center">
                             <thead>
                                 <tr>
-                                    {% for y in col %}
-                                        <th>{{y}}</th> 
-                                    {% endfor %}
+                                    <th>Campus</th> 
+                                    <th>Building</th> 
+                                    <th>Room#</th> 
+                                    <th>Capacity</th> 
+                                    <th>Room Type</th> 
                                     <th></th> 
                                 </tr>
                             </thead>
@@ -39,6 +41,7 @@
                                 </tr>
                                 {% endfor %}
                             </tbody>
+                            
                             <span  class="table-add float-right mb-3 mr-2">
                                 <a href="#bottom" id="EditorAdd">
                                     <i  class="fa fa-plus" aria-hidden="true"></i> 
@@ -111,8 +114,8 @@
         $(document).ready(function() {
             $('#DataTab').DataTable({
                 aLengthMenu: [
-                    [25, 50, -1, 200, "All"],
-                    [25, 50, 100, 200, "All"]
+                    [25, 50, 100, -1],
+                    [25, 50, 100, "All"]
                 ],
                 iDisplayLength: -1,
                 columns:[

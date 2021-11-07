@@ -23,7 +23,7 @@ try:
     elif (mode== '-v'):
         table =  sys.argv[2]
         df3 = pd.read_sql('select * from '+ table, conn) #scheduler_rooms scheduler_meeting_times
-        print(df3.head())
+        print(df3)
 
     else:
         usage()

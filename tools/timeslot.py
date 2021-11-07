@@ -1,12 +1,17 @@
 import openpyxl
 import pandas as pd
 from pathlib import Path
-import sqlite3
+#import sqlite3
+#import mysql.connector
+from sqlalchemy import create_engine
 
-
-conn = sqlite3.connect("db.sqlite3")
-
-cur = conn.cursor()
+'''
+conn =  mysql.connector.connect(user='djangouser', password='password',
+                              host='127.0.0.1',
+                              database='SCHEDULER')
+'''
+engine = create_engine("mysql://djangouser:password@127.0.0.1/SCHEDULER")
+conn = engine.connect()
 
 DATA_DIR =  Path.cwd() / 'Extras'
 # Give the location of the file
