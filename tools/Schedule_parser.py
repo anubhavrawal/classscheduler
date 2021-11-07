@@ -1,7 +1,5 @@
-import openpyxl
 import pandas as pd
 from pathlib import Path
-import sqlite3
 import datetime
 from sqlalchemy import create_engine
 
@@ -50,26 +48,31 @@ def adjust_meeting_times(conn, days,time):
         time = ""
     
     time = time.split('-')
-
+    
     # Change format of the times to fit the model
     if(len(time) > 1):
+        time[0] = str(datetime.datetime.strptime(time[0], "%H%M"))
+        time[1] = str(datetime.datetime.strptime(time[1], "%H%M"))
+        result = conn.execute("SELECT TIME(start_time) AS start_time, TIME(end_time) AS end_time, days, id FROM scheduler_meeting_times WHERE start_time = + '"+ time[0] +"' AND end_time = '"+time[1]+"' AND days = '"+ days +"';")
+
         if(days != ""):
-            meet_times_df = pd.read_sql("SELECT strftime('%H%M', start_time), strftime('%H%M',end_time), days, id FROM scheduler_meeting_times "+
-                                        "WHERE strftime('%H%M', start_time) = '"+ time[0] +"' "+
-                                        "AND strftime('%H%M', end_time) = '"+ time[1] +"' "+
-                                        "AND days = '"+ days +"';",conn)
+            result =  conn.execute("SELECT TIME(start_time) AS start_time, TIME(end_time) AS end_time, days, id FROM scheduler_meeting_times "+ 
+                                    "WHERE start_time = + '"+ time[0] +"' "+ 
+                                    "AND end_time = '"+time[1]+"' "+
+                                    "AND days = '"+ days +"'; ")
         else:
-            meet_times_df = pd.read_sql("SELECT strftime('%H%M', start_time), strftime('%H%M',end_time), days, id FROM scheduler_meeting_times "+
-                                        "WHERE strftime('%H%M', start_time) = '"+ time[0] +"' "+
-                                        "AND strftime('%H%M', end_time) = '"+ time[1] +"';",conn)
+            result =  conn.execute("SELECT TIME(start_time) AS start_time, TIME(end_time) AS end_time, days, id FROM scheduler_meeting_times "+ 
+                                    "WHERE start_time = + '"+ time[0] +"' "+ 
+                                    "AND end_time = '"+time[1]+"';")
         
-        if(meet_times_df.empty):
-            temp.append(0)
+        if(not result):
+            temp.append(1)
         else:
-            temp.append(meet_times_df['id'].values[0])
-       # meet_times_df = pd.read_sql("SELECT start_time, end_time, days, id FROM scheduler_meeting_times WHERE start_time LIKE 08:00:00;",conn)
+            for x in result:
+                temp.append(x['id'])
     else:
-        temp.append(0)
+        temp.append(1)
+    return
 
 def adjust_room(conn, line):
     if(pd.isna(line)):
@@ -78,9 +81,7 @@ def adjust_room(conn, line):
     if(not rooms_df.empty):
         temp.append(rooms_df['id'].values[0])
     else:
-        temp.append(0)
-    #if(line[0:5] in rooms_df['room_num']):
-    #   temp.append()   
+        temp.append(1)
     return
 
 def adjust_dates(line):
@@ -202,7 +203,7 @@ def main ():
     #for row in classes:
     #    print(row)
     #print( [ ,excel_col, db_col_list] 
-    
+    '''
     new_df = pd.DataFrame(classes, columns=db_col_list)
 
     #new_df = new_df.reset_index()
@@ -214,10 +215,10 @@ def main ():
         print("Sucessfully Added ")
     except Exception as e :
         print("Failed to add excel information to database....\n Error Message: " + str(e) )
-
+    '''
     #scheduler_semester
     
-
+    print(classes[2][21])
     conn.close()
 
 main()

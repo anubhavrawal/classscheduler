@@ -1,8 +1,8 @@
 import openpyxl
 import pandas as pd
 from pathlib import Path
-import sqlite3
-import mysql.connector
+#import sqlite3
+#import mysql.connector
 from sqlalchemy import create_engine
 
 '''
