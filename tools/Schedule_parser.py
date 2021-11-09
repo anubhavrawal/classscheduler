@@ -124,7 +124,7 @@ def main ():
     print(excel_col)
     print(len(excel_col))
     
-    db_col_list = ['crn'] + tmp_db[2:] + ['dept']
+    db_col_list = ['crn'] + tmp_db[2:20]+ tmp_db[21:26] + ['meet_time','dept']
     print(db_col_list)
     print(len(db_col_list))
 
@@ -208,17 +208,17 @@ def main ():
 
     #new_df = new_df.reset_index()
     #print(new_df.columns)
-
+    '''
     print("Processing excel header information")
     try:
         new_df.to_sql(name='scheduler_semester',if_exists='append', index_label='id', con =conn)
         print("Sucessfully Added ")
     except Exception as e :
         print("Failed to add excel information to database....\n Error Message: " + str(e) )
-    
+    '''
     #scheduler_semester
     
-    print(classes[2][21])
+    print(classes[0][21])
     conn.close()
 
 main()
