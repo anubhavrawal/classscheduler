@@ -66,12 +66,13 @@ def adjust_meeting_times(conn, days,time):
                                     "AND end_time = '"+time[1]+"';")
         
         if(not result):
-            temp.append(0)
+            temp.append(1)
         else:
             for x in result:
                 temp.append(x['id'])
     else:
-        temp.append(0)
+        temp.append(1)
+    return
 
 def adjust_room(conn, line):
     if(pd.isna(line)):
@@ -80,9 +81,7 @@ def adjust_room(conn, line):
     if(not rooms_df.empty):
         temp.append(rooms_df['id'].values[0])
     else:
-        temp.append(0)
-    #if(line[0:5] in rooms_df['room_num']):
-    #   temp.append()   
+        temp.append(1)
     return
 
 def adjust_dates(line):
@@ -219,7 +218,7 @@ def main ():
     
     #scheduler_semester
     
-
+    print(classes[2][21])
     conn.close()
 
 main()
