@@ -1,0 +1,20 @@
+version: "3.9"
+   
+services:
+  db:
+    image: mysql
+    volumes:
+      - ../db/scheduler.sql:/var/lib/mysql/scheduler.sql
+    ports:
+      - 3306:3306
+
+  app:
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+    ports:
+      - 3000:3000
+    volumes:
+      - ../app:/workspace
+    environment:
+      PORT: 3000
