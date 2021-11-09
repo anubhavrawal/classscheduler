@@ -204,7 +204,7 @@ def main ():
     #for row in classes:
     #    print(row)
     #print( [ ,excel_col, db_col_list] 
-    '''
+    
     new_df = pd.DataFrame(classes, columns=db_col_list)
 
     #new_df = new_df.reset_index()
@@ -216,7 +216,7 @@ def main ():
         print("Sucessfully Added ")
     except Exception as e :
         print("Failed to add excel information to database....\n Error Message: " + str(e) )
-    '''
+    
     #scheduler_semester
     
 
