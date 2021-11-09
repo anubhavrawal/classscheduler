@@ -135,13 +135,13 @@ def main ():
 
     #print("Processing excel header information")
     
-    
+    '''
     try:
         header_map_df.to_sql(name='scheduler_header_map',if_exists='append', index_label='id', con =conn)
         print("Sucessfully Added excel header information")
     except Exception as e :
         print("Failed to add excel header information to database....\n Error Message: " + str(e) )
-    
+    '''
     
     #--------------------------------Formatting End here-----------------------------------------
 
@@ -208,17 +208,17 @@ def main ():
 
     #new_df = new_df.reset_index()
     #print(new_df.columns)
-
+    '''
     print("Processing excel header information")
     try:
         new_df.to_sql(name='scheduler_semester',if_exists='append', index_label='id', con =conn)
         print("Sucessfully Added ")
     except Exception as e :
         print("Failed to add excel information to database....\n Error Message: " + str(e) )
-    
+    '''
     #scheduler_semester
     
-    print(classes[2][21])
+    print(classes[0][21])
     conn.close()
 
 main()
