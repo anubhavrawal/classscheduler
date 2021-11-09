@@ -1,8 +1,15 @@
+from django.http import response
 from django.shortcuts import render
 # from django.http import HttpResponse
 from django.contrib.auth.models import User
+
+from .serialize import Roomsserializer
 from .models import *
 from .models import fields
+
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
 
 
 def main_page(request):
@@ -12,6 +19,16 @@ def main_page(request):
     }
     return render(request, 'scheduler/home.html', context)
 
+@api_view(['POST'])
+def saveroom(request):
+    if request.method== "POST":
+        saveserialize = Roomsserializer(data=request.data)
+        if saveserialize.is_valid():
+            saveserialize.save()
+            return Response(saveserialize.data, status= status.HTTP_201_CREATED)
+        else:
+            return Response(saveserialize.data, status= status.HTTP_400_BAD_REQUEST)
+    
 
 def room_page(request):
     context = {

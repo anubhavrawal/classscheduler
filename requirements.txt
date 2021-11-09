@@ -8,3 +8,6 @@ sqlparse==0.4.2
 pandas
 sqlalchemy
 openpyxl
+django-filter
+markdown
+djangorestframework

@@ -31,7 +31,7 @@
                             </thead>
                             <tbody>
                                 {% for x in input %}
-                                <tr>
+                                <tr id="{{ x.id }}">
                                     <td class="pt-3-half" contenteditable="true"> {{ x.campus }} </td>
                                     <td class="pt-3-half" contenteditable="true"> {{ x.building }} </td>
                                     <td class="pt-3-half" contenteditable="true"> {{ x.room_num }} </td>
@@ -86,7 +86,7 @@
         var track_delete;
         var counter = 0;
         $("#EditorAdd").on("click", function (e) {
-            var newRow = $("<tr class='table-success'>");
+            var newRow = $("<tr id='?' class='table-success'>");
             var cols = "";
             cols += '<td class="pt-3-half" contenteditable="true">  Parkview  </td>';
             cols += '<td class="pt-3-half" contenteditable="true">  Floyd  </td>';
@@ -99,8 +99,7 @@
             $("#DataTab").append(newRow);
             
             counter++;
-
-            //$(this).closest('tr').;
+            
         } );
 
         $('#DataTab').on('click', 'td.editor-delete', function (e) {
