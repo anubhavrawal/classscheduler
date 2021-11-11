@@ -96,3 +96,7 @@
 	```
 	pip3 install -r requirements.txt
 	```
+- Dumping a database
+	```
+	mysqldump SCHEDULER > scheduler.db
+	```
