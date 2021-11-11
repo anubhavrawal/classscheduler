@@ -63,3 +63,36 @@
 	- Users can then look up any teacher and see their schedule.  
 
 	- Finally, after the schedule for the semester is well represented, the user can export to a .xlsx file. 
+
+# Installation Commands
+
+- Make sure that the linux system is uptodate
+
+	```
+	sudo apt update
+	sudo apt upgrade
+	```
+
+- Install Python3
+
+	```
+	sudo apt-get install python3
+	```
+
+- Install mySqlserver
+
+	```
+	sudo apt-get install mysql-server
+	```
+
+- Install the python3 SQL client dependencies
+
+	```
+	sudo apt install python3 libmysqlclient-dev default-libmysqlclient-dev
+	```
+
+- Install all python dependencies
+
+	```
+	pip3 install -r requirements.txt
+	```
