@@ -211,7 +211,7 @@ def semParser (tablename, content):
     
     print("Processing excel header information")
     try:
-        new_df.to_sql(name='scheduler_semester', index_label='id', con =conn)
+        new_df.to_sql(name='scheduler_semester12', if_exists='append' , index_label='id', con =conn)
         print("Sucessfully Added ")
     except Exception as e :
         print("Failed to add excel information to database....\n Error Message: " + str(e) )

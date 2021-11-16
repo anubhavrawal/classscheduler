@@ -1,1 +1,3 @@
-semester_table = ""
+from .models import Semester
+
+semester_table = "scheduler_semester"

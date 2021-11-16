@@ -6,22 +6,32 @@ from django.contrib.auth.models import User
 from .serialize import Roomsserializer
 from .models import *
 from .models import fields
-
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-
 from .Schedule_parser import semParser
-
 from .forms import UploadFileForm
+from .constants import *
+from django.db import connection
+from collections import namedtuple
 
+def namedtuplefetchall(cursor):
+    "Return all rows from a cursor as a namedtuple"
+    desc = cursor.description
+    nt_result = namedtuple('Result', [col[0] for col in desc])
+    return [nt_result(*row) for row in cursor.fetchall()]
 
 def main_page(request):
-    context = {
-        # 'input': Semester.objects.all(),
-        # 'col': fields(Semester)[1:]
-    }
-    return render(request, 'scheduler/home.html', context)
+    items = ''
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT * FROM "+ semester_table)
+        items = namedtuplefetchall(cursor)
+
+        context = {
+            'input': items,
+            'col': "id"  #fields(Semester)[1:]
+        }
+        return render(request, 'scheduler/home.html', context)
 
 def upload_view(request):
     context = {}
