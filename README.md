@@ -45,6 +45,13 @@ An application that allows users to schedule classes and view the schedule of cl
 	```
 	$ pip3 install -r requirements.txt
 	```
+- Importing a database
+	```
+	mysql> CREATE database SCHEDULER;
+	
+	$ mysql SCHEDULER <scheduler.db
+	```
+
 - Dumping a database
 	```
 	$ mysqldump SCHEDULER > scheduler.db
