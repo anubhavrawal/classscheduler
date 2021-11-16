@@ -90,7 +90,7 @@ def adjust_dates(line):
     temp.append(datetime.datetime.strptime(dates[1], "%m/%d").date())                   # Appends End date
     return
 
-def main ():
+def semParser (tablename, content):
     global classes
     global temp  
     global temp_days
@@ -105,7 +105,7 @@ def main ():
     DATA_DIR =  Path.cwd() / 'tools'
     # Give the location of the file
     path = DATA_DIR / "./demo.xlsx"
-    df = pd.read_excel(path, 
+    df = pd.read_excel(content.file, 
                         sheet_name= 'CS',
                         header=4,
                         usecols='A:AA',
@@ -208,17 +208,16 @@ def main ():
 
     #new_df = new_df.reset_index()
     #print(new_df.columns)
-    '''
+    
     print("Processing excel header information")
     try:
-        new_df.to_sql(name='scheduler_semester',if_exists='append', index_label='id', con =conn)
+        new_df.to_sql(name='scheduler_semester', index_label='id', con =conn)
         print("Sucessfully Added ")
     except Exception as e :
         print("Failed to add excel information to database....\n Error Message: " + str(e) )
-    '''
+    
     #scheduler_semester
     
     print(classes[0][21])
     conn.close()
 
-main()

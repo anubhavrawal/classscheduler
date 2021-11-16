@@ -10,13 +10,11 @@
 
 {% block content %}
 
-<form class="" action="" method="post" enctype="multipart/form-data" >
-{% csrf_token %}
-<input type="file" name="excel_data">
-<p></p>
-<Input Type = "Submit" class = "btn btn-default" value = "Upload">
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Submit">
 </form>
-
 
 {% endblock content %}
 

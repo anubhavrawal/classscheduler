@@ -11,6 +11,10 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 
+from .Schedule_parser import semParser
+
+from .forms import UploadFileForm
+
 
 def main_page(request):
     context = {
@@ -18,6 +22,18 @@ def main_page(request):
         # 'col': fields(Semester)[1:]
     }
     return render(request, 'scheduler/home.html', context)
+
+def upload_view(request):
+    context = {}
+    if request.POST:
+        form = UploadFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            semParser('test',request.FILES.get('File_field'))
+    else:
+        form = UploadFileForm()
+
+    context['form'] = UploadFileForm()
+    return render(request, "scheduler/upload.html", context)
 
 @api_view(['POST'])
 def saveroom(request):
