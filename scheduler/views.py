@@ -14,6 +14,11 @@ from .forms import UploadFileForm
 from .constants import *
 from django.db import connection
 from collections import namedtuple
+import json
+from django.core import serializers
+
+import io
+from rest_framework.parsers import JSONParser
 
 def namedtuplefetchall(cursor):
     "Return all rows from a cursor as a namedtuple"
@@ -45,15 +50,21 @@ def upload_view(request):
     context['form'] = UploadFileForm()
     return render(request, "scheduler/upload.html", context)
 
-@api_view(['POST'])
 def saveroom(request):
     if request.method== "POST":
-        saveserialize = Roomsserializer(data=request.data)
-        if saveserialize.is_valid():
-            saveserialize.save()
-            return Response(saveserialize.data, status= status.HTTP_201_CREATED)
-        else:
-            return Response(saveserialize.data, status= status.HTTP_400_BAD_REQUEST)
+        stream = io.BytesIO(request.body)
+        data = JSONParser().parse(stream)
+        tmpResp = Roomsserializer(data = data[0])
+
+        for val in data:
+            saveserialize = Roomsserializer(data = val)
+            if saveserialize.is_valid():
+                saveserialize.save()
+                #return Response(saveserialize.data, status= status.HTTP_201_CREATED)
+            else:
+                return Response(saveserialize.data, status= status.HTTP_400_BAD_REQUEST)
+        
+        return Response(saveserialize.data, status= status.HTTP_201_CREATED)    
     
 
 def room_page(request):

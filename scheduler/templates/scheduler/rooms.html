@@ -21,11 +21,11 @@
                             <table id="DataTab" class="table table-bordered table-responsive-md table-striped text-center">
                             <thead>
                                 <tr>
-                                    <th>Campus</th> 
-                                    <th>Building</th> 
-                                    <th>Room#</th> 
-                                    <th>Capacity</th> 
-                                    <th>Room Type</th> 
+                                    <th data-override="campus">Campus</th> 
+                                    <th data-override="building">Building</th> 
+                                    <th data-override="room_num">Room#</th> 
+                                    <th data-override="capacity">Capacity</th> 
+                                    <th data-override="room_type">Room Type</th> 
                                     <th></th> 
                                 </tr>
                             </thead>
@@ -50,6 +50,8 @@
                             </span>
 
                         </table>
+
+                        <input id="sendServer" class="btn btn-primary" name="sendServer" type="button" value="Send to Server" />
 
                         <div id="bottom"> 
                         </div>
@@ -81,8 +83,56 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
-    
+    <script src="https://cdn.jsdelivr.net/npm/table-to-json@1.0.0/lib/jquery.tabletojson.min.js" integrity="sha256-H8xrCe0tZFi/C2CgxkmiGksqVaxhW0PFcUKZJZo1yNU=" crossorigin="anonymous"></script>
+
     <script>
+
+        $(function(){
+            var dataArr = [];
+            
+            /*
+            var table = $('#DataTab').tableToJSON({
+                ignoreColumns:[5]
+            });
+            */
+
+            $('#sendServer').click(function(e){
+                e.preventDefault();
+
+                var TableData = new Array();
+
+                $('#DataTab tr').each(function(row, tr){
+                    TableData[row]={
+                        "campus" : $(tr).find('td:eq(0)').text()
+                        , "building" :$(tr).find('td:eq(1)').text()
+                        , "room_num" : $(tr).find('td:eq(2)').text()
+                        , "capacity" : parseInt($(tr).find('td:eq(3)').text())
+                        , "room_type" : $(tr).find('td:eq(4)').text()
+                    }    
+                }); 
+                TableData.shift();
+                
+                console.log(TableData);
+        
+                $.ajax({
+                    type : "POST",
+                    contentType:"application/json; charset=utf-8",
+                    url : 'http://127.0.0.1:8000/saverooms',
+                    dataType:"json",
+                    beforeSend: function (xhr, settings) {
+                        xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+                    },
+                    data : JSON.stringify(TableData),
+                    success: function(data) {
+                        alert(data);// alert the data from the server
+                    },
+                    error : function() {
+                    }
+                });
+            });
+        });
+        
+
         var track_delete;
         var counter = 0;
         $("#EditorAdd").on("click", function (e) {
