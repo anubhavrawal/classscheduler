@@ -1,5 +1,6 @@
 {% extends "scheduler/base.html" %}
 {% load static %}
+{% load custom_template_tags %}
 
 {% block page_css%}
     <link rel="stylesheet" type = "text/css" href= "{% static 'scheduler/home.css' %}" >
@@ -12,6 +13,7 @@
             <div class="card">
                 <h3 class="card-header text-center font-weight-bold text-uppercase py-4">Class List</h3>
                     <div class="card-body">
+                        <button type="button">DON'T CLICK ME</button>
                         <div id="table" class="table-editable">
                             <span class="table-add float-right mb-3 mr-2"
                             ><a href="#!" class="text-success"
@@ -27,7 +29,7 @@
                             <tbody>
                                 {% for x in input %}
                                 <tr>
-                                    <td class="pt-3-half" contenteditable="true"> {{ x.billing_hours}} </td>
+                                    <td class="pt-3-half" contenteditable={{edit_mode}}> {{ x.billing_hours}} </td>
                                 </tr>
                                 {% endfor %}
                             </tbody>

@@ -28,13 +28,15 @@ def namedtuplefetchall(cursor):
 
 def main_page(request):
     items = ''
+    edit = "false"
     with connection.cursor() as cursor:
         cursor.execute("SELECT * FROM "+ semester_table)
         items = namedtuplefetchall(cursor)
 
         context = {
             'input': items,
-            'col': "id"  #fields(Semester)[1:]
+            'col': "id",  #fields(Semester)[1:]
+            'edit_mode': edit,
         }
         return render(request, 'scheduler/home.html', context)
 
