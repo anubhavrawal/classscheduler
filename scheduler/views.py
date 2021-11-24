@@ -58,7 +58,7 @@ def upload_view(request):
     context['form'] = UploadFileForm()
     return render(request, "scheduler/upload.html", context)
 
-@api_view(('POST',))
+@api_view(('POST','DELETE',))
 @renderer_classes((TemplateHTMLRenderer, JSONRenderer))
 def saveroom(request):
     if request.method== "POST":
@@ -76,8 +76,20 @@ def saveroom(request):
 
         else:
             return Response(saveserialize.error_messages, status= status.HTTP_400_BAD_REQUEST)
+    
+    if request.method== "DELETE":
+        stream = io.BytesIO(request.body)
+        data = JSONParser().parse(stream)
+        pk = data['id']
 
+        saveserialize = Roomsserializer(data = data)
 
+        if saveserialize.is_valid():
+            saveserialize.delete(saveserialize.validated_data, pk)
+            return Response( pk , status= status.HTTP_204_NO_CONTENT)
+
+        else:
+            return Response(saveserialize.error_messages, status= status.HTTP_400_BAD_REQUEST)
 
 
     '''

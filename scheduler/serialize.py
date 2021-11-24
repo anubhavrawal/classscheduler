@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from .models import Rooms, fields
 from .forms import UpdateForm
+from rest_framework.response import Response
+from rest_framework import status
 
 
 class RoomsListserializer(serializers.ListSerializer):
@@ -81,7 +83,6 @@ class Roomsserializer(serializers.ModelSerializer):
         musician = Rooms.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
-
         instance.id = validated_data.get('id', instance.id)
         instance.campus = validated_data.get('campus', instance.campus)
         instance.building = validated_data.get('building', instance.building)
@@ -91,3 +92,8 @@ class Roomsserializer(serializers.ModelSerializer):
         instance.save()
 
         return instance
+    
+    def delete(self, request, pk):
+        instance = Rooms.objects.get(id = pk)
+        instance.delete()
+        return Response({"message":"Record "+ instance.room_num +" was sucessfully deleted!!" })

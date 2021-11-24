@@ -116,7 +116,8 @@
                         , "capacity" : parseInt($(tr).find('td:eq(3)').text())
                         , "room_type" : $(tr).find('td:eq(4)').text()
                     }    
-                }); 
+                });
+
                 TableData.shift();//Remove the first empty cell
                 
                 console.log(TableData);
@@ -163,10 +164,68 @@
 
         $('#DataTab').on('click', 'td.editor-delete', function (e) {
             e.preventDefault();
+            
             if (confirm("Are you sure you want to delete the row?")) {
-                $(this).closest('tr').remove();
+                var curr_row = $(this).closest('tr') 
+                
+                if ( curr_row.hasClass('table-success') ){
+                    curr_row.remove();
+                    counter--;
+
+                }
+                else{
+                    var rowArray = new Array();
+                    curr_row.each(function(row, tr){
+
+                        rowArray[row]={
+                            "id" : parseInt(jQuery(curr_row).attr('id'))
+                            ,"campus" : $(tr).find('td:eq(0)').text()
+                            , "building" :$(tr).find('td:eq(1)').text()
+                            , "room_num" : $(tr).find('td:eq(2)').text()
+                            , "capacity" : parseInt($(tr).find('td:eq(3)').text())
+                            , "room_type" : $(tr).find('td:eq(4)').text()
+                        } 
+
+                    });
+
+                    console.log(rowArray[0]);
+                    $.ajax({
+                        type : "DELETE",
+                        contentType:"application/json; charset=utf-8",
+                        url : 'http://127.0.0.1:8000/saverooms' ,
+                        dataType:"json",
+                        beforeSend: function (xhr, settings) {
+                            xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+                        },
+                        data : JSON.stringify(rowArray[0]),
+                        success: function(data, status) {
+                            console.log(data);
+                            console.log(status);
+                            alert("Sucessfully deleted your record number: " + data);
+                            
+                            curr_row.remove();
+                            counter--;
+                        },
+                        error : function(data) {
+                            alert("Something went wrong" + data)
+                        }
+                    });
+
+
+                }
+            }
+                
+                
+
+            /*
+            if (confirm("Are you sure you want to delete the row?")) {
+                
+                
+
+                //$(this).closest('tr').remove();
                 counter--;
             }
+            */
             return false;
         } );
         
