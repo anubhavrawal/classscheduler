@@ -95,13 +95,8 @@
 
         $(function(){
             var dataArr = [];
-            
-            /*
-            var table = $('#DataTab').tableToJSON({
-                ignoreColumns:[5]
-            });
-            */
 
+            //Handels how to send the infromation to the server
             $('#sendServer').click(function(e){
                 e.preventDefault();
 
@@ -140,40 +135,52 @@
                 });
             });
         });
-        
-
         var track_delete;
-        //var counter = parseInt($('#DataTab').DataTable().row(':last').data().id);
 
+        //Handels the Add new row feature
         $("#EditorAdd").on("click", function (e) {
+
+            //Basic setup to target the table and get one of it's object
             var table = $('#DataTab').DataTable();
             var domRow = $('#'+ counter);
             var newrow = Object.create(table.row(domRow).data());
             counter++;
             
+            //Deafult values that are required for the setup
             newrow.DT_RowId = ''+counter;
             newrow.id = ''+counter;
             newrow.RoomNum = 'Z000';
             newrow.Capacity = '40';
             newrow.RoomType = 'S';
 
+            //Append the row to datatable and redraw the table
             table.row.add(newrow).draw(false);
+
+            //Add in a seprate class to seprate out the new row
             $('#' + counter).addClass('table-success')
             
         } );
 
+        //Handels what hapens when delete button is hit
         $('#DataTab').on('click', 'td.editor-delete', function (e) {
             e.preventDefault();
             
+            //Ask user if they are sure they want to update the changes
             if (confirm("Are you sure you want to delete the row?")) {
+                
+                //Select the row where the button was clicked
                 var curr_row = $(this).closest('tr') 
                 
+                //Test if the page was reloaded or not by 
+                //checking if the 'new row marker class:table-success' has been removed or not
                 if ( curr_row.hasClass('table-success') ){
+                    //Perform the basic remove function
                     curr_row.remove();
                     counter--;
 
                 }
                 else{
+                    //Send the infromation to database for deletion
                     var rowArray = new Array();
                     curr_row.each(function(row, tr){
 
@@ -188,7 +195,7 @@
 
                     });
 
-                    console.log(rowArray[0]);
+                    console.log(rowArray[0]);// low the row for debug
                     $.ajax({
                         type : "DELETE",
                         contentType:"application/json; charset=utf-8",
@@ -214,18 +221,6 @@
 
                 }
             }
-                
-                
-
-            /*
-            if (confirm("Are you sure you want to delete the row?")) {
-                
-                
-
-                //$(this).closest('tr').remove();
-                counter--;
-            }
-            */
             return false;
         } );
         
@@ -255,7 +250,7 @@
                 
             });
         
-
+        //Alaways remember how many rows there are on table at load
         $(document).ready(function() {
             counter = parseInt($('#DataTab').DataTable().row(':last').data().id);
         } );

@@ -11,28 +11,6 @@ class RoomsListserializer(serializers.ListSerializer):
         return Rooms.objects.bulk_create(books)
 
     def update(self, instance, validated_data):
-        '''
-        # Maps for id->instance and id->data item.
-        room_mapping = {instance.id: instance for room in validated_data}
-        data_mapping = {item['id']: item for item in validated_data}
-
-        # Perform creations and updates.
-        ret = []
-        for room_id, data in data_mapping.items():
-            room = room_mapping.get(room_id, None)
-            if room is None:
-                ret.append(self.child.create(data))
-            else:
-                ret.append(self.child.update(room, data))
-
-        # Perform deletions.
-        for room_id, room in room_mapping.items():
-            if room_id not in data_mapping:
-                room.delete()
-
-        return ret
-        '''
-        #data_mapping = [item for item in validated_data]
         updated_instances = [] 
         
         for data in validated_data:
@@ -55,14 +33,6 @@ class RoomsListserializer(serializers.ListSerializer):
         return updated_instances
 
 class Roomsserializer(serializers.ModelSerializer):
-    ''' 
-    campus = serializers.CharField()
-    building = serializers.CharField()
-    room_num = serializers.CharField()
-    capacity = serializers.IntegerField(max_value=2147483647, min_value=-2147483648)
-    room_type = serializers.CharField(max_length=3)
-    id = serializers.IntegerField()
-    '''
     id = serializers.IntegerField()
 
     class Meta:
