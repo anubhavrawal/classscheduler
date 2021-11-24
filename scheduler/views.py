@@ -23,6 +23,7 @@ from .forms import   UploadFileForm
 import io
 from rest_framework.parsers import JSONParser
 from rest_framework.exceptions import APIException
+import json
 
 def namedtuplefetchall(cursor):
     "Return all rows from a cursor as a namedtuple"
@@ -63,6 +64,9 @@ def saveroom(request):
     if request.method== "POST":
         stream = io.BytesIO(request.body)
         data = JSONParser().parse(stream)
+        
+        #json.dump([x for x in data if "instagram" in x["origin"]["platform"]], open("post_instagram.json", "w"))
+        #json.dump([x for x in data if "facebook" in x["origin"]["platform"]], open("post_facebook.json", "w"))
 
         saveserialize = Roomsserializer(data = data, many=True)
         

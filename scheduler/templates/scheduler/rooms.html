@@ -142,21 +142,22 @@
         
 
         var track_delete;
-        var counter = 0;
+        //var counter = parseInt($('#DataTab').DataTable().row(':last').data().id);
+
         $("#EditorAdd").on("click", function (e) {
-            var newRow = $("<tr id='?' class='table-success'>");
-            var cols = "";
-            cols += '<td class="pt-3-half" contenteditable="true">  Parkview  </td>';
-            cols += '<td class="pt-3-half" contenteditable="true">  Floyd  </td>';
-            cols += '<td class="pt-3-half" contenteditable="true">  Z000  </td>';
-            cols += '<td class="pt-3-half" contenteditable="true"> 40 </td>';
-            cols += '<td class="pt-3-half" contenteditable="true"> S </td>';
-            cols += '<td class=" pt-1-half editor-delete"><i class="fa fa-trash"></i></td>';
-            cols +="</tr>";
-            newRow.append(cols);
-            $("#DataTab").append(newRow);
-            
+            var table = $('#DataTab').DataTable();
+            var domRow = $('#'+ counter);
+            var newrow = Object.create(table.row(domRow).data());
             counter++;
+            
+            newrow.DT_RowId = ''+counter;
+            newrow.id = ''+counter;
+            newrow.RoomNum = 'Z000';
+            newrow.Capacity = '40';
+            newrow.RoomType = 'S';
+
+            table.row.add(newrow).draw(false);
+            $('#' + counter).addClass('table-success')
             
         } );
 
@@ -164,12 +165,12 @@
             e.preventDefault();
             if (confirm("Are you sure you want to delete the row?")) {
                 $(this).closest('tr').remove();
+                counter--;
             }
             return false;
         } );
-
-        $(document).ready(function() {
-            var table = $('#DataTab').DataTable({
+        
+        var datTable = $('#DataTab').DataTable({
                 aLengthMenu: [
                     [25, 50, 100, -1],
                     [25, 50, 100, "All"]
@@ -181,9 +182,9 @@
                     },
                     {data: "Campus"},
                     {data: "Building"},
-                    {data: "Room number #"},
+                    {data: "RoomNum"},
                     {data: "Capacity"},
-                    {data: "Room Type"},
+                    {data: "RoomType"},
                     {
                         data: null,
                         className: "pt-1-half table-warning editor-delete ",
@@ -194,7 +195,10 @@
                 responsive: true //Table is responsive only after reload for a given size
                 
             });
+        
 
+        $(document).ready(function() {
+            counter = parseInt($('#DataTab').DataTable().row(':last').data().id);
         } );
         
         

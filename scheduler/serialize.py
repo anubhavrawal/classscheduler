@@ -34,14 +34,20 @@ class RoomsListserializer(serializers.ListSerializer):
         updated_instances = [] 
         
         for data in validated_data:
-            instance = Rooms.objects.get(id = data['id'])
+            try:
+                instance = Rooms.objects.get(id = data['id'])
+                instance.campus = data['campus']
+                instance.building = data['building']
+                instance.room_num = data['room_num']
+                instance.capacity = data['capacity']
+                instance.room_type = data['room_type']
+                instance.save()
+            
+            except:
+                #validated_data.pop('id')
+                instance = Rooms.objects.create(**data)
+            
 
-            instance.campus = data['campus']
-            instance.building = data['building']
-            instance.room_num = data['room_num']
-            instance.capacity = data['capacity']
-            instance.room_type = data['room_type']
-            instance.save()
             updated_instances.append(instance)
         
         return updated_instances
