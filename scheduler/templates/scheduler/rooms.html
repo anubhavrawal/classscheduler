@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block page_css%}
-    <link rel="stylesheet" type = "text/css" href= "{% static 'scheduler/home.css' %}" >
+    <link rel="stylesheet" type = "text/css" href= "{% static 'scheduler/room.css' %}" >
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.2.4/css/buttons.dataTables.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -11,32 +11,35 @@
 {% block content %}
 
 <!--div class="container mt-100"-->
-    <div class="row">
-        <div class="col-md-8 mx-auto">
-            <div class="card">
+    <div class="row mx-auto ">
+        <div class="table-responsive">
+        <div class="col-md-8 col-sm-12 mx-auto">
+            <div class="card mx-auto">
                 <h3 class="card-header text-center font-weight-bold text-uppercase py-4">CS Room List</h3>
                     <div class="card-body">
 
                         <div id="table" class="table-editable">
-                            <table id="DataTab" class="table table-bordered table-responsive-md table-striped text-center">
+                            <table id="DataTab" class="table table-bordered  table-striped text-center">
                             <thead>
                                 <tr>
-                                    <th data-override="campus">Campus</th> 
-                                    <th data-override="building">Building</th> 
-                                    <th data-override="room_num">Room#</th> 
-                                    <th data-override="capacity">Capacity</th> 
-                                    <th data-override="room_type">Room Type</th> 
+                                    <th >id</th> 
+                                    <th >Campus</th> 
+                                    <th >Building</th> 
+                                    <th >Room#</th> 
+                                    <th >Capacity</th> 
+                                    <th >Room Type</th> 
                                     <th></th> 
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for x in input %}
                                 <tr id="{{ x.id }}">
-                                    <td class="pt-3-half" contenteditable="true"> {{ x.campus }} </td>
-                                    <td class="pt-3-half" contenteditable="true"> {{ x.building }} </td>
-                                    <td class="pt-3-half" contenteditable="true"> {{ x.room_num }} </td>
-                                    <td class="pt-3-half" contenteditable="true"> {{ x.capacity }} </td>
-                                    <td class="pt-3-half" contenteditable="true"> {{ x.room_type }} </td>
+                                    <td >{{x.id}}</td>
+                                    <td class="pt-3" contenteditable="true"> {{ x.campus }} </td>
+                                    <td class="pt-3" contenteditable="true"> {{ x.building }} </td>
+                                    <td class="pt-3" contenteditable="true"> {{ x.room_num }} </td>
+                                    <td class="pt-3" contenteditable="true"> {{ x.capacity }} </td>
+                                    <td class="pt-3" contenteditable="true"> {{ x.room_type }} </td>
                                     <td> </td>
                                 </tr>
                                 {% endfor %}
@@ -59,6 +62,7 @@
                 </div>
             </div>
         </div>
+        </div>
     </div>
 <!--/div-->
 
@@ -72,6 +76,9 @@
     <!--Data Table-->
     <script type="text/javascript"  src=" https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript"  src=" https://cdn.datatables.net/buttons/1.2.4/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript"  src=" https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+    <script type="text/javascript"  src=" https://cdn.datatables.net/fixedheader/3.2.0/js/dataTables.fixedHeader.min.js"></script>
+
 
     <!--Export table buttons-->
     <script type="text/javascript"  src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
@@ -83,7 +90,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/table-to-json@1.0.0/lib/jquery.tabletojson.min.js" integrity="sha256-H8xrCe0tZFi/C2CgxkmiGksqVaxhW0PFcUKZJZo1yNU=" crossorigin="anonymous"></script>
 
     <script>
 
@@ -103,14 +109,15 @@
 
                 $('#DataTab tr').each(function(row, tr){
                     TableData[row]={
-                        "campus" : $(tr).find('td:eq(0)').text()
+                        "id" : $('#DataTab').DataTable().cell( (row-1), 0 ).data()
+                        ,"campus" : $(tr).find('td:eq(0)').text()
                         , "building" :$(tr).find('td:eq(1)').text()
                         , "room_num" : $(tr).find('td:eq(2)').text()
                         , "capacity" : parseInt($(tr).find('td:eq(3)').text())
                         , "room_type" : $(tr).find('td:eq(4)').text()
                     }    
                 }); 
-                TableData.shift();
+                TableData.shift();//Remove the first empty cell
                 
                 console.log(TableData);
         
@@ -124,9 +131,10 @@
                     },
                     data : JSON.stringify(TableData),
                     success: function(data) {
-                        alert(data);// alert the data from the server
+                        alert("Sucessfully Updated your changes!!");
                     },
-                    error : function() {
+                    error : function(data) {
+                        alert("Something went wrong" + data)
                     }
                 });
             });
@@ -161,13 +169,16 @@
         } );
 
         $(document).ready(function() {
-            $('#DataTab').DataTable({
+            var table = $('#DataTab').DataTable({
                 aLengthMenu: [
                     [25, 50, 100, -1],
                     [25, 50, 100, "All"]
                 ],
                 iDisplayLength: -1,
                 columns:[
+                    {   data: "id",
+                        visible:false
+                    },
                     {data: "Campus"},
                     {data: "Building"},
                     {data: "Room number #"},
@@ -179,12 +190,14 @@
                         defaultContent: "<i class='fa fa-trash'/>",
                         orderable: false
                     }
-                ]
-            }
+                ],
+                responsive: true //Table is responsive only after reload for a given size
+                
+            });
 
-            );
         } );
-
+        
+        
     </script>
     
 {% endblock bootstrapJS %} 
