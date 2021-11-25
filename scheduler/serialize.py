@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from .models import Rooms, fields, Instructors
-from .forms import UpdateForm
 from rest_framework.response import Response
 from rest_framework import status
 

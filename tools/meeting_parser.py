@@ -39,7 +39,7 @@ except Exception as e :
 '''
 df.rename(columns= columns, inplace=True)
 try:
-    df.to_sql(name='scheduler_rooms',if_exists='append', index_label='id', con =conn)
+    df.to_sql(name='scheduler_rooms',if_exists='append', index_label='id',index= False, con =conn)
     print("Sucessfully Added excel information")
 except Exception as e :
     print("Failed to add excel information to database....\n Error Message: " + str(e) )

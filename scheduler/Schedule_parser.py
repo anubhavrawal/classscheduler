@@ -90,6 +90,9 @@ def adjust_dates(line):
     temp.append(datetime.datetime.strptime(dates[1], "%m/%d").date())                   # Appends End date
     return
 
+import pymysql.cursors
+import pymysql
+
 def semParser (tablename, content):
     global classes
     global temp  
@@ -97,6 +100,7 @@ def semParser (tablename, content):
     global temp_times
 
     ### Database connection ###
+    # format: engine = sqlalchemy.create_engine('mysql://user:password@server') #
     engine = create_engine("mysql://djangouser:password@127.0.0.1/SCHEDULER")
     conn = engine.connect()
 
@@ -211,7 +215,7 @@ def semParser (tablename, content):
     
     print("Processing excel header information")
     try:
-        new_df.to_sql(name='scheduler_semester12', if_exists='append' , index_label='id', con =conn)
+        new_df.to_sql(name='scheduler_semester', if_exists='append' , index_label='id', index= False, con =conn)
         print("Sucessfully Added ")
     except Exception as e :
         print("Failed to add excel information to database....\n Error Message: " + str(e) )

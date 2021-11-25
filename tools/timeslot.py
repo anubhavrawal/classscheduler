@@ -24,7 +24,7 @@ df = pd.read_excel(path,
 #df.columns = map(str.lower, df.columns)
 df = df.rename(columns={"Start": "start_time", "End": "end_time", "Days": "days"})
 
-df.to_sql(name='scheduler_meeting_times',if_exists='append', index_label='id', con =conn)
+df.to_sql(name='scheduler_meeting_times',if_exists='append', index_label='id',index= False, con =conn)
 df3 = pd.read_sql('select * from scheduler_meeting_times', conn) #scheduler_rooms scheduler_meeting_times
 conn.close()
 
