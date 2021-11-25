@@ -17,10 +17,10 @@ class InstructorListserializer(serializers.ListSerializer):
         for data in validated_data:
             try:
                 instance = Instructors.objects.get(id = data['id'])
-                instance.campus = data['last_name']
-                instance.building = data['first_name']
-                instance.room_num = data['status']
-                instance.capacity = data['department']
+                instance.last_name = data['last_name']
+                instance.first_name = data['first_name']
+                instance.status = data['status']
+                instance.department = data['department']
                 instance.save()
             
             except:
@@ -54,10 +54,10 @@ class Instructorserializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         instance.id = validated_data.get('id', instance.id)
-        instance.campus = validated_data.get('last_name', instance.campus)
-        instance.building = validated_data.get('first_name', instance.building)
-        instance.room_num = validated_data.get('status', instance.room_num)
-        instance.capacity = validated_data.get('department', instance.capacity)
+        instance.last_name = validated_data.get('last_name', instance.campus)
+        instance.first_name = validated_data.get('first_name', instance.building)
+        instance.status = validated_data.get('status', instance.room_num)
+        instance.department = validated_data.get('department', instance.capacity)
         instance.save()
 
         return instance
@@ -65,7 +65,7 @@ class Instructorserializer(serializers.ModelSerializer):
     def delete(self, request, pk):
         instance = Instructors.objects.get(id = pk)
         instance.delete()
-        return Response({"message":"Record "+ instance.room_num +" was sucessfully deleted!!" })
+        return Response({"message":"Record "+ instance.first_name +" was sucessfully deleted!!" })
 #-----------------------Instructor Searilizer End------------------------------------------
 
 
