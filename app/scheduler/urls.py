@@ -28,5 +28,6 @@ urlpatterns = [
     path('', include(router.urls)),
     path('rooms', views.room_page, name='scheduler-rooms'),
     path('instructors', views.instructor_page, name='scheduler-instructors'),
-    path('api-post', include('rest_framework.urls'))
+    path('api-post', include('rest_framework.urls')),
+    path('help', views.help_page, name='scheduler-help'),
 ]

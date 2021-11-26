@@ -18,7 +18,7 @@ def main_page(request):
 def room_page(request):
     context = {
         'input': Rooms.objects.all(),
-        'col': list(Header_Map.objects.filter(PageName = "scheduler_rooms").values_list('CSVheader', flat='True'))
+        'col': list(Header_Map.objects.filter(PageName="scheduler_rooms").values_list('CSVheader', flat='True'))
     }
     return render(request, 'scheduler/rooms.html', context)
 
@@ -29,3 +29,7 @@ def instructor_page(request):
         'weekdays': ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
     }
     return render(request, 'scheduler/instructors.html', context)
+
+
+def help_page(request):
+    return render(request, 'scheduler/help.html')
