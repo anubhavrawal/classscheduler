@@ -16,7 +16,7 @@ df = pd.read_excel(path,
                     header=0,
                     usecols='C:F')
 
-df.to_sql(name='scheduler_instructors',if_exists='append', index_label='id', con =conn)
+df.to_sql(name='scheduler_instructors',if_exists='append', index_label='id', index= False, con =conn)
 
 
 

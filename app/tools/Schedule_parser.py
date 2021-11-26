@@ -90,13 +90,17 @@ def adjust_dates(line):
     temp.append(datetime.datetime.strptime(dates[1], "%m/%d").date())                   # Appends End date
     return
 
-def main ():
+import pymysql.cursors
+import pymysql
+
+def semParser (tablename, content):
     global classes
     global temp  
     global temp_days
     global temp_times
 
     ### Database connection ###
+    # format: engine = sqlalchemy.create_engine('mysql://user:password@server') #
     engine = create_engine("mysql://djangouser:password@127.0.0.1/SCHEDULER")
     conn = engine.connect()
 
@@ -105,7 +109,7 @@ def main ():
     DATA_DIR =  Path.cwd() / 'tools'
     # Give the location of the file
     path = DATA_DIR / "./demo.xlsx"
-    df = pd.read_excel(path, 
+    df = pd.read_excel(content.file, 
                         sheet_name= 'CS',
                         header=4,
                         usecols='A:AA',
@@ -124,7 +128,7 @@ def main ():
     print(excel_col)
     print(len(excel_col))
     
-    db_col_list = ['crn'] + tmp_db[2:] + ['dept']
+    db_col_list = ['crn'] + tmp_db[2:20]+ tmp_db[21:26] + ['meet_time','dept']
     print(db_col_list)
     print(len(db_col_list))
 
@@ -157,7 +161,7 @@ def main ():
                 adjust_department( temp[1])
                 classes.append(temp)
             #else:
-            #    classes.append(temp)
+                #classes.append(temp)
             temp = []
 
             # Iterate through each column in the courses and add it to the temporary class
@@ -203,22 +207,21 @@ def main ():
     #for row in classes:
     #    print(row)
     #print( [ ,excel_col, db_col_list] 
-    '''
+    
     new_df = pd.DataFrame(classes, columns=db_col_list)
 
     #new_df = new_df.reset_index()
     #print(new_df.columns)
-
+    
     print("Processing excel header information")
     try:
-        new_df.to_sql(name='scheduler_semester',if_exists='append', index_label='id', con =conn)
+        new_df.to_sql(name='scheduler_semester', if_exists='append' , index_label='id', index= False, con =conn)
         print("Sucessfully Added ")
     except Exception as e :
         print("Failed to add excel information to database....\n Error Message: " + str(e) )
-    '''
+    
     #scheduler_semester
     
-    print(classes[2][21])
+    print(classes[0][21])
     conn.close()
 
-main()
