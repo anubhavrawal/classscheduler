@@ -7,7 +7,7 @@ from django.utils.datetime_safe import datetime
 # from django.db.models.fields.json import JSONField
 
 
-    # All of the items that create a semester
+# All of the items that create a semester
 class Semester(models.Model):
     crn = models.IntegerField(unique = True)
     course_id = models.CharField(max_length=9)
@@ -36,6 +36,7 @@ class Semester(models.Model):
     meet_time = models.IntegerField()                                   # Check for valid time in meeting_time
     dept = models.CharField(max_length= 4)
     deleted =  models.BooleanField(default=False, blank=True, null = False)
+    season_year = models.TextField(default="Fall 2021")
     
 class Header_Map(models.Model):
     PageName = models.CharField(max_length=32)

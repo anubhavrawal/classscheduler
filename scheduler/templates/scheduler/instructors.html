@@ -27,7 +27,7 @@
                                 <th >First Name</th> 
                                 <th >Status</th> 
                                 <th >Department </th> 
-                                <th></th> 
+                                <th ></th> 
                             </tr>
                         </thead>
 
@@ -39,7 +39,7 @@
                                 <td class="pt-3-half content" contenteditable="false"> {{ x.first_name  }} </td>
                                 <td class="pt-3-half content" contenteditable="false"> {{ x.status }} </td>
                                 <td class="pt-3-half content" contenteditable="false"> {{ x.department }} </td>
-                                <td> </td>
+                                <td class="del_row"> </td>
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -66,7 +66,7 @@
 
 <script>
      function editmode(){
-        var row, new_row, send_server, edit_button,i;
+        var row, new_row, send_server, edit_button, delete_row_button, i;
         row = document.querySelectorAll('.content');
         new_row = document.getElementById("EditorAdd");
         send_server = document.getElementById("sendServer");
@@ -78,6 +78,7 @@
                 new_row.style.display = 'block';
                 send_server.style.display = 'block';
                 edit_button.innerHTML = 'Cancel';
+                delete_row_button.style.display = 'block';
             }
             else{
                 window.location.reload()
