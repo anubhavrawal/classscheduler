@@ -2,20 +2,21 @@
 {% load static %}
 
 {% block page_css%}
-    <link rel="stylesheet" type = "text/css" href= "{% static 'scheduler/home.css' %}" >
+    <link rel="stylesheet" type = "text/css" href= "{% static 'scheduler/upload.css' %}" >
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.2.4/css/buttons.dataTables.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 {% endblock page_css%}
 
 {% block content %}
-
-<form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Submit">
-</form>
-
+<div class="container">
+    <h1>Upload File</h1>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Submit" class="submit-button">
+    </form>
+</div>
 {% endblock content %}
 
 {% block bootstrapJS %}
