@@ -91,6 +91,38 @@ def saveInstructor(request):
             return Response(saveserialize.error_messages, status= status.HTTP_400_BAD_REQUEST)
 
 
+@api_view(('POST','DELETE',))
+@renderer_classes((TemplateHTMLRenderer, JSONRenderer))
+def saveroom(request):
+    if request.method== "POST":
+        stream = io.BytesIO(request.body)
+        data = JSONParser().parse(stream)
+
+        saveserialize = Roomsserializer(data = data, many=True)
+        
+        if saveserialize.is_valid():
+            saveserialize.update( Rooms, saveserialize.validated_data)
+            return Response(saveserialize.data, status= status.HTTP_201_CREATED)
+
+        else:
+            return Response(saveserialize.error_messages, status= status.HTTP_400_BAD_REQUEST)
+    
+    #Handel the delete functionality
+    if request.method== "DELETE":
+        stream = io.BytesIO(request.body)
+        data = JSONParser().parse(stream)
+        pk = data['id'] #fetch primary key to deleate
+
+        saveserialize = Roomsserializer(data = data)
+
+        if saveserialize.is_valid():
+            saveserialize.delete(saveserialize.validated_data, pk) #perform the action
+            return Response( pk , status= status.HTTP_204_NO_CONTENT)
+
+        else:
+            return Response(saveserialize.error_messages, status= status.HTTP_400_BAD_REQUEST)
+            
+
 
 @api_view(('POST','DELETE',))
 @renderer_classes((TemplateHTMLRenderer, JSONRenderer))

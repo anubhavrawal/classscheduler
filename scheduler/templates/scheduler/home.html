@@ -391,6 +391,7 @@
         
         //Alaways remember how many rows there are on table at load
         $(document).ready(function() {
+            //get the row id of the last element
             counter = parseInt($('#DataTab').DataTable().row(':last').data().id);
         } );
 
