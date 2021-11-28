@@ -3,21 +3,20 @@
 {% load semester_extras %}
 
 {% block page_css%}
-    <link rel="stylesheet" type = "text/css" href= "{% static 'scheduler/home.css' %}" >
+    <link rel="stylesheet" type = "text/css" href= "{% static 'scheduler/instructors.css' %}" >
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.2.4/css/buttons.dataTables.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 {% endblock page_css%}
 
 {% block content %}
-<<<<<<< Updated upstream
 
 <div class="row mx-auto">
     <div class="col-md-8 col-sm-12 mx-auto">
         <div class="card mx-auto">
             <h3 class="card-header text-center font-weight-bold text-uppercase py-4">Instructors</h3>
                 <div class="card-body">
-                    
+                    <button type="button" id = 'editButton' onclick=editmode()>Edit</button>
                     <div id="table" class="table-editable">
                         
                         <table id="DataTab" class="table table-bordered table-responsive-md table-striped text-center">
@@ -36,10 +35,10 @@
                             {% for x in input %}
                             <tr id="{{ x.id }}">
                                 <td >{{x.id}}</td>
-                                <td class="pt-3-half" contenteditable="true"> {{ x.last_name }} </td>
-                                <td class="pt-3-half" contenteditable="true"> {{ x.first_name  }} </td>
-                                <td class="pt-3-half" contenteditable="true"> {{ x.status }} </td>
-                                <td class="pt-3-half" contenteditable="true"> {{ x.department }} </td>
+                                <td class="pt-3-half content" contenteditable="false"> {{ x.last_name }} </td>
+                                <td class="pt-3-half content" contenteditable="false"> {{ x.first_name  }} </td>
+                                <td class="pt-3-half content" contenteditable="false"> {{ x.status }} </td>
+                                <td class="pt-3-half content" contenteditable="false"> {{ x.department }} </td>
                                 <td> </td>
                             </tr>
                             {% endfor %}
@@ -58,60 +57,34 @@
 
                     <div id="bottom"> 
 
-=======
-<div class="container mt-100">
-    <div class="row">
-        <div class="col-md-8 mx-auto">
-            <div class="card">
-                <h3 class="card-header text-center font-weight-bold text-uppercase py-4">Instructors</h3>
-                    <div class="card-body">
-                        <button type="button" onclick=editmode()>Click Me!</button>
-                        <div id="table" class="table-editable">
-                            <span class="table-add float-right mb-3 mr-2"
-                            ><a href="#!" class="text-success"
-                                ><i class="fas fa-plus fa-2x" aria-hidden="true"></i></a
-                            ></span>
-                            <table class="table table-bordered table-responsive-md table-striped text-center">
-                            <thead>
-                                <tr>
-                                    <th style="display: none;">#</th>
-                                    {% for y in col %}
-                                        <th>{{y}}</th> 
-                                    {% endfor %}
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for x in input %}
-                                <tr>
-                                    <td class="pt-3-half content" contenteditable='false'> {{ x.first_name }} </td>
-                                    <td class="pt-3-half content" contenteditable='false'> {{ x.last_name }} </td>
-                                    <td class="pt-3-half content" contenteditable='false'> {{ x.status }} </td>
-                                    <td class="pt-3-half content" contenteditable='false'> {{ x.department }} </td>
-                                    <td class="pt-3-half content" contenteditable='false'> {{ x.schedule }} </td> {% comment %} need to fix this to display json properly {% endcomment %}
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
->>>>>>> Stashed changes
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<<<<<<< Updated upstream
-=======
+
 <script>
-    function editmode(){
-        var x, i;
-        x = document.querySelectorAll('.content');
-        for (i = 0; i < x.length; i ++){
-            x[i].contentEditable = 'true';
+     function editmode(){
+        var row, new_row, send_server, edit_button,i;
+        row = document.querySelectorAll('.content');
+        new_row = document.getElementById("EditorAdd");
+        send_server = document.getElementById("sendServer");
+        edit_button = document.getElementById("editButton");
+
+        for (i = 0; i < row.length; i ++){
+            if(row[i].contentEditable == 'false'){
+                row[i].contentEditable = 'true';
+                new_row.style.display = 'block';
+                send_server.style.display = 'block';
+                edit_button.innerHTML = 'Cancel';
+            }
+            else{
+                window.location.reload()
+            }
         }
-    }
+    } 
 </script>
->>>>>>> Stashed changes
 
 {% endblock content %}
 

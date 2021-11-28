@@ -134,13 +134,7 @@ def room_page(request):
 
 def instructor_page(request):
     context = {
-<<<<<<< Updated upstream
         'input': Instructors.objects.all()[1:],
         'col': fields(Instructors)[1:]
-=======
-        'input': Instructors.objects.all(),
-        'col': fields(Instructors)[1:],
-        'edit_mode':'false'
->>>>>>> Stashed changes
     }
     return render(request, 'scheduler/instructors.html', context)
