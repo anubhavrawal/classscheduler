@@ -138,3 +138,11 @@ def instructor_page(request):
         'col': fields(Instructors)[1:]
     }
     return render(request, 'scheduler/instructors.html', context)
+
+def meeting_times_page(request):
+    context = {
+        'input': Meeting_Times.objects.all(),
+        'temp': list(Meeting_Times.objects.all())[1],
+        'col': fields(Meeting_Times)[1:]
+    }
+    return render(request, 'scheduler/meeting_times.html', context)
