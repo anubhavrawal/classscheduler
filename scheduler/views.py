@@ -3,7 +3,7 @@ from django.shortcuts import render
 # from django.http import HttpResponse
 from django.contrib.auth.models import User
 
-from .serialize import Roomsserializer, Instructorserializer
+from .serialize import Roomsserializer, Instructorserializer, MeetingTimeserializer
 from .models import *
 from .models import fields
 #from rest_framework.decorators import api_view
@@ -146,3 +146,34 @@ def meeting_times_page(request):
         'col': fields(Meeting_Times)[1:]
     }
     return render(request, 'scheduler/meeting_times.html', context)
+
+@api_view(('POST','DELETE',))
+@renderer_classes((TemplateHTMLRenderer, JSONRenderer))
+def saveMeetingTime(request):
+    if request.method== "POST":
+        stream = io.BytesIO(request.body)
+        data = JSONParser().parse(stream)
+
+        saveserialize = MeetingTimeserializer(data = data, many=True)
+        
+        if saveserialize.is_valid():
+            saveserialize.update( Meeting_Times, saveserialize.validated_data)
+            return Response(saveserialize.data, status= status.HTTP_201_CREATED)
+
+        else:
+            return Response(saveserialize.error_messages, status= status.HTTP_400_BAD_REQUEST)
+    
+    #Handel the delete functionality
+    if request.method== "DELETE":
+        stream = io.BytesIO(request.body)
+        data = JSONParser().parse(stream)
+        pk = data['id'] #fetch primary key to deleate
+
+        saveserialize = Instructorserializer(data = data)
+
+        if saveserialize.is_valid():
+            saveserialize.delete(saveserialize.validated_data, pk) #perform the action
+            return Response( pk , status= status.HTTP_204_NO_CONTENT)
+
+        else:
+            return Response(saveserialize.error_messages, status= status.HTTP_400_BAD_REQUEST)
