@@ -52,6 +52,7 @@ An application that allows users to schedule classes and view the schedule of cl
 	$ mysql SCHEDULER <scheduler.db
 	```
 
+
 - Dumping a database
 	```
 	$ mysqldump SCHEDULER > scheduler.db
@@ -73,3 +74,7 @@ An application that allows users to schedule classes and view the schedule of cl
     ```
     $ python3 manage.py runserver
     ```
+- Run server guidelines
+	```
+	python manage.py runserver 0.0.0.0:8080
+	```
