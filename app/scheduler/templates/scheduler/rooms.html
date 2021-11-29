@@ -19,8 +19,10 @@
                     <div class="card-body">
 
                         <div id="table" class="table-editable">
+                            <!--Make sure id is DataTab for the table feature to work-->>
                             <table id="DataTab" class="table table-bordered  table-striped text-center">
                             <thead>
+                                <!-- Add an id field that is hidden by the -->>
                                 <tr>
                                     <th >id</th> 
                                     <th >Campus</th> 
@@ -158,7 +160,9 @@
             table.row.add(newrow).draw(false);
 
             //Add in a seprate class to seprate out the new row
-            $('#' + counter).addClass('table-success')
+            $('#' + counter).addClass('table-success');
+            $('#' + counter).children('td').attr('contenteditable','true');
+            $('#' + counter).children('td').addClass('pt-3-half');
             
         } );
 
@@ -225,12 +229,14 @@
             return false;
         } );
         
+        //Datatabe initilization
         var datTable = $('#DataTab').DataTable({
                 aLengthMenu: [
                     [25, 50, 100, -1],
                     [25, 50, 100, "All"]
                 ],
                 iDisplayLength: -1,
+                //Customize here based on your table
                 columns:[
                     {   data: "id",
                         visible:false

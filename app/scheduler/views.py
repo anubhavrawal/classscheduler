@@ -3,7 +3,7 @@ from django.shortcuts import render
 # from django.http import HttpResponse
 from django.contrib.auth.models import User
 
-from .serialize import Roomsserializer, Instructorserializer
+from .serialize import Roomsserializer, Instructorserializer, MeetingTimeserializer
 from .models import *
 from .models import fields
 #from rest_framework.decorators import api_view
@@ -23,7 +23,7 @@ from .forms import UploadFileForm
 import io
 from rest_framework.parsers import JSONParser
 from rest_framework.exceptions import APIException
-import json
+from dateutil import tz
 
 
 def namedtuplefetchall(cursor):
@@ -94,7 +94,40 @@ def saveInstructor(request):
             return Response(saveserialize.error_messages, status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(('POST', 'DELETE',))
+@api_view(('POST','DELETE',))
+@renderer_classes((TemplateHTMLRenderer, JSONRenderer))
+def saveroom(request):
+    if request.method== "POST":
+        stream = io.BytesIO(request.body)
+        data = JSONParser().parse(stream)
+
+        saveserialize = Roomsserializer(data = data, many=True)
+        
+        if saveserialize.is_valid():
+            saveserialize.update( Rooms, saveserialize.validated_data)
+            return Response(saveserialize.data, status= status.HTTP_201_CREATED)
+
+        else:
+            return Response(saveserialize.error_messages, status= status.HTTP_400_BAD_REQUEST)
+    
+    #Handel the delete functionality
+    if request.method== "DELETE":
+        stream = io.BytesIO(request.body)
+        data = JSONParser().parse(stream)
+        pk = data['id'] #fetch primary key to deleate
+
+        saveserialize = Roomsserializer(data = data)
+
+        if saveserialize.is_valid():
+            saveserialize.delete(saveserialize.validated_data, pk) #perform the action
+            return Response( pk , status= status.HTTP_204_NO_CONTENT)
+
+        else:
+            return Response(saveserialize.error_messages, status= status.HTTP_400_BAD_REQUEST)
+            
+
+
+@api_view(('POST','DELETE',))
 @renderer_classes((TemplateHTMLRenderer, JSONRenderer))
 def saveroom(request):
     if request.method == "POST":
@@ -153,3 +186,51 @@ def upload_page(request):
 
 def times_page(request):
     return render(request, 'scheduler/times.html')
+def meeting_times_page(request):
+    context = {
+        'input': Meeting_Times.objects.all(),
+        'temp': list(Meeting_Times.objects.all())[1],
+        'col': fields(Meeting_Times)[1:]
+    }
+    return render(request, 'scheduler/meeting_times.html', context)
+
+@api_view(('POST','DELETE',))
+@renderer_classes((TemplateHTMLRenderer, JSONRenderer))
+def saveMeetingTime(request):
+    from_zone = tz.tzutc()
+    to_zone = tz.tzlocal()
+
+    if request.method== "POST":
+        for info in request.data:
+            tmpdate = datetime.fromisoformat(info['start_time'][:-1]).replace(tzinfo=from_zone).astimezone(to_zone)
+            info['start_time'] = tmpdate.strftime('%H:%M:%S')
+            tmpdate = datetime.fromisoformat(info['end_time'][:-1]).replace(tzinfo=from_zone).astimezone(to_zone)
+            info['end_time'] = tmpdate.strftime('%H:%M:%S')
+
+        saveserialize = MeetingTimeserializer(data = request.data, many=True)
+        
+        if saveserialize.is_valid():
+            saveserialize.update( Meeting_Times, saveserialize.validated_data)
+            return Response(saveserialize.data, status= status.HTTP_201_CREATED)
+
+        else:
+            return Response(saveserialize.error_messages, status= status.HTTP_400_BAD_REQUEST)
+    
+    #Handel the delete functionality
+    if request.method== "DELETE":
+        
+        #fetch primary key to deleate
+        pk = request.data['id'] 
+        tmpdate = datetime.fromisoformat(request.data['start_time'][:-1]).replace(tzinfo=from_zone).astimezone(to_zone)
+        request.data['start_time'] = tmpdate.strftime('%H:%M:%S')
+        tmpdate = datetime.fromisoformat(request.data['end_time'][:-1]).replace(tzinfo=from_zone).astimezone(to_zone)
+        request.data['end_time'] = tmpdate.strftime('%H:%M:%S')
+
+        saveserialize = MeetingTimeserializer(data = request.data)
+
+        if saveserialize.is_valid():
+            saveserialize.delete(saveserialize.validated_data, pk) #perform the action
+            return Response( pk , status= status.HTTP_204_NO_CONTENT)
+
+        else:
+            return Response(saveserialize.error_messages, status= status.HTTP_400_BAD_REQUEST)

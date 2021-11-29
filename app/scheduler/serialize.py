@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Rooms, fields, Instructors
+from .models import Meeting_Times, Rooms, fields, Instructors
 from rest_framework.response import Response
 from rest_framework import status
 
@@ -64,7 +64,7 @@ class Instructorserializer(serializers.ModelSerializer):
     def delete(self, request, pk):
         instance = Instructors.objects.get(id = pk)
         instance.delete()
-        return Response({"message":"Record "+ instance.first_name +" was sucessfully deleted!!" })
+        return Response({"message":"Record  was sucessfully deleted!!" })
 #-----------------------Instructor Searilizer End------------------------------------------
 
 
@@ -133,4 +133,54 @@ class Roomsserializer(serializers.ModelSerializer):
     def delete(self, request, pk):
         instance = Rooms.objects.get(id = pk)
         instance.delete()
-        return Response({"message":"Record "+ instance.room_num +" was sucessfully deleted!!" })
+        return Response({"message":"Record  was sucessfully deleted!!" })
+
+#-----------------------Meeting Time Searilizer------------------------------------------
+class MeetingTimesListserializer(serializers.ListSerializer):
+    def create(self, validated_data):
+        books = [Meeting_Times(**item) for item in validated_data]
+        return Meeting_Times.objects.bulk_create(books)
+
+    def update(self, instance, validated_data):
+        updated_instances = [] 
+        
+        for data in validated_data:
+            try:
+                instance = Meeting_Times.objects.get(id = data['id'])
+                instance.start_time = data['start_time']
+                instance.end_time = data['end_time']
+                instance.days = data['days']
+                instance.save()
+            
+            except:
+                #validated_data.pop('id')
+                instance = Meeting_Times.objects.create(**data)
+            
+
+            updated_instances.append(instance)
+        
+        return updated_instances
+
+class MeetingTimeserializer(serializers.ModelSerializer):
+    id = serializers.IntegerField()
+
+    class Meta:
+        model = Meeting_Times
+        fields=['id','start_time', 'end_time', 'days']
+        list_serializer_class = MeetingTimesListserializer
+
+     
+    @classmethod
+    def many_init(cls, *args, **kwargs):
+        # Instantiate the child serializer.
+        kwargs['child'] = cls()
+        # Instantiate the parent list serializer.
+        return MeetingTimesListserializer(*args, **kwargs)
+     
+    def delete(self, request, pk):
+        instance = Meeting_Times.objects.get(id = pk)
+        tmp = instance.id
+        instance.delete()
+        return Response({"message":"Record was sucessfully deleted!!" })
+
+#-----------------------Meeting Time Searilizer End------------------------------------------

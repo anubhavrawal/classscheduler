@@ -1,9 +1,8 @@
 {% extends "scheduler/base.html" %}
 {% load static %}
-{% load semester_extras %}
 
 {% block page_css%}
-    <link rel="stylesheet" type = "text/css" href= "{% static 'scheduler/instructors.css' %}" >
+    <link rel="stylesheet" type = "text/css" href= "{% static 'scheduler/meeting_times.css' %}" >
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.2.4/css/buttons.dataTables.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -14,8 +13,9 @@
 <div class="row mx-auto">
     <div class="col-md-8 col-sm-12 mx-auto">
         <div class="card mx-auto">
-            <h3 class="card-header text-center font-weight-bold text-uppercase py-4">Instructors</h3>
+            <h3 class="card-header text-center font-weight-bold text-uppercase py-4">Meeting Times</h3>
                 <div class="card-body">
+                    <p>{{temp.start_time}}</p>
                     <button type="button" id = 'editButton' onclick=editmode()>Edit</button>
                     <div id="table" class="table-editable">
                         
@@ -23,10 +23,9 @@
                         <thead>
                             <tr>
                                 <th >id</th> 
-                                <th >Last Name</th> 
-                                <th >First Name</th> 
-                                <th >Status</th> 
-                                <th >Department </th> 
+                                <th >Start Time</th> 
+                                <th >End Time</th> 
+                                <th >Days</th> 
                                 <th ></th> 
                             </tr>
                         </thead>
@@ -35,10 +34,9 @@
                             {% for x in input %}
                             <tr id="{{ x.id }}">
                                 <td >{{x.id}}</td>
-                                <td class="pt-3-half content" contenteditable="false"> {{ x.last_name }} </td>
-                                <td class="pt-3-half content" contenteditable="false"> {{ x.first_name  }} </td>
-                                <td class="pt-3-half content" contenteditable="false"> {{ x.status }} </td>
-                                <td class="pt-3-half content" contenteditable="false"> {{ x.department }} </td>
+                                <td class="pt-3-half content" contenteditable="false"> {{ x.start_time|time:"H:i" }} </td>
+                                <td class="pt-3-half content" contenteditable="false"> {{ x.end_time|time:"H:i" }} </td>
+                                <td class="pt-3-half content" contenteditable="false"> {{ x.days }} </td>
                                 <td class="del_row"> </td>
                             </tr>
                             {% endfor %}
@@ -112,6 +110,9 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
 
+    <script type="text/javascript" src="{% static 'scheduler/date.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scheduler/parser.js' %}"></script>
+
     <script>
         $(function(){
             var dataArr = [];
@@ -119,27 +120,31 @@
             //Handels how to send the infromation to the server
             $('#sendServer').click(function(e){
                 e.preventDefault();
-
+                
+                //Creates a Jquery's array based on current state of the table
+                //My current I mean when the sendServer button is pressed
+                // THe changes are not known to Datattable
                 var TableData = new Array();
-
                 $('#DataTab tr').each(function(row, tr){
                     TableData[row]={
                         "id" : $('#DataTab').DataTable().cell( (row-1), 0 ).data()
-                        ,"last_name" : $(tr).find('td:eq(0)').text()
-                        , "first_name" :$(tr).find('td:eq(1)').text()
-                        , "status" : $(tr).find('td:eq(2)').text()
-                        , "department" : $(tr).find('td:eq(3)').text()
+                        ,"start_time" : Date.parse($(tr).find('td:eq(0)').text())
+                        , "end_time" : Date.parse($(tr).find('td:eq(1)').text())
+                        , "days" : $(tr).find('td:eq(2)').text()
                     }    
                 });
 
-                TableData.shift();//Remove the first empty cell
+                TableData.shift();//Remove the first empty cell caused by the header field
                 
+                //Show me the current state of the table
                 console.log(TableData);
-        
+                
+                //Prepre a pack to send to the server
+                //Server: Django
                 $.ajax({
                     type : "POST",
                     contentType:"application/json; charset=utf-8",
-                    url : 'http://127.0.0.1:8000/saveInstructor',
+                    url : 'http://127.0.0.1:8000/saveTime',
                     dataType:"json",
                     beforeSend: function (xhr, settings) {
                         xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
@@ -168,10 +173,9 @@
             //Deafult values that are required for the setup
             newrow.DT_RowId = ''+counter;
             newrow.id = ''+counter;
-            newrow.last_name = 'Doe';
-            newrow.first_name = 'John';
-            newrow.department = 'cs';
-            newrow.status = 'F';
+            newrow.start_time = '00:00';
+            newrow.end_time = '00:00';
+            newrow.days = 'O';
 
             //Append the row to datatable and redraw the table
             table.row.add(newrow).draw(false);
@@ -208,10 +212,9 @@
 
                         rowArray[row]={
                             "id" : parseInt(jQuery(curr_row).attr('id'))
-                            ,"last_name" : $(tr).find('td:eq(0)').text()
-                            , "first_name" :$(tr).find('td:eq(1)').text()
-                            , "status" : $(tr).find('td:eq(2)').text()
-                            , "department" : $(tr).find('td:eq(3)').text()
+                            ,"start_time" : Date.parse($(tr).find('td:eq(0)').text())
+                            , "end_time" :Date.parse($(tr).find('td:eq(1)').text())
+                            , "days" : $(tr).find('td:eq(2)').text()
                         } 
 
                     });
@@ -220,15 +223,13 @@
                     $.ajax({
                         type : "DELETE",
                         contentType:"application/json; charset=utf-8",
-                        url : 'http://127.0.0.1:8000/saveInstructor' ,
+                        url : 'http://127.0.0.1:8000/saveTime' ,
                         dataType:"json",
                         beforeSend: function (xhr, settings) {
                             xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
                         },
                         data : JSON.stringify(rowArray[0]),
                         success: function(data, status) {
-                            console.log(data);
-                            console.log(status);
                             alert("Sucessfully deleted your record number: " + data);
                             
                             curr_row.remove();
@@ -255,10 +256,9 @@
                     {   data: "id",
                         visible:false
                     },
-                    {data: "last_name"},
-                    {data: "first_name"},
-                    {data: "status"},
-                    {data: "department"},
+                    {data: "start_time"},
+                    {data: "end_time"},
+                    {data: "days"},
                     {
                         data: null,
                         className: "pt-1-half table-warning editor-delete ",
