@@ -5,8 +5,8 @@ from .models import Rooms, fields
 
 
 class UploadFileForm(forms.Form):
-    input_file = forms.FileField(allow_empty_file=False, label='Schedule Upload (.xlsx)', widget=forms.ClearableFileInput(
-        attrs={'class': 'form-control-file form-control-lg', 'type': 'file'}))
+    input_file = forms.FileField(allow_empty_file=False, label='', widget=forms.ClearableFileInput(
+        attrs={'class': 'form-control-file', 'type': 'file'}))
 
 
 class UpdateForm(ModelForm):

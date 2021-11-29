@@ -8,103 +8,77 @@
 {% endblock page_css%}
 
 {% block content %}
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#staticBackdrop">
-  Upload Schedule
-</button>
-
-<!-- Modal -->
-<div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="staticBackdropLabel">Schedule Upload</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <input type="submit" value="Submit">
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Done</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="container mt-100">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-                <h3 class="card-header text-center font-weight-bold text-uppercase py-4">Class List</h3>
-                    <div class="card-body">
-                        <button type="button">DON'T CLICK ME</button>
-                        <div id="table" class="table-editable">
-                            <span class="table-add float-right mb-3 mr-2"
-                            ><a href="#!" class="text-success"
-                                ><i class="fas fa-plus fa-2x" aria-hidden="true"></i></a
-                            ></span>
-                            <table class="table table-bordered table-responsive-md table-striped text-center">
-                            <thead>
-                                <tr>
-                                    <th style="display: none;">#</th>
-                                    <th>ID</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for x in input %}
-                                <tr>
-                                    <td class="pt-3-half" contenteditable={{edit_mode}}> {{ x.billing_hours}} </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
 
 <div class="row mx-auto" >
     <div class="col-md-12 col-sm-12 mx-auto">
         <div class="card mx-auto">
-            <h3 class="card-header text-center font-weight-bold text-uppercase py-4">Instructors</h3>
+            <h3 class="card-header text-center font-weight-bold text-uppercase py-4">Class List</h3>
                 <div class="card-body">
-                    
+
+                    <div class="clearfix"> <!---div for the upload modal-->
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#staticBackdrop">
+                        Upload Schedule
+                        </button>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="staticBackdropLabel">Schedule Upload (.xlsx)</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form method="POST" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    {{ form.as_p }}
+                                    <input type="submit" value="Submit">
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" data-dismiss="modal">Done</button>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+
                     <div id="table" class="table-editable" style = "overflow: auto !important;">
                         
                         <table id="DataTab" class="table table-bordered table-responsive-md table-striped text-center">
                         <thead>
                             <tr>
-                                <th> id</th> 
-                                <th> CRN</th> 
-                                <th> Course ID</th> 
-                                <th> Section</th> 
-                                <th> Status</th> 
-                                <th> Title </th> 
-                                <th> L1 </th> 
-                                <th> L2 </th> 
-                                <th> Schedule Type </th> 
-                                <th> Res.</th> 
-                                <th> Credit Hours </th> 
-                                <th> Billing Hours </th> 
-                                <th> Contact Hours </th> 
-                                <th> GR? </th> 
-                                <th> Cap </th> 
-                                <th> Waitlist Cap </th> 
-                                <th> Spec Appr </th> 
-                                <th> Meeting Type </th> 
-                                <th> Begin_date </th> 
-                                <th> End_date </th> 
-                                <th> Location </th> 
-                                <th> Site_code </th> 
+                                <th>id</th> 
+                                <th>CRN</th> 
+                                <th>Course ID</th> 
+                                <th>Section</th> 
+                                <th>Status</th> 
+                                <th>Title </th> 
+                                <th>L1 </th> 
+                                <th>L2 </th> 
+                                <th>Schedule Type</th> 
+                                <th>Res.</th> 
+                                <th>Credit Hours</th> 
+                                <th>Billing Hours</th> 
+                                <th>Contact Hours</th> 
+                                <th>GR?</th> 
+                                <th>Cap</th> 
+                                <th>Waitlist Cap</th> 
+                                <th>Spec Appr</th> 
+                                <th>Meeting Type</th> 
+                                <th>Begin_date </th> 
+                                <th>End_date</th> 
+                                <th>Location</th> 
+                                <th>Site_code</th> 
                                 <th> Primary_instructor</th> 
-                                <th> Fee </th> 
-                                <th> Comment </th> 
-                                <th> Meet_time </th> 
-                                <th> Dept </th> 
-                                <th> Deleted</th> 
+                                <th>Fee</th>
+                                <th>Comment</th>
+                                <th>Meet_time</th>
+                                <th>Dept</th>
+                                <th>Deleted</th> 
                                 <th></th> 
                             </tr>
                         </thead>
@@ -153,15 +127,17 @@
                         </span>
 
                     </table>
-                    
-                    <input id="sendServer" class="btn btn-primary" name="sendServer" type="button" value="Send to Server" />
+
 
                     <div id="bottom"> 
-
-
                 </div>
             </div>
-        </div>
+            <br>
+
+            <div class="clearfix">
+                <input id="sendServer" class="btn btn-primary float-right" name="sendServer" type="button" value="Send to Server" />
+            </div>
+        </div> <!-- end of card -->
     </div>
 </div>
 
