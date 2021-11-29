@@ -34,8 +34,8 @@
                             {% for x in input %}
                             <tr id="{{ x.id }}">
                                 <td >{{x.id}}</td>
-                                <td class="pt-3-half content" contenteditable="false"> {{ x.start_time|time:"H:i" }} </td>
-                                <td class="pt-3-half content" contenteditable="false"> {{ x.end_time|time:"H:i" }} </td>
+                                <td class="pt-3-half content" contenteditable="false"> {{ x.start_time|time:"H:i A" }} </td>
+                                <td class="pt-3-half content" contenteditable="false"> {{ x.end_time|time:"H:i A" }} </td>
                                 <td class="pt-3-half content" contenteditable="false"> {{ x.days }} </td>
                                 <td class="del_row"> </td>
                             </tr>
@@ -152,6 +152,7 @@
                     data : JSON.stringify(TableData),
                     success: function(data) {
                         alert("Sucessfully Updated your changes!!");
+                        location.reload();
                     },
                     error : function(data) {
                         alert("Something went wrong" + data)
