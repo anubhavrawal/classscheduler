@@ -10,5 +10,7 @@ urlpatterns = [
     path("instructors", views.instructor_page, name="scheduler-instructors"),
     path("help", views.help_page, name="scheduler-help"),
     path("upload", views.upload_view, name="scheduler-upload"),
-    path("times", views.times_page, name="scheduler-times"),
+    path("saveTime", views.saveMeetingTime, name="saveMeetingTime"),
+    path("meeting_times", views.meeting_times_page,
+         name="scheduler-meeting-times"),
 ]
