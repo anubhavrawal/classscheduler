@@ -11,7 +11,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view, renderer_classes
 from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
 from rest_framework import status
-from .Schedule_parser import semParser
+from tools.Schedule_parser import semParser
 
 from .constants import *
 from django.db import connection
@@ -145,3 +145,11 @@ def instructor_page(request):
 
 def help_page(request):
     return render(request, 'scheduler/help.html')
+
+
+def upload_page(request):
+    return render(request, 'scheduler/upload.html')
+
+
+def times_page(request):
+    return render(request, 'scheduler/times.html')

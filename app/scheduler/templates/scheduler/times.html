@@ -1,4 +1,5 @@
 {%extends 'scheduler/base.html' %}
+{% block title %}Meeting Times{% endblock %}
 {% load static %}
 
 {% block page_css%}
@@ -13,7 +14,7 @@
 <div class="row mx-auto">
     <div class="col-md-8 col-sm-12 mx-auto">
         <div class="card mx-auto">
-            <h3 class="card-header text-center font-weight-bold text-uppercase py-4">Instructors</h3>
+            <h3 class="card-header text-center font-weight-bold text-uppercase py-4">{{ title }}</h3>
                 <div class="card-body">
                     
                     <div id="table" class="table-editable">
@@ -21,11 +22,11 @@
                         <table id="DataTab" class="table table-bordered table-responsive-md table-striped text-center">
                         <thead>
                             <tr>
-                                <th >id</th> 
-                                <th >Last Name</th> 
-                                <th >First Name</th> 
-                                <th >Status</th> 
-                                <th >Department </th> 
+                                <th>id</th> 
+                                <th>Last Name</th> 
+                                <th>First Name</th> 
+                                <th>Status</th> 
+                                <th>Department </th> 
                                 <th></th> 
                             </tr>
                         </thead>
