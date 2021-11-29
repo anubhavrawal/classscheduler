@@ -64,7 +64,7 @@ class Instructorserializer(serializers.ModelSerializer):
     def delete(self, request, pk):
         instance = Instructors.objects.get(id = pk)
         instance.delete()
-        return Response({"message":"Record "+ instance.first_name +" was sucessfully deleted!!" })
+        return Response({"message":"Record  was sucessfully deleted!!" })
 #-----------------------Instructor Searilizer End------------------------------------------
 
 
@@ -133,7 +133,7 @@ class Roomsserializer(serializers.ModelSerializer):
     def delete(self, request, pk):
         instance = Rooms.objects.get(id = pk)
         instance.delete()
-        return Response({"message":"Record "+ instance.room_num +" was sucessfully deleted!!" })
+        return Response({"message":"Record  was sucessfully deleted!!" })
 
 #-----------------------Meeting Time Searilizer------------------------------------------
 class MeetingTimesListserializer(serializers.ListSerializer):
@@ -181,6 +181,6 @@ class MeetingTimeserializer(serializers.ModelSerializer):
         instance = Meeting_Times.objects.get(id = pk)
         tmp = instance.id
         instance.delete()
-        return Response({"message":"Record "+ str(tmp) +" was sucessfully deleted!!" })
+        return Response({"message":"Record was sucessfully deleted!!" })
 
 #-----------------------Meeting Time Searilizer End------------------------------------------
