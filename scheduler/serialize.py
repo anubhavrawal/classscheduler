@@ -179,7 +179,8 @@ class MeetingTimeserializer(serializers.ModelSerializer):
      
     def delete(self, request, pk):
         instance = Meeting_Times.objects.get(id = pk)
+        tmp = instance.id
         instance.delete()
-        return Response({"message":"Record "+ instance.id +" was sucessfully deleted!!" })
+        return Response({"message":"Record "+ str(tmp) +" was sucessfully deleted!!" })
 
 #-----------------------Meeting Time Searilizer End------------------------------------------

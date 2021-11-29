@@ -34,8 +34,8 @@
                             {% for x in input %}
                             <tr id="{{ x.id }}">
                                 <td >{{x.id}}</td>
-                                <td class="pt-3-half content" contenteditable="false"> {{ x.start_time }} </td>
-                                <td class="pt-3-half content" contenteditable="false"> {{ x.end_time }} </td>
+                                <td class="pt-3-half content" contenteditable="false"> {{ x.start_time|time:"H:i" }} </td>
+                                <td class="pt-3-half content" contenteditable="false"> {{ x.end_time|time:"H:i" }} </td>
                                 <td class="pt-3-half content" contenteditable="false"> {{ x.days }} </td>
                                 <td class="del_row"> </td>
                             </tr>
@@ -120,9 +120,11 @@
             //Handels how to send the infromation to the server
             $('#sendServer').click(function(e){
                 e.preventDefault();
-
+                
+                //Creates a Jquery's array based on current state of the table
+                //My current I mean when the sendServer button is pressed
+                // THe changes are not known to Datattable
                 var TableData = new Array();
-
                 $('#DataTab tr').each(function(row, tr){
                     TableData[row]={
                         "id" : $('#DataTab').DataTable().cell( (row-1), 0 ).data()
@@ -132,14 +134,17 @@
                     }    
                 });
 
-                TableData.shift();//Remove the first empty cell
+                TableData.shift();//Remove the first empty cell caused by the header field
                 
+                //Show me the current state of the table
                 console.log(TableData);
-        
+                
+                //Prepre a pack to send to the server
+                //Server: Django
                 $.ajax({
                     type : "POST",
                     contentType:"application/json; charset=utf-8",
-                    url : 'http://127.0.0.1:8000/saveInstructor',
+                    url : 'http://127.0.0.1:8000/saveTime',
                     dataType:"json",
                     beforeSend: function (xhr, settings) {
                         xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
@@ -218,15 +223,13 @@
                     $.ajax({
                         type : "DELETE",
                         contentType:"application/json; charset=utf-8",
-                        url : 'http://127.0.0.1:8000/saveInstructor' ,
+                        url : 'http://127.0.0.1:8000/saveTime' ,
                         dataType:"json",
                         beforeSend: function (xhr, settings) {
                             xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
                         },
                         data : JSON.stringify(rowArray[0]),
                         success: function(data, status) {
-                            console.log(data);
-                            console.log(status);
                             alert("Sucessfully deleted your record number: " + data);
                             
                             curr_row.remove();

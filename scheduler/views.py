@@ -23,7 +23,7 @@ from .forms import   UploadFileForm
 import io
 from rest_framework.parsers import JSONParser
 from rest_framework.exceptions import APIException
-import json
+from dateutil import tz
 
 def namedtuplefetchall(cursor):
     "Return all rows from a cursor as a namedtuple"
@@ -182,11 +182,17 @@ def meeting_times_page(request):
 @api_view(('POST','DELETE',))
 @renderer_classes((TemplateHTMLRenderer, JSONRenderer))
 def saveMeetingTime(request):
-    if request.method== "POST":
-        stream = io.BytesIO(request.body)
-        data = JSONParser().parse(stream)
+    from_zone = tz.tzutc()
+    to_zone = tz.tzlocal()
 
-        saveserialize = MeetingTimeserializer(data = data, many=True)
+    if request.method== "POST":
+        for info in request.data:
+            tmpdate = datetime.fromisoformat(info['start_time'][:-1]).replace(tzinfo=from_zone).astimezone(to_zone)
+            info['start_time'] = tmpdate.strftime('%H:%M:%S')
+            tmpdate = datetime.fromisoformat(info['end_time'][:-1]).replace(tzinfo=from_zone).astimezone(to_zone)
+            info['end_time'] = tmpdate.strftime('%H:%M:%S')
+
+        saveserialize = MeetingTimeserializer(data = request.data, many=True)
         
         if saveserialize.is_valid():
             saveserialize.update( Meeting_Times, saveserialize.validated_data)
@@ -197,11 +203,15 @@ def saveMeetingTime(request):
     
     #Handel the delete functionality
     if request.method== "DELETE":
-        stream = io.BytesIO(request.body)
-        data = JSONParser().parse(stream)
-        pk = data['id'] #fetch primary key to deleate
+        
+        #fetch primary key to deleate
+        pk = request.data['id'] 
+        tmpdate = datetime.fromisoformat(request.data['start_time'][:-1]).replace(tzinfo=from_zone).astimezone(to_zone)
+        request.data['start_time'] = tmpdate.strftime('%H:%M:%S')
+        tmpdate = datetime.fromisoformat(request.data['end_time'][:-1]).replace(tzinfo=from_zone).astimezone(to_zone)
+        request.data['end_time'] = tmpdate.strftime('%H:%M:%S')
 
-        saveserialize = Instructorserializer(data = data)
+        saveserialize = MeetingTimeserializer(data = request.data)
 
         if saveserialize.is_valid():
             saveserialize.delete(saveserialize.validated_data, pk) #perform the action
