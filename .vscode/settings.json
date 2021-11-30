@@ -1,0 +1,7 @@
+{
+	// "python.analysis.extraPaths": [
+	// "/mnt/c/Users/brasm/senior_design/app/tools"
+	// ],
+	"python.envFile": "${workspaceFolder}/.env",
+	"python.pythonPath": "/mnt/c/Users/brasm/senior_design/app/tools",
+}

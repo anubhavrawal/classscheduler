@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 
-from .serialize import Roomsserializer, Instructorserializer, MeetingTimeserializer, Semesterserializer,Homeserializer
+from .serialize import Roomsserializer, Instructorserializer, MeetingTimeserializer, Semesterserializer, Homeserializer
 from .models import *
 from .models import fields
 #from rest_framework.decorators import api_view
@@ -12,7 +12,7 @@ from rest_framework.decorators import api_view, permission_classes, renderer_cla
 from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
 from rest_framework import status
 from rest_framework.permissions import AllowAny
-from .Schedule_parser import semParser
+from tools.Schedule_parser import semParser
 
 from .constants import *
 from django.db import connection
@@ -50,32 +50,35 @@ def main_page(request):
         cursor.execute("SELECT * FROM " + semester_table)
     context = {
         'input': Semester.objects.values('season_year').distinct()
-        
+
     }
     return render(request, 'scheduler/home.html', context)
+
 
 @api_view(('DELETE',))
 @renderer_classes((TemplateHTMLRenderer, JSONRenderer))
 @permission_classes([AllowAny])
 def home_api(request):
     if request.method == 'DELETE':
-        saveserialize = Homeserializer(data = request.data)
-        #response = {'status': 1, 'message':"Internal Server Error", 'url':'/rooms'} 
+        saveserialize = Homeserializer(data=request.data)
+        #response = {'status': 1, 'message':"Internal Server Error", 'url':'/rooms'}
 
         if saveserialize.is_valid():
-            tmp = saveserialize.delete(saveserialize.validated_data) #perform the action
-            return Response( tmp.data)
+            tmp = saveserialize.delete(
+                saveserialize.validated_data)  # perform the action
+            return Response(tmp.data)
         else:
-            return Response(saveserialize.error_messages, status= status.HTTP_400_BAD_REQUEST)
+            return Response(saveserialize.error_messages, status=status.HTTP_400_BAD_REQUEST)
 
-    
+
 @permission_classes([AllowAny])
 def semester_view(request):
     items = ''
     edit = "false"
     term = request.GET['term']
     with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM "+ semester_table + " Where season_year = '"+term+"'")
+        cursor.execute("SELECT * FROM " + semester_table +
+                       " Where season_year = '"+term+"'")
         items = namedtuplefetchall(cursor)
 
         context = {
@@ -125,20 +128,22 @@ def saveInstructor(request):
         pk = data['id']  # fetch primary key to deleate
 
         saveserialize = Instructorserializer(data=data)
+
+
 @permission_classes([AllowAny])
 def saveSemester(request):
-    if request.method== "POST":
-        saveserialize = Roomsserializer(data = request.data, many=True)
-    
+    if request.method == "POST":
+        saveserialize = Roomsserializer(data=request.data, many=True)
+
         if saveserialize.is_valid():
-            saveserialize.update( Rooms, saveserialize.validated_data)
-            return Response(saveserialize.data, status= status.HTTP_201_CREATED)
+            saveserialize.update(Rooms, saveserialize.validated_data)
+            return Response(saveserialize.data, status=status.HTTP_201_CREATED)
 
         else:
-            return Response(saveserialize.error_messages, status= status.HTTP_400_BAD_REQUEST)
-    
-    if request.method =="DELETE":
-        saveserialize = Semesterserializer(data = request.data)
+            return Response(saveserialize.error_messages, status=status.HTTP_400_BAD_REQUEST)
+
+    if request.method == "DELETE":
+        saveserialize = Semesterserializer(data=request.data)
         pk = int(request.query_params['id'])
 
         if saveserialize.is_valid():
@@ -194,13 +199,13 @@ def saveroom(request):
         if saveserialize.is_valid():
             saveserialize.update(Rooms, saveserialize.validated_data)
             return Response(saveserialize.data, status=status.HTTP_201_CREATED)
-            return Response(saveserialize.error_messages, status= status.HTTP_400_BAD_REQUEST)
+            return Response(saveserialize.error_messages, status=status.HTTP_400_BAD_REQUEST)
 
 
 def room_page(request):
     context = {
         'input': Rooms.objects.all(),
-        'col': list(Header_Map.objects.filter(PageName = "scheduler_rooms").values_list('CSVheader', flat='True'))
+        'col': list(Header_Map.objects.filter(PageName="scheduler_rooms").values_list('CSVheader', flat='True'))
     }
     return render(request, 'scheduler/rooms.html', context)
 
@@ -212,18 +217,19 @@ def instructor_page(request):
     }
     return render(request, 'scheduler/instructors.html', context)
 
-@api_view(('POST','DELETE',))
+
+@api_view(('POST', 'DELETE',))
 @renderer_classes((TemplateHTMLRenderer, JSONRenderer))
 def saveInstructor(request):
-    if request.method== "POST":
+    if request.method == "POST":
         stream = io.BytesIO(request.body)
         data = JSONParser().parse(stream)
 
-        saveserialize = Instructorserializer(data = data, many=True)
-        
+        saveserialize = Instructorserializer(data=data, many=True)
+
         if saveserialize.is_valid():
-            saveserialize.update( Instructors, saveserialize.validated_data)
-            return Response(saveserialize.data, status= status.HTTP_201_CREATED)
+            saveserialize.update(Instructors, saveserialize.validated_data)
+            return Response(saveserialize.data, status=status.HTTP_201_CREATED)
 
         else:
             return Response(saveserialize.error_messages, status=status.HTTP_400_BAD_REQUEST)
@@ -234,11 +240,12 @@ def saveInstructor(request):
         data = JSONParser().parse(stream)
         pk = data['id']  # fetch primary key to delete
 
-        saveserialize = Instructorserializer(data = data)
+        saveserialize = Instructorserializer(data=data)
 
         if saveserialize.is_valid():
-            resp = saveserialize.delete(saveserialize.validated_data, pk) #perform the action
-            return Response( resp , status= status.HTTP_204_NO_CONTENT)
+            resp = saveserialize.delete(
+                saveserialize.validated_data, pk)  # perform the action
+            return Response(resp, status=status.HTTP_204_NO_CONTENT)
 
         else:
             return Response(saveserialize.error_messages, status=status.HTTP_400_BAD_REQUEST)
