@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block page_css%}
-    <link rel="stylesheet" type = "text/css" href= "{% static 'scheduler/meeting_times.css' %}" >
+    <link rel="stylesheet" type = "text/css" href= "{% static 'scheduler/hiddenCol.css' %}" >
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.2.4/css/buttons.dataTables.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -15,7 +15,6 @@
         <div class="card mx-auto">
             <h3 class="card-header text-center font-weight-bold text-uppercase py-4">Meeting Times</h3>
                 <div class="card-body">
-                    <p>{{temp.start_time}}</p>
                     <button type="button" id = 'editButton' onclick=editmode()>Edit</button>
                     <div id="table" class="table-editable">
                         
@@ -26,7 +25,7 @@
                                 <th >Start Time</th> 
                                 <th >End Time</th> 
                                 <th >Days</th> 
-                                <th ></th> 
+                                <th id = 'delete_column'></th> 
                             </tr>
                         </thead>
 
@@ -37,7 +36,7 @@
                                 <td class="pt-3-half content" contenteditable="false"> {{ x.start_time|time:"H:i A" }} </td>
                                 <td class="pt-3-half content" contenteditable="false"> {{ x.end_time|time:"H:i A" }} </td>
                                 <td class="pt-3-half content" contenteditable="false"> {{ x.days }} </td>
-                                <td class="del_row"> </td>
+                                <td class="delete_row"> </td>
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -60,34 +59,12 @@
         </div>
     </div>
 </div>
-
-
-<script>
-     function editmode(){
-        var row, new_row, send_server, edit_button, delete_row_button, i;
-        i = 0;
-        row = document.querySelectorAll('.content');
-        new_row = document.getElementById("EditorAdd");
-        send_server = document.getElementById("sendServer");
-        edit_button = document.getElementById("editButton");
-
-        for (i; i < row.length; i++){
-            if(row[i].contentEditable == 'false'){
-                row[i].contentEditable = 'true';
-                new_row.style.display = 'block';
-                send_server.style.display = 'block';
-                edit_button.innerHTML = 'Cancel';
-            }
-            else{
-                window.location.reload();
-            }
-        }
-    } 
-</script>
-
 {% endblock content %}
 
 {% block bootstrapJS %}
+<!-- Hidden Deletion Column JS-->
+<script type="text/javascript" src="{% static 'scheduler/hiddenCol.js' %}"></script>
+
 <!--Import jQuery before export.js-->
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
 

@@ -1,9 +1,8 @@
 {% extends 'scheduler/base.html' %}
 {% load static %}
-{% load semester_extras %}
 
 {% block page_css%}
-    <link rel="stylesheet" type = "text/css" href= "{% static 'scheduler/instructors.css' %}" >
+    <link rel="stylesheet" type = "text/css" href= "{% static 'scheduler/hiddenCol.css' %}" >
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.2.4/css/buttons.dataTables.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -23,11 +22,15 @@
                         <thead>
                             <tr>
                                 <th >id</th> 
-                                <th class = "last_name">Last Name</th> 
+                                <th >Last Name</th> 
                                 <th >First Name</th> 
                                 <th >Status</th> 
                                 <th >Department </th> 
+<<<<<<< Updated upstream:app/scheduler/templates/scheduler/instructors.html
                                 <th class="del_row"></th> 
+=======
+                                <th id = 'delete_column'></th> 
+>>>>>>> Stashed changes:scheduler/templates/scheduler/instructors.html
                             </tr>
                         </thead>
 
@@ -35,11 +38,11 @@
                             {% for x in input %}
                             <tr id="{{ x.id }}">
                                 <td >{{x.id}}</td>
-                                <td class="pt-3-half content last_name" contenteditable="false"> {{ x.last_name }} </td>
+                                <td class="pt-3-half content" contenteditable="false"> {{ x.last_name }} </td>
                                 <td class="pt-3-half content" contenteditable="false"> {{ x.first_name  }} </td>
                                 <td class="pt-3-half content" contenteditable="false"> {{ x.status }} </td>
                                 <td class="pt-3-half content" contenteditable="false"> {{ x.department }} </td>
-                                <td> </td>
+                                <td class="delete_row"> </td>
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -63,32 +66,12 @@
     </div>
 </div>
 
-
-<script>
-     function editmode(){
-        var row, new_row, send_server, edit_button,i;
-        row = document.querySelectorAll('.content');
-        new_row = document.getElementById("EditorAdd");
-        send_server = document.getElementById("sendServer");
-        edit_button = document.getElementById("editButton");
-
-        for (i = 0; i < row.length; i ++){
-            if(row[i].contentEditable == 'false'){
-                row[i].contentEditable = 'true';
-                new_row.style.display = 'block';
-                send_server.style.display = 'block';
-                edit_button.innerHTML = 'Cancel';
-            }
-            else{
-                window.location.reload()
-            }
-        }
-    } 
-</script>
-
 {% endblock content %}
 
 {% block bootstrapJS %}
+<!-- Hidden Deletion Column JS-->
+    <script type="text/javascript" src="{% static 'scheduler/hiddenCol.js' %}"></script>
+
 <!--Import jQuery before export.js-->
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
 

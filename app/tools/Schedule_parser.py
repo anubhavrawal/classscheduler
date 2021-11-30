@@ -205,7 +205,17 @@ def semParser (semesterName, department, content):
             if(not pd.isna(row[comment_col])):
                 temp.append(str(temp[comment_col]) + " " +  str(row[comment_col]))
 
-    print( len(db_col_list) )
+        # Checks the for the last entry to make sure that it wasn't an extra line and appends data to the classes list
+        if(index == len(df)-1 and not pd.isna(row['crn'])):
+            adjust_meeting_times(conn,temp_days, temp_times)
+            adjust_department( temp[1])
+            classes.append(temp)
+
+    
+    
+    for x in classes:
+        print(x)
+
     #for row in classes:
     #    print(row)
     #print( [ ,excel_col, db_col_list] 
