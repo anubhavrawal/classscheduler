@@ -4,6 +4,8 @@ from .models import Rooms, fields
 
 
 class UploadFileForm(forms.Form):
+    term_Name =  forms.CharField()
+    dept_Name =  forms.CharField()
     input_file = forms.FileField(allow_empty_file=False, label='', widget=forms.ClearableFileInput(
         attrs={'class': 'form-control-file', 'type': 'file'}))
 

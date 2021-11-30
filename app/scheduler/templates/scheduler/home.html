@@ -14,17 +14,18 @@
     <div class="col-md-8 col-sm-12 mx-auto">
         <div class="card mx-auto">
             <h3 class="card-header text-center font-weight-bold text-uppercase py-4">Home</h3>
-                <div class="card-body">
+            <div class="card-body">
 
-                    <div class="clearfix"> <!---div for the upload modal-->
-                        <!-- Button trigger modal -->
-                        <button id='upload_buton' type="button" class="btn btn-primary float-left" data-toggle="modal" data-target="#staticBackdrop">
-                        Upload Schedule
-                        </button>
-                        
+                <div class="clearfix"> <!---div for the upload modal-->
+                    <form method="POST" enctype="multipart/form-data">
+                    <!-- Button trigger modal -->
+                    <button id='upload_buton' type="button" class="btn btn-primary float-left" data-toggle="modal" data-target="#staticBackdrop">
+                    Upload Schedule
+                    </button>
+                    
 
-                        <!-- Modal -->
-                        <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <!-- Modal -->
+                    <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
                             <div class="modal-header">
@@ -33,12 +34,15 @@
                                 <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
+                            
                             <div class="modal-body">
-                                <form method="POST" enctype="multipart/form-data">
-                                    {% csrf_token %}
-                                    {{ form.as_p }}
-                                    <input type="submit" value="Submit">
-                                </form>
+                                
+                                
+                                {% csrf_token %}
+                                {{ form.as_p }}
+                                <input type="submit" value="Submit" class="submit-button">
+                                
+
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-primary" data-dismiss="modal">Done</button>
@@ -47,8 +51,10 @@
                         </div>
                         </div>
                     </div>
+                    </form>
+                
 
-                    <div id="table" class="table-editable" style = "overflow: auto !important;">
+                    <div id="table" class="table-editable">
                         
                         <table id="DataTab" class="table table-bordered table-responsive-md table-striped text-center">
                         <thead>
@@ -65,8 +71,8 @@
                             {% for x in input %}
                             <tr id="1">
                                 <td >1</td>
-                                <td class="pt-3-half content last_name" contenteditable="false"> {{ x.season_year }} </td>
-                                <td class="pt-3-half content" contenteditable="false"> CS </td>
+                                <td class="pt-3-half content last_name"> {{ x.season_year }} </td>
+                                <td class="pt-3-half content" > CS </td>
                                 <td class="pt-3-half content" >   </td>
                                 <td> </td>
                             </tr>
@@ -77,8 +83,8 @@
 
                     <div id="bottom"> 
 
-                </div>
-            </div>
+                    </div>
+            </div><!-- end of card body -->
 
         </div> <!-- end of card -->
     </div>

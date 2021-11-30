@@ -37,10 +37,11 @@ def namedtuplefetchall(cursor):
 
 
 def main_page(request):
+
     if request.POST:
-        form = UploadFileForm(request.FILES)
+        form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
-            semParser('test', request.FILES.get('File_field'))
+            semParser(form['term_Name'].data,form['dept_Name'].data, request.FILES.get('input_file'))
     else:
         form = UploadFileForm()
 
@@ -49,7 +50,8 @@ def main_page(request):
     with connection.cursor() as cursor:
         cursor.execute("SELECT * FROM " + semester_table)
     context = {
-        'input': Semester.objects.values('season_year').distinct()
+        'form' : form,
+        'input': Semester.objects.values('season_year').distinct(),
 
     }
     return render(request, 'scheduler/home.html', context)
@@ -199,7 +201,6 @@ def saveroom(request):
         if saveserialize.is_valid():
             saveserialize.update(Rooms, saveserialize.validated_data)
             return Response(saveserialize.data, status=status.HTTP_201_CREATED)
-            return Response(saveserialize.error_messages, status=status.HTTP_400_BAD_REQUEST)
 
 
 def room_page(request):
