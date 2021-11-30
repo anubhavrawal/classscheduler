@@ -31,12 +31,12 @@ class Semester(models.Model):
     location = models.IntegerField()                                    # Check for valid location in location table
     site_code = models.CharField(max_length=5)
     primary_instructor = models.IntegerField()                          # Check for valid teacher in teacher table
-    fee = models.IntegerField()
+    fee = models.IntegerField(blank=True)
     comment = models.TextField()
     meet_time = models.IntegerField()                                   # Check for valid time in meeting_time
     dept = models.CharField(max_length= 4)
     deleted =  models.BooleanField(default=False, blank=True, null = False)
-    season_year = models.TextField(default="Fall 2021")
+    season_year = models.TextField(default="Fall_2021")
     
 class Header_Map(models.Model):
     PageName = models.CharField(max_length=32)

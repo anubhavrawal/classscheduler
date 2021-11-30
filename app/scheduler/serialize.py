@@ -1,7 +1,71 @@
 from rest_framework import serializers
-from .models import Meeting_Times, Rooms, fields, Instructors
+from .models import Meeting_Times, Rooms, fields, Instructors, Semester
 from rest_framework.response import Response
 from rest_framework import status
+
+
+class Homeserializer(serializers.ModelSerializer):
+    id = serializers.IntegerField()
+
+    class Meta:
+        model = Semester
+        fields=['id','season_year', 'dept']
+
+    
+    def delete(self, data):
+        Semester.objects.filter(season_year__contains=data['season_year'], dept__contains =data['dept']).delete()
+        return Response({"message":"Record  was sucessfully deleted!!" })
+
+
+#-----------------------Semester Searilizer------------------------------------------
+class SemesterListserializer(serializers.ListSerializer):
+    def create(self, validated_data):
+        books = [Semester(**item) for item in validated_data]
+        return Semester.objects.bulk_create(books)
+
+    def update(self, instance, validated_data):
+        updated_instances = [] 
+        
+        for data in validated_data:
+            try:
+                instance = Semester.objects.get(id = data['id'])
+                instance.last_name = data['last_name']
+                instance.first_name = data['first_name']
+                instance.status = data['status']
+                instance.department = data['department']
+                instance.save()
+            
+            except:
+                #validated_data.pop('id')
+                instance = Semester.objects.create(**data)
+            
+
+            updated_instances.append(instance)
+        
+        return updated_instances
+
+class Semesterserializer(serializers.ModelSerializer):
+    id = serializers.IntegerField()
+
+    class Meta:
+        model = Semester
+        fields= '__all__'
+        list_serializer_class = SemesterListserializer
+
+     
+    @classmethod
+    def many_init(cls, *args, **kwargs):
+        # Instantiate the child serializer.
+        kwargs['child'] = cls()
+        # Instantiate the parent list serializer.
+        return SemesterListserializer(*args, **kwargs)
+    
+    def delete(self, request, pk):
+        instance = Semester.objects.get(id = pk)
+        instance.deleted = True
+        return Response({"message":"Record  was sucessfully deleted!!" })
+#-----------------------Semester Searilizer End------------------------------------------
+
 
 
 #-----------------------Instructor Searilizer------------------------------------------
@@ -134,6 +198,9 @@ class Roomsserializer(serializers.ModelSerializer):
         instance = Rooms.objects.get(id = pk)
         instance.delete()
         return Response({"message":"Record  was sucessfully deleted!!" })
+
+#-----------------------Room Searilizer END------------------------------------------
+
 
 #-----------------------Meeting Time Searilizer------------------------------------------
 class MeetingTimesListserializer(serializers.ListSerializer):

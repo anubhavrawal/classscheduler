@@ -93,7 +93,7 @@ def adjust_dates(line):
 import pymysql.cursors
 import pymysql
 
-def semParser (tablename, content):
+def semParser (semesterName, content):
     global classes
     global temp  
     global temp_days
@@ -121,14 +121,14 @@ def semParser (tablename, content):
     df.columns = map(str.lower, df.columns)
 
     #---------------------------Formating header for header_map db---------------------------
-    excel_col =  tmp_col_list[0:17] +['Begin Date',"End Date", "Meeting Time"]+ tmp_col_list[21:26]+ ["Department"]
+    excel_col =  tmp_col_list[0:17] +['Begin Date',"End Date"]+ tmp_col_list[21:26]+ ["Meeting Time","Department"]
     db=conn.execute('''SELECT * FROM scheduler_semester''')
 
     tmp_db =  list(db.keys())[1:-1]
     print(excel_col)
     print(len(excel_col))
     
-    db_col_list = ['crn'] + tmp_db[2:20]+ tmp_db[21:26] + ['meet_time','dept']
+    db_col_list = ['crn'] + tmp_db[2:20]+ tmp_db[21:26] + ['meet_time','dept', 'season_year']
     print(db_col_list)
     print(len(db_col_list))
 
@@ -159,7 +159,7 @@ def semParser (tablename, content):
                 temp_days = ""
                 temp_times = ""
                 adjust_department( temp[1])
-                temp.append()
+                temp.append(semesterName)
                 classes.append(temp)
             #else:
                 #classes.append(temp)

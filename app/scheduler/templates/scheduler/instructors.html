@@ -1,4 +1,4 @@
-{% extends "scheduler/base.html" %}
+{% extends 'scheduler/base.html' %}
 {% load static %}
 {% load semester_extras %}
 
@@ -23,11 +23,11 @@
                         <thead>
                             <tr>
                                 <th >id</th> 
-                                <th >Last Name</th> 
+                                <th class = "last_name">Last Name</th> 
                                 <th >First Name</th> 
                                 <th >Status</th> 
                                 <th >Department </th> 
-                                <th ></th> 
+                                <th class="del_row"></th> 
                             </tr>
                         </thead>
 
@@ -35,11 +35,11 @@
                             {% for x in input %}
                             <tr id="{{ x.id }}">
                                 <td >{{x.id}}</td>
-                                <td class="pt-3-half content" contenteditable="false"> {{ x.last_name }} </td>
+                                <td class="pt-3-half content last_name" contenteditable="false"> {{ x.last_name }} </td>
                                 <td class="pt-3-half content" contenteditable="false"> {{ x.first_name  }} </td>
                                 <td class="pt-3-half content" contenteditable="false"> {{ x.status }} </td>
                                 <td class="pt-3-half content" contenteditable="false"> {{ x.department }} </td>
-                                <td class="del_row"> </td>
+                                <td> </td>
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -66,7 +66,7 @@
 
 <script>
      function editmode(){
-        var row, new_row, send_server, edit_button, delete_row_button, i;
+        var row, new_row, send_server, edit_button,i;
         row = document.querySelectorAll('.content');
         new_row = document.getElementById("EditorAdd");
         send_server = document.getElementById("sendServer");
@@ -78,7 +78,6 @@
                 new_row.style.display = 'block';
                 send_server.style.display = 'block';
                 edit_button.innerHTML = 'Cancel';
-                delete_row_button.style.display = 'block';
             }
             else{
                 window.location.reload()
@@ -178,8 +177,6 @@
 
             //Add in a seprate class to seprate out the new row
             $('#' + counter).addClass('table-success')
-            $('#' + counter).children('td').attr('contenteditable','true');
-            $('#' + counter).children('td').addClass('pt-3-half');
             
         } );
 
