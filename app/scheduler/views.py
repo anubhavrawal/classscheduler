@@ -154,7 +154,6 @@ def saveSemester(request):
         else:
             return Response(saveserialize.error_messages, status=status.HTTP_400_BAD_REQUEST)
 
-
 @api_view(('POST', 'DELETE',))
 @renderer_classes((TemplateHTMLRenderer, JSONRenderer))
 def saveroom(request):
