@@ -2,6 +2,7 @@
 {% load static %}
 
 {% block page_css%}
+    <link rel="stylesheet" type = "text/css" href= "{% static 'scheduler/hiddenCol.css' %}" >
     <link rel="stylesheet" type = "text/css" href= "{% static 'scheduler/room.css' %}" >
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.2.4/css/buttons.dataTables.min.css">
@@ -17,7 +18,7 @@
             <div class="card mx-auto">
                 <h3 class="card-header text-center font-weight-bold text-uppercase py-4">CS Room List</h3>
                     <div class="card-body">
-
+                        <button type="button" id = 'editButton' onclick=editmode()>Edit</button>
                         <div id="table" class="table-editable">
                             <!--Make sure id is DataTab for the table feature to work-->
                             <table id="DataTab" class="table table-bordered  table-striped text-center">
@@ -30,7 +31,7 @@
                                     <th >Room#</th> 
                                     <th >Capacity</th> 
                                     <th >Room Type</th> 
-                                    <th></th> 
+                                    <th id = 'delete_column'></th> 
                                 </tr>
                             </thead>
                             
@@ -38,12 +39,12 @@
                                 {% for x in input %}
                                 <tr id="{{ x.id }}">
                                     <td >{{x.id}}</td>
-                                    <td class="pt-3" contenteditable="true"> {{ x.campus }} </td>
-                                    <td class="pt-3" contenteditable="true"> {{ x.building }} </td>
-                                    <td class="pt-3" contenteditable="true"> {{ x.room_num }} </td>
-                                    <td class="pt-3" contenteditable="true"> {{ x.capacity }} </td>
-                                    <td class="pt-3" contenteditable="true"> {{ x.room_type }} </td>
-                                    <td> </td>
+                                    <td class="pt-3 content" contenteditable="false"> {{ x.campus }} </td>
+                                    <td class="pt-3 content" contenteditable="false"> {{ x.building }} </td>
+                                    <td class="pt-3 content" contenteditable="false"> {{ x.room_num }} </td>
+                                    <td class="pt-3 content" contenteditable="false"> {{ x.capacity }} </td>
+                                    <td class="pt-3 content" contenteditable="false"> {{ x.room_type }} </td>
+                                    <td class="delete_row"> </td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -72,6 +73,9 @@
 {% endblock content %}
 
 {% block bootstrapJS %}
+<!-- Hidden Deletion Column JS-->
+<script type="text/javascript" src="{% static 'scheduler/hiddenCol.js' %}"></script>
+
        <!--Import jQuery before export.js-->
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
 
