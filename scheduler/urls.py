@@ -4,6 +4,9 @@ from . import views
 urlpatterns = [
     path("", views.main_page, name='scheduler-home'),
     path("upload",views.upload_view, name ="fileUpload"),
+    path("home_api", views.home_api, name='home_api'),
+
+    path("semester", views.semester_view, name="semView"),
     path("saveSemster", views.saveSemester, name='saveSemester'),
 
     path("rooms", views.room_page, name="scheduler-rooms"),

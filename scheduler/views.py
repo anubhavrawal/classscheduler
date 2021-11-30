@@ -1,9 +1,9 @@
 from django.http import response
 from django.shortcuts import render
-# from django.http import HttpResponse
+from django.http import HttpResponse
 from django.contrib.auth.models import User
 
-from .serialize import Roomsserializer, Instructorserializer, MeetingTimeserializer, Semesterserializer
+from .serialize import Roomsserializer, Instructorserializer, MeetingTimeserializer, Semesterserializer,Homeserializer
 from .models import *
 from .models import fields
 #from rest_framework.decorators import api_view
@@ -25,6 +25,8 @@ import io
 from rest_framework.parsers import JSONParser
 from rest_framework.exceptions import APIException
 from dateutil import tz
+from django.http import HttpResponseRedirect
+import json
 
 def namedtuplefetchall(cursor):
     "Return all rows from a cursor as a namedtuple"
@@ -32,11 +34,37 @@ def namedtuplefetchall(cursor):
     nt_result = namedtuple('Result', [col[0] for col in desc])
     return [nt_result(*row) for row in cursor.fetchall()]
 
+
 def main_page(request):
+    context = {
+        'input': Semester.objects.values('season_year').distinct()
+        
+    }
+    return render(request, 'scheduler/home.html', context)
+
+@api_view(('DELETE',))
+@renderer_classes((TemplateHTMLRenderer, JSONRenderer))
+@permission_classes([AllowAny])
+def home_api(request):
+    if request.method == 'DELETE':
+        request.data
+        saveserialize = Homeserializer(data = request.data)
+        response = {'status': 1, 'message':"Internal Server Error", 'url':'/rooms'} 
+
+        if saveserialize.is_valid():
+            tmp = saveserialize.delete(saveserialize.validated_data) #perform the action
+            return Response( tmp , status= status.HTTP_204_NO_CONTENT)
+        else:
+            return Response(saveserialize.error_messages, status= status.HTTP_400_BAD_REQUEST)
+
+    
+@permission_classes([AllowAny])
+def semester_view(request):
     items = ''
     edit = "false"
+    term = request.GET['term']
     with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM "+ semester_table)
+        cursor.execute("SELECT * FROM "+ semester_table + " Where season_year = '"+term+"'")
         items = namedtuplefetchall(cursor)
 
         context = {
@@ -44,7 +72,7 @@ def main_page(request):
             'col': "id",  #fields(Semester)[1:]
             'edit_mode': edit,
         }
-        return render(request, 'scheduler/home.html', context)
+        return render(request, 'scheduler/semester.html', context)
 
 @api_view(('POST','DELETE',))
 @renderer_classes((TemplateHTMLRenderer, JSONRenderer))
@@ -158,8 +186,8 @@ def saveInstructor(request):
         saveserialize = Instructorserializer(data = data)
 
         if saveserialize.is_valid():
-            saveserialize.delete(saveserialize.validated_data, pk) #perform the action
-            return Response( pk , status= status.HTTP_204_NO_CONTENT)
+            resp = saveserialize.delete(saveserialize.validated_data, pk) #perform the action
+            return Response( resp , status= status.HTTP_204_NO_CONTENT)
 
         else:
             return Response(saveserialize.error_messages, status= status.HTTP_400_BAD_REQUEST)

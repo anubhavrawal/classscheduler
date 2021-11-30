@@ -4,6 +4,19 @@ from rest_framework.response import Response
 from rest_framework import status
 
 
+class Homeserializer(serializers.ModelSerializer):
+    id = serializers.IntegerField()
+
+    class Meta:
+        model = Semester
+        fields=[ 'season_year', 'department']
+
+    
+    def delete(self, data):
+        Semester.objects.filter(season_year__contains='Fall_2021', dept__contains = 'CS').delete()
+        return Response({"message":"Record  was sucessfully deleted!!" })
+
+
 #-----------------------Semester Searilizer------------------------------------------
 class SemesterListserializer(serializers.ListSerializer):
     def create(self, validated_data):
