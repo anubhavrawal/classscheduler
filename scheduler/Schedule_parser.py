@@ -159,7 +159,7 @@ def semParser (tablename, content):
                 temp_days = ""
                 temp_times = ""
                 adjust_department( temp[1])
-                temp.append()
+                #temp.append()
                 classes.append(temp)
             #else:
                 #classes.append(temp)

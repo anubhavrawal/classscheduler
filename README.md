@@ -12,6 +12,11 @@ Brenden Rasmussen
 ## Description
 An application that allows users to schedule classes and view the schedule of classes that have been scheduled.
 
+## Run
+
+```
+$ python manage.py runserver 0.0.0.0:8080
+```
 
 ## Installation Guidelines
 
@@ -50,6 +55,7 @@ An application that allows users to schedule classes and view the schedule of cl
 	mysql> CREATE database SCHEDULER;
 	
 	$ mysql SCHEDULER <scheduler.db
+	$ sudo apt-get install python3-dev
 	```
 
 - Dumping a database
@@ -73,3 +79,12 @@ An application that allows users to schedule classes and view the schedule of cl
     ```
     $ python3 manage.py runserver
     ```
+
+# Deploy
+
+	```
+	$ sudo apt-get install python3-setuptools libpython-dev python3-dev
+	$ sudo apt-get install nginx
+	$ sudo apt-get install uwsgi uwsgi-plugin-python3
+	$ 
+	```
