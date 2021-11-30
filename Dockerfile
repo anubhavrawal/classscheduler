@@ -1,0 +1,10 @@
+# syntax=docker/dockerfile:1
+FROM python:3
+ENV PYTHONUNBUFFERED=1
+
+WORKDIR /django
+COPY . .
+
+RUN pip3 install -r requirements.txt
+
+CMD ["python3", "manage.py", "runserver"]

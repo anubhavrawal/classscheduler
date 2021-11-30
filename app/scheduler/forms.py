@@ -1,12 +1,11 @@
 from django import forms
 from django.forms import ModelForm
 from .models import Rooms, fields
-  
+
 
 class UploadFileForm(forms.Form):
-    name = forms.CharField()
-    dept = forms.CharField()
-    file_field = forms.FileField()
+    input_file = forms.FileField(allow_empty_file=False, label='', widget=forms.ClearableFileInput(
+        attrs={'class': 'form-control-file', 'type': 'file'}))
 
 
 class UpdateForm(ModelForm):

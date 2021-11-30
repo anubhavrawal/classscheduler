@@ -16,7 +16,38 @@
             <h3 class="card-header text-center font-weight-bold text-uppercase py-4">Home</h3>
                 <div class="card-body">
 
-                    <div id="table" class="table-editable">
+                    <div class="clearfix"> <!---div for the upload modal-->
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#staticBackdrop">
+                        Upload Schedule
+                        </button>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="staticBackdropLabel">Schedule Upload (.xlsx)</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form method="POST" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    {{ form.as_p }}
+                                    <input type="submit" value="Submit">
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" data-dismiss="modal">Done</button>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+
+                    <div id="table" class="table-editable" style = "overflow: auto !important;">
                         
                         <table id="DataTab" class="table table-bordered table-responsive-md table-striped text-center">
                         <thead>
@@ -47,7 +78,12 @@
 
                 </div>
             </div>
-        </div>
+            <br>
+
+            <div class="clearfix">
+                <input id="sendServer" class="btn btn-primary float-right" name="sendServer" type="button" value="Send to Server" />
+            </div>
+        </div> <!-- end of card -->
     </div>
 </div>
 
