@@ -2,6 +2,7 @@
 {% load static %}
 {% block page_css%}
     <link rel="stylesheet" type = "text/css" href= "{% static 'scheduler/semester.css' %}" >
+    <link rel="stylesheet" type = "text/css" href= "{% static 'scheduler/hiddenCol.css' %}" >
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.2.4/css/buttons.dataTables.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -14,7 +15,7 @@
         <div class="card mx-auto">
             <h3 class="card-header text-center font-weight-bold text-uppercase py-4">Semester</h3>
                 <div class="card-body">
-                    
+                    <button type="button" id = 'editButton' onclick=editmode()>Edit</button>
                     <div id="table" class="table-editable" style = "overflow: auto !important;">
                         
                         <table id="DataTab" class="table table-bordered table-responsive-md table-striped text-center">
@@ -48,7 +49,7 @@
                                 <th> Meet_time </th> 
                                 <th> Dept </th> 
                                 <th> Deleted</th> 
-                                <th></th> 
+                                <th id = 'delete_column'></th> 
                             </tr>
                         </thead>
 
@@ -56,34 +57,34 @@
                             {% for x in input %}
                             <tr id="{{ x.id }}">
                                 <td >{{x.id}}</td>
-                                <td class="pt-3-half" contenteditable="true"> {{ x.crn }} </td>
-                                <td class="pt-3-half" contenteditable="true"> {{ x.course_id  }} </td>
-                                <td class="pt-3-half" contenteditable="true"> {{ x.section }} </td>
-                                <td class="pt-3-half" contenteditable="true"> {{ x.status }} </td>
-                                <td class="pt-3-half" contenteditable="true"> {{ x.title }} </td>
-                                <td class="pt-3-half" contenteditable="true"> {{ x.link1 }} </td>
-                                <td class="pt-3-half" contenteditable="true"> {{ x.link2 }} </td>
-                                <td class="pt-3-half" contenteditable="true"> {{ x.schedule_type }} </td>
-                                <td class="pt-3-half" contenteditable="true"> {{ x.reserved }} </td>
-                                <td class="pt-3-half" contenteditable="true"> {{ x.credit_hours }} </td>
-                                <td class="pt-3-half" contenteditable="true"> {{ x.billing_hours }} </td>
-                                <td class="pt-3-half" contenteditable="true"> {{ x.contact_hours }} </td>
-                                <td class="pt-3-half" contenteditable="true"> {{ x.grad_able }} </td>
-                                <td class="pt-3-half" contenteditable="true"> {{ x.cap }} </td>
-                                <td class="pt-3-half" contenteditable="true"> {{ x.waitlist_cap }} </td>
-                                <td class="pt-3-half" contenteditable="true"> {{ x.spec_appr }} </td>
-                                <td class="pt-3-half" contenteditable="true"> {{ x.meeting_type }} </td>
-                                <td class="pt-3-half" contenteditable="true"> {{ x.begin_date }} </td>
-                                <td class="pt-3-half" contenteditable="true"> {{ x.end_date }} </td>
-                                <td class="pt-3-half" contenteditable="true"> {{ x.location }} </td>
-                                <td class="pt-3-half" contenteditable="true"> {{ x.site_code }} </td>
-                                <td class="pt-3-half" contenteditable="true"> {{ x.primary_instructor }} </td>
-                                <td class="pt-3-half" contenteditable="true"> {{ x.fee }} </td>
-                                <td class="pt-3-half" contenteditable="true"> {{ x.comment }} </td>
-                                <td class="pt-3-half" contenteditable="true"> {{ x.meet_time }} </td>
-                                <td class="pt-3-half" contenteditable="true"> {{ x.dept }} </td>
+                                <td class="pt-3-half content " contenteditable="false"> {{ x.crn }} </td>
+                                <td class="pt-3-half content" contenteditable="false"> {{ x.course_id  }} </td>
+                                <td class="pt-3-half content" contenteditable="false"> {{ x.section }} </td>
+                                <td class="pt-3-half content" contenteditable="false"> {{ x.status }} </td>
+                                <td class="pt-3-half content" contenteditable="false"> {{ x.title }} </td>
+                                <td class="pt-3-half content" contenteditable="false"> {{ x.link1 }} </td>
+                                <td class="pt-3-half content" contenteditable="false"> {{ x.link2 }} </td>
+                                <td class="pt-3-half content" contenteditable="false"> {{ x.schedule_type }} </td>
+                                <td class="pt-3-half content" contenteditable="false"> {{ x.reserved }} </td>
+                                <td class="pt-3-half content" contenteditable="false"> {{ x.credit_hours }} </td>
+                                <td class="pt-3-half content" contenteditable="false"> {{ x.billing_hours }} </td>
+                                <td class="pt-3-half content" contenteditable="false"> {{ x.contact_hours }} </td>
+                                <td class="pt-3-half content" contenteditable="false"> {{ x.grad_able }} </td>
+                                <td class="pt-3-half content" contenteditable="false"> {{ x.cap }} </td>
+                                <td class="pt-3-half content" contenteditable="false"> {{ x.waitlist_cap }} </td>
+                                <td class="pt-3-half content" contenteditable="false"> {{ x.spec_appr }} </td>
+                                <td class="pt-3-half content" contenteditable="false"> {{ x.meeting_type }} </td>
+                                <td class="pt-3-half content" contenteditable="false"> {{ x.begin_date }} </td>
+                                <td class="pt-3-half content" contenteditable="false"> {{ x.end_date }} </td>
+                                <td class="pt-3-half content" contenteditable="false"> {{ x.location }} </td>
+                                <td class="pt-3-half content" contenteditable="false"> {{ x.site_code }} </td>
+                                <td class="pt-3-half content" contenteditable="false"> {{ x.primary_instructor }} </td>
+                                <td class="pt-3-half content" contenteditable="false"> {{ x.fee }} </td>
+                                <td class="pt-3-half content" contenteditable="false"> {{ x.comment }} </td>
+                                <td class="pt-3-half content" contenteditable="false"> {{ x.meet_time }} </td>
+                                <td class="pt-3-half content" contenteditable="false"> {{ x.dept }} </td>
                                 <td >{{x.deleted}}</td>
-                                <td> </td>
+                                <td class="delete_row"> </td>
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -112,6 +113,9 @@
 {% endblock content %}
 
 {% block bootstrapJS %}
+<!-- Hidden Deletion Column JS-->
+<script type="text/javascript" src="{% static 'scheduler/hiddenCol.js' %}"></script>
+
 <!--Import jQuery before export.js-->
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
 

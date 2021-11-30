@@ -90,7 +90,7 @@ def semester_view(request):
         }
         context['form'] = UploadFileForm()
 
-        return render(request, 'scheduler/home.html', context)
+        return render(request, 'scheduler/semester.html', context)
 
 
 def upload_view(request):
