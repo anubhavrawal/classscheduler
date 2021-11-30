@@ -65,21 +65,21 @@
 <script>
      function editmode(){
         var row, new_row, send_server, edit_button, delete_row_button, i;
+        i = 0;
         row = document.querySelectorAll('.content');
         new_row = document.getElementById("EditorAdd");
         send_server = document.getElementById("sendServer");
         edit_button = document.getElementById("editButton");
 
-        for (i = 0; i < row.length; i ++){
+        for (i; i < row.length; i++){
             if(row[i].contentEditable == 'false'){
                 row[i].contentEditable = 'true';
                 new_row.style.display = 'block';
                 send_server.style.display = 'block';
                 edit_button.innerHTML = 'Cancel';
-                delete_row_button.style.display = 'block';
             }
             else{
-                window.location.reload()
+                window.location.reload();
             }
         }
     } 

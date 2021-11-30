@@ -31,7 +31,7 @@ class Semester(models.Model):
     location = models.IntegerField()                                    # Check for valid location in location table
     site_code = models.CharField(max_length=5)
     primary_instructor = models.IntegerField()                          # Check for valid teacher in teacher table
-    fee = models.IntegerField()
+    fee = models.IntegerField(blank=True)
     comment = models.TextField()
     meet_time = models.IntegerField()                                   # Check for valid time in meeting_time
     dept = models.CharField(max_length= 4)

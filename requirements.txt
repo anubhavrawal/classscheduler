@@ -1,4 +1,5 @@
 asgiref>=3.4.1
+uwsgi
 Cython
 Django>=3.2.8
 django-tables2>=2.4.1
