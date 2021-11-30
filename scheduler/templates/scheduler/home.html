@@ -146,7 +146,7 @@
 
                 $('#DataTab tr').each(function(row, tr){
                     TableData[row]={
-                        "id" : $('#DataTab').DataTable().cell( (row-1), 0 ).data()
+                        "id" : $('#DataTab').DataTable().cell( (row-1), 0 ).data() //Fetch the id based on the row number
                         ,"crn" : $(tr).find('td:eq(0)').text()
                         , "course_id" :$(tr).find('td:eq(1)').text()
                         , "section" : $(tr).find('td:eq(2)').text()
@@ -275,7 +275,7 @@
                     curr_row.each(function(row, tr){
 
                         rowArray[row]={
-                            "id" : parseInt(jQuery(curr_row).attr('id'))
+                            "id" : parseInt(jQuery(curr_row).attr('id')) //Fetch the id of the currently selected block of table row
                             ,"crn" : $(tr).find('td:eq(0)').text()
                             , "course_id" :$(tr).find('td:eq(1)').text()
                             , "section" : $(tr).find('td:eq(2)').text()
@@ -307,12 +307,14 @@
                         } 
 
                     });
-
+                    //debugger;
+                    console.log(rowArray[0][0])
+                    //debugger;
                     console.log(rowArray[0]);// low the row for debug
                     $.ajax({
                         type : "DELETE",
                         contentType:"application/json; charset=utf-8",
-                        url : 'http://127.0.0.1:8000/saveInstructor' ,
+                        url : 'http://127.0.0.1:8000/saveSemster?id='+rowArray[0]['id'] ,
                         dataType:"json",
                         beforeSend: function (xhr, settings) {
                             xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
@@ -322,7 +324,6 @@
                             console.log(data);
                             console.log(status);
                             alert("Sucessfully deleted your record number: " + data);
-                            
                             curr_row.remove();
                             counter--;
                         },

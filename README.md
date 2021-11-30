@@ -58,6 +58,7 @@ $ python manage.py runserver 0.0.0.0:8080
 	$ sudo apt-get install python3-dev
 	```
 
+
 - Dumping a database
 	```
 	$ mysqldump SCHEDULER > scheduler.db
@@ -79,6 +80,7 @@ $ python manage.py runserver 0.0.0.0:8080
     ```
     $ python3 manage.py runserver
     ```
+<<<<<<< HEAD
 
 # Deploy
 
@@ -87,4 +89,9 @@ $ python manage.py runserver 0.0.0.0:8080
 	$ sudo apt-get install nginx
 	$ sudo apt-get install uwsgi uwsgi-plugin-python3
 	$ 
+=======
+- Run server guidelines
+	```
+	python manage.py runserver 0.0.0.0:8080
+>>>>>>> 354b2cd607027a1263437477070469e53bab038e
 	```

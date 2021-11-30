@@ -93,7 +93,7 @@ def adjust_dates(line):
 import pymysql.cursors
 import pymysql
 
-def semParser (tablename, content):
+def semParser (semesterName, content):
     global classes
     global temp  
     global temp_days

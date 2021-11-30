@@ -3,14 +3,15 @@ from django.shortcuts import render
 # from django.http import HttpResponse
 from django.contrib.auth.models import User
 
-from .serialize import Roomsserializer, Instructorserializer, MeetingTimeserializer
+from .serialize import Roomsserializer, Instructorserializer, MeetingTimeserializer, Semesterserializer
 from .models import *
 from .models import fields
 #from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework.decorators import api_view, renderer_classes
+from rest_framework.decorators import api_view, permission_classes, renderer_classes
 from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
 from rest_framework import status
+from rest_framework.permissions import AllowAny
 from .Schedule_parser import semParser
 
 from .constants import *
@@ -45,61 +46,13 @@ def main_page(request):
         }
         return render(request, 'scheduler/home.html', context)
 
-
-def upload_view(request):
-    context = {}
-    if request.POST:
-        form = UploadFileForm(request.POST, request.FILES)
-        if form.is_valid():
-            semParser('test',request.FILES.get('File_field'))
-    else:
-        form = UploadFileForm()
-
-    context['form'] = UploadFileForm()
-    return render(request, "scheduler/upload.html", context)
-
-
 @api_view(('POST','DELETE',))
 @renderer_classes((TemplateHTMLRenderer, JSONRenderer))
-def saveInstructor(request):
+@permission_classes([AllowAny])
+def saveSemester(request):
     if request.method== "POST":
-        stream = io.BytesIO(request.body)
-        data = JSONParser().parse(stream)
-
-        saveserialize = Instructorserializer(data = data, many=True)
-        
-        if saveserialize.is_valid():
-            saveserialize.update( Instructors, saveserialize.validated_data)
-            return Response(saveserialize.data, status= status.HTTP_201_CREATED)
-
-        else:
-            return Response(saveserialize.error_messages, status= status.HTTP_400_BAD_REQUEST)
+        saveserialize = Roomsserializer(data = request.data, many=True)
     
-    #Handel the delete functionality
-    if request.method== "DELETE":
-        stream = io.BytesIO(request.body)
-        data = JSONParser().parse(stream)
-        pk = data['id'] #fetch primary key to deleate
-
-        saveserialize = Instructorserializer(data = data)
-
-        if saveserialize.is_valid():
-            saveserialize.delete(saveserialize.validated_data, pk) #perform the action
-            return Response( pk , status= status.HTTP_204_NO_CONTENT)
-
-        else:
-            return Response(saveserialize.error_messages, status= status.HTTP_400_BAD_REQUEST)
-
-
-@api_view(('POST','DELETE',))
-@renderer_classes((TemplateHTMLRenderer, JSONRenderer))
-def saveroom(request):
-    if request.method== "POST":
-        stream = io.BytesIO(request.body)
-        data = JSONParser().parse(stream)
-
-        saveserialize = Roomsserializer(data = data, many=True)
-        
         if saveserialize.is_valid():
             saveserialize.update( Rooms, saveserialize.validated_data)
             return Response(saveserialize.data, status= status.HTTP_201_CREATED)
@@ -107,13 +60,9 @@ def saveroom(request):
         else:
             return Response(saveserialize.error_messages, status= status.HTTP_400_BAD_REQUEST)
     
-    #Handel the delete functionality
-    if request.method== "DELETE":
-        stream = io.BytesIO(request.body)
-        data = JSONParser().parse(stream)
-        pk = data['id'] #fetch primary key to deleate
-
-        saveserialize = Roomsserializer(data = data)
+    if request.method =="DELETE":
+        saveserialize = Semesterserializer(data = request.data)
+        pk = int(request.query_params['id'])
 
         if saveserialize.is_valid():
             saveserialize.delete(saveserialize.validated_data, pk) #perform the action
@@ -121,7 +70,20 @@ def saveroom(request):
 
         else:
             return Response(saveserialize.error_messages, status= status.HTTP_400_BAD_REQUEST)
-            
+
+
+def upload_view(request):
+    context = {}
+    if request.POST:
+        form = UploadFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            semParser(form['name'].data,request.FILES.get('File_field'))
+    else:
+        form = UploadFileForm()
+
+    context['form'] = UploadFileForm()
+    return render(request, "scheduler/upload.html", context)
+
 
 
 @api_view(('POST','DELETE',))
@@ -170,6 +132,38 @@ def instructor_page(request):
         'col': fields(Instructors)[1:]
     }
     return render(request, 'scheduler/instructors.html', context)
+
+@api_view(('POST','DELETE',))
+@renderer_classes((TemplateHTMLRenderer, JSONRenderer))
+def saveInstructor(request):
+    if request.method== "POST":
+        stream = io.BytesIO(request.body)
+        data = JSONParser().parse(stream)
+
+        saveserialize = Instructorserializer(data = data, many=True)
+        
+        if saveserialize.is_valid():
+            saveserialize.update( Instructors, saveserialize.validated_data)
+            return Response(saveserialize.data, status= status.HTTP_201_CREATED)
+
+        else:
+            return Response(saveserialize.error_messages, status= status.HTTP_400_BAD_REQUEST)
+    
+    #Handel the delete functionality
+    if request.method== "DELETE":
+        stream = io.BytesIO(request.body)
+        data = JSONParser().parse(stream)
+        pk = data['id'] #fetch primary key to deleate
+
+        saveserialize = Instructorserializer(data = data)
+
+        if saveserialize.is_valid():
+            saveserialize.delete(saveserialize.validated_data, pk) #perform the action
+            return Response( pk , status= status.HTTP_204_NO_CONTENT)
+
+        else:
+            return Response(saveserialize.error_messages, status= status.HTTP_400_BAD_REQUEST)
+
 
 def meeting_times_page(request):
     context = {
