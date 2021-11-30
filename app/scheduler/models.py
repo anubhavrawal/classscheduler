@@ -40,7 +40,7 @@ class Semester(models.Model):
     
 class Header_Map(models.Model):
     PageName = models.CharField(max_length=32)
-    CSVheader =  models.CharField(max_length=32)
+    CSVheader = models.CharField(max_length=32)
     DBheader = models.CharField(max_length=32)
     created_date = models.DateTimeField(default=datetime.now, null=False )
     modified_date = models.DateTimeField(default=datetime.now, null=False)
