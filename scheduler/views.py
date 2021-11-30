@@ -104,7 +104,7 @@ def upload_view(request):
     if request.POST:
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
-            semParser(form['name'].data,request.FILES.get('File_field'))
+            semParser(form['name'].data, form['dept'].data, request.FILES.get('file_field'))
     else:
         form = UploadFileForm()
 
