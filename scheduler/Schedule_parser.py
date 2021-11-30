@@ -128,7 +128,7 @@ def semParser (semesterName, content):
     print(excel_col)
     print(len(excel_col))
     
-    db_col_list = ['crn'] + tmp_db[2:20]+ tmp_db[21:26] + ['meet_time','dept']
+    db_col_list = ['crn'] + tmp_db[2:20]+ tmp_db[21:26] + ['meet_time','dept', 'season_year']
     print(db_col_list)
     print(len(db_col_list))
 

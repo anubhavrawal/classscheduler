@@ -9,11 +9,11 @@ class Homeserializer(serializers.ModelSerializer):
 
     class Meta:
         model = Semester
-        fields=[ 'season_year', 'department']
+        fields=['id','season_year', 'dept']
 
     
     def delete(self, data):
-        Semester.objects.filter(season_year__contains='Fall_2021', dept__contains = 'CS').delete()
+        Semester.objects.filter(season_year__contains=data['season_year'], dept__contains =data['dept']).delete()
         return Response({"message":"Record  was sucessfully deleted!!" })
 
 
@@ -49,7 +49,7 @@ class Semesterserializer(serializers.ModelSerializer):
 
     class Meta:
         model = Semester
-        fields=['id','last_name', 'first_name', 'status', 'department']
+        fields= '__all__'
         list_serializer_class = SemesterListserializer
 
      

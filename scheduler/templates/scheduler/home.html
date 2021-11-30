@@ -15,7 +15,7 @@
         <div class="card mx-auto">
             <h3 class="card-header text-center font-weight-bold text-uppercase py-4">Instructors</h3>
                 <div class="card-body">
-                    
+
                     <div id="table" class="table-editable">
                         
                         <table id="DataTab" class="table table-bordered table-responsive-md table-striped text-center">
@@ -136,8 +136,8 @@
                         xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
                     },
                     data : JSON.stringify(rowArray[0]),
-                    success: function(data, status) {
-                        alert("Sucessfully deleted your record number: " + data);
+                    success: function(data) {
+                        alert(data.message);
                         
                         curr_row.remove();
                         counter--;

@@ -47,13 +47,12 @@ def main_page(request):
 @permission_classes([AllowAny])
 def home_api(request):
     if request.method == 'DELETE':
-        request.data
         saveserialize = Homeserializer(data = request.data)
-        response = {'status': 1, 'message':"Internal Server Error", 'url':'/rooms'} 
+        #response = {'status': 1, 'message':"Internal Server Error", 'url':'/rooms'} 
 
         if saveserialize.is_valid():
             tmp = saveserialize.delete(saveserialize.validated_data) #perform the action
-            return Response( tmp , status= status.HTTP_204_NO_CONTENT)
+            return Response( tmp.data)
         else:
             return Response(saveserialize.error_messages, status= status.HTTP_400_BAD_REQUEST)
 
