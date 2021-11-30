@@ -12,7 +12,7 @@ from rest_framework.decorators import api_view, permission_classes, renderer_cla
 from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
 from rest_framework import status
 from rest_framework.permissions import AllowAny
-from .Schedule_parser import semParser
+from ...tools.Schedule_parser import semParser
 
 from .constants import *
 from django.db import connection
