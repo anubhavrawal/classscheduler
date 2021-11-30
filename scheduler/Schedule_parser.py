@@ -121,7 +121,7 @@ def semParser (semesterName, content):
     df.columns = map(str.lower, df.columns)
 
     #---------------------------Formating header for header_map db---------------------------
-    excel_col =  tmp_col_list[0:17] +['Begin Date',"End Date", "Meeting Time"]+ tmp_col_list[21:26]+ ["Department"]
+    excel_col =  tmp_col_list[0:17] +['Begin Date',"End Date"]+ tmp_col_list[21:26]+ ["Meeting Time","Department"]
     db=conn.execute('''SELECT * FROM scheduler_semester''')
 
     tmp_db =  list(db.keys())[1:-1]
