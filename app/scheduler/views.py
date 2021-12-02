@@ -260,14 +260,6 @@ def room_page(request):
     return render(request, 'scheduler/rooms.html', context)
 
 
-def instructor_page(request):
-    context = {
-        'instructors': Instructors.objects.all()[1:],
-        'col': fields(Instructors)[1:]
-    }
-    return render(request, 'scheduler/instructors.html', context)
-
-
 def help_page(request):
     return render(request, 'scheduler/help.html')
 
