@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+import os
+from pathlib import Path
 
 import pymysql
 pymysql.install_as_MySQLdb()
@@ -26,10 +28,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-)q&khi_t_p-zzsb--#oy_4s2)skmw2ibwq_9+=#kpfe2n)2%d+'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-#ALLOWED_HOSTS = ['classscheduler.cs.wmich.edu','35.46.125.39']
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['classscheduler.cs.wmich.edu','35.46.125.39']
+#ALLOWED_HOSTS = []
 
 # Application definition
 
@@ -140,6 +142,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
