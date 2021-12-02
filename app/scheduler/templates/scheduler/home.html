@@ -1,4 +1,5 @@
 {% extends 'scheduler/base.html' %}
+{% block title %}Home{% endblock title %}
 {% load static %}
 {% block page_css%}
     <link rel="stylesheet" type = "text/css" href= "{% static 'scheduler/home.css' %}" >
@@ -13,10 +14,10 @@
 <div class="row mx-auto">
     <div class="col-md-8 col-sm-12 mx-auto">
         <div class="card mx-auto">
-            <h3 class="card-header text-center font-weight-bold text-uppercase py-4">Home</h3>
+            <h3 class="card-header text-center font-weight-bold text-uppercase py-4"> HOME </h3>
             <div class="card-body">
 
-                <div class="clearfix"> <!---div for the upload modal-->
+                <div class="clearfix"> <!-- div for the upload modal -->
                     <form method="POST" enctype="multipart/form-data">
                     <!-- Button trigger modal -->
                     <button id='upload_buton' type="button" class="btn btn-primary float-left" data-toggle="modal" data-target="#staticBackdrop">
@@ -25,7 +26,7 @@
                     
 
                     <!-- Modal -->
-                    <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal fade" id="staticBackdrop" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
                             <div class="modal-header">
@@ -36,33 +37,32 @@
                             </div>
                             
                             <div class="modal-body">
-                                
-                                
+                              <form>
                                 {% csrf_token %}
                                 {{ form.as_p }}
                                 <input type="submit" value="Submit" class="submit-button">
-                                
-
+                              </form>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-primary" data-dismiss="modal">Done</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                             </div>
                             </div>
                         </div>
                         </div>
                     </div>
                     </form>
+                </div> <!-- end of modal -->
                 
-
                     <div id="table" class="table-editable">
                         
                         <table id="DataTab" class="table table-bordered table-responsive-md table-striped text-center">
                         <thead>
                             <tr>
-                                <th >id</th> 
-                                <th >Avilable Semester</th> 
-                                <th >Department </th> 
-                                <th ></th> 
+                                <th> id </th> 
+                                <th> Avilable Semester</th> 
+                                <th> Department </th> 
+                                <th> Active </th> 
+                                <th> Deleted </th>
                                 <th class="del_row"></th> 
                             </tr>
                         </thead>
@@ -73,6 +73,7 @@
                                 <td >1</td>
                                 <td class="pt-3-half content last_name"> {{ x.season_year }} </td>
                                 <td class="pt-3-half content" > CS </td>
+                                <td class="pt-3-half content" >   </td>
                                 <td class="pt-3-half content" >   </td>
                                 <td> </td>
                             </tr>
@@ -121,14 +122,26 @@
 <script>
     var track_delete;
 
-    //Handel the get request
-    $('#DataTab').on('click', 'td.getcontent', function (e) {
+    //Handel the get request for Active records
+    $('#DataTab').on('click', 'td.getactive', function (e) {
         e.preventDefault();
         
         var term = $(this).closest('tr').find('td:eq(0)').text()
         console.log(term)
 
         window.location.replace('/semester?term='+ term);
+            
+
+    } );
+
+    //Handel the get request for deleted records
+    $('#DataTab').on('click', 'td.getdeleted', function (e) {
+        e.preventDefault();
+        
+        var term = $(this).closest('tr').find('td:eq(0)').text()
+        console.log(term)
+
+        window.location.replace('/deleted?term='+ term);
             
 
     } );
@@ -205,8 +218,13 @@
                 {data: "season_year"},
                 {data: "dept"},
                 {data: null,
-                    className: 'pt-1-half getcontent',
-                    defaultContent:'<button type="button" class="btn btn-primary">Get</button>', 
+                    className: 'pt-1-half getactive',
+                    defaultContent:'<button type="button" class="btn btn-primary"> Get </button>', 
+                    orderable: false },
+
+                {data: null,
+                    className: 'pt-1-half getdeleted',
+                    defaultContent:'<button type="button" class="btn btn-primary"> Get </button>', 
                     orderable: false },
                 {
                     data: null,

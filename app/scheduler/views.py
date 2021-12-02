@@ -80,7 +80,7 @@ def semester_view(request):
     term = request.GET['term']
     with connection.cursor() as cursor:
         cursor.execute("SELECT * FROM " + semester_table +
-                       " Where season_year = '"+term+"'")
+                       " Where season_year = '"+term+"' and deleted = 0")
         items = namedtuplefetchall(cursor)
 
         context = {
@@ -92,6 +92,125 @@ def semester_view(request):
 
         return render(request, 'scheduler/semester.html', context)
 
+@api_view(('POST', 'DELETE',))
+@renderer_classes((TemplateHTMLRenderer, JSONRenderer))
+@permission_classes([AllowAny])
+def saveSemester(request):
+    from_zone = tz.tzutc()
+    to_zone = tz.tzlocal()
+
+    if request.method == "POST":
+        
+
+        stream = io.BytesIO(request.body)
+        data = JSONParser().parse(stream)
+        
+        for info in data:
+            tmpdate = datetime.fromisoformat(
+                info['begin_date'][:-1]).replace(tzinfo=from_zone).astimezone(to_zone)
+            info['begin_date'] = tmpdate.strftime('%m/%d')
+            tmpdate = datetime.fromisoformat(
+                info['end_date'][:-1]).replace(tzinfo=from_zone).astimezone(to_zone)
+            info['end_date'] = tmpdate.strftime('%m/%d')
+        
+        saveserialize = Semesterserializer(data=data, many=True)
+
+        if saveserialize.is_valid():
+            tmp = saveserialize.update(Semester, saveserialize.validated_data)
+            return Response(tmp.data, status=status.HTTP_201_CREATED)
+
+        else:
+            return Response(saveserialize.error_messages, status=status.HTTP_400_BAD_REQUEST)
+
+    if request.method == "DELETE":
+        
+        pk = int(request.query_params['id'])
+
+        tmpdate = datetime.fromisoformat(
+        request.data['begin_date'][:-1]).replace(tzinfo=from_zone).astimezone(to_zone)
+        request.data['begin_date'] = tmpdate.strftime('%m/%d')
+        
+        tmpdate = datetime.fromisoformat(
+        request.data['end_date'][:-1]).replace(tzinfo=from_zone).astimezone(to_zone)
+        request.data['end_date'] = tmpdate.strftime('%m/%d')
+        saveserialize = Semesterserializer(data=request.data)
+
+        if saveserialize.is_valid():
+            # perform the action
+            saveserialize.delete(saveserialize.validated_data, pk, 'DELETE')
+            return Response(pk, status=status.HTTP_204_NO_CONTENT)
+
+        else:
+            return Response(saveserialize.error_messages, status=status.HTTP_400_BAD_REQUEST)
+
+
+@permission_classes([AllowAny])
+def deleted_view(request):
+    items = ''
+    edit = "false"
+    term = request.GET['term']
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT * FROM " + semester_table +
+                       " Where season_year = '"+term+"' and deleted = 1")
+        items = namedtuplefetchall(cursor)
+
+        context = {
+            'input': items,
+            'col': "id",  # fields(Semester)[1:]
+            'edit_mode': "false",
+        }
+        context['form'] = UploadFileForm()
+
+        return render(request, 'scheduler/deleted_record.html', context)
+
+#DELETE request from here recovers the item
+@api_view(('POST', 'DELETE',))
+@renderer_classes((TemplateHTMLRenderer, JSONRenderer))
+@permission_classes([AllowAny])
+def deleted_api(request):
+    from_zone = tz.tzutc()
+    to_zone = tz.tzlocal()
+
+    if request.method == "POST":
+        stream = io.BytesIO(request.body)
+        data = JSONParser().parse(stream)
+        
+        for info in data:
+            tmpdate = datetime.fromisoformat(
+                info['begin_date'][:-1]).replace(tzinfo=from_zone).astimezone(to_zone)
+            info['begin_date'] = tmpdate.strftime('%m/%d')
+            tmpdate = datetime.fromisoformat(
+                info['end_date'][:-1]).replace(tzinfo=from_zone).astimezone(to_zone)
+            info['end_date'] = tmpdate.strftime('%m/%d')
+        
+        saveserialize = Semesterserializer(data=data, many=True)
+
+        if saveserialize.is_valid():
+            tmp = saveserialize.update(Semester, saveserialize.validated_data)
+            return Response(tmp.data, status=status.HTTP_201_CREATED)
+
+        else:
+            return Response(saveserialize.error_messages, status=status.HTTP_400_BAD_REQUEST)
+
+    if request.method == "DELETE":
+        pk = int(request.query_params['id'])
+
+        tmpdate = datetime.fromisoformat(
+        request.data['begin_date'][:-1]).replace(tzinfo=from_zone).astimezone(to_zone)
+        request.data['begin_date'] = tmpdate.strftime('%m/%d')
+        
+        tmpdate = datetime.fromisoformat(
+        request.data['end_date'][:-1]).replace(tzinfo=from_zone).astimezone(to_zone)
+        request.data['end_date'] = tmpdate.strftime('%m/%d')
+        saveserialize = Semesterserializer(data=request.data)
+
+        if saveserialize.is_valid():
+            # perform the action
+            saveserialize.delete(saveserialize.validated_data, pk, 'RECOVER')
+            return Response(pk, status=status.HTTP_204_NO_CONTENT)
+
+        else:
+            return Response(saveserialize.error_messages, status=status.HTTP_400_BAD_REQUEST)
 
 def upload_view(request):
     context = {}
@@ -131,30 +250,6 @@ def saveInstructor(request):
 
         saveserialize = Instructorserializer(data=data)
 
-
-@permission_classes([AllowAny])
-def saveSemester(request):
-    if request.method == "POST":
-        saveserialize = Roomsserializer(data=request.data, many=True)
-
-        if saveserialize.is_valid():
-            saveserialize.update(Rooms, saveserialize.validated_data)
-            return Response(saveserialize.data, status=status.HTTP_201_CREATED)
-
-        else:
-            return Response(saveserialize.error_messages, status=status.HTTP_400_BAD_REQUEST)
-
-    if request.method == "DELETE":
-        saveserialize = Semesterserializer(data=request.data)
-        pk = int(request.query_params['id'])
-
-        if saveserialize.is_valid():
-            # perform the action
-            saveserialize.delete(saveserialize.validated_data, pk)
-            return Response(pk, status=status.HTTP_204_NO_CONTENT)
-
-        else:
-            return Response(saveserialize.error_messages, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(('POST', 'DELETE',))
 @renderer_classes((TemplateHTMLRenderer, JSONRenderer))
@@ -258,14 +353,6 @@ def room_page(request):
         'col': list(Header_Map.objects.filter(PageName="scheduler_rooms").values_list('CSVheader', flat='True'))
     }
     return render(request, 'scheduler/rooms.html', context)
-
-
-def instructor_page(request):
-    context = {
-        'instructors': Instructors.objects.all()[1:],
-        'col': fields(Instructors)[1:]
-    }
-    return render(request, 'scheduler/instructors.html', context)
 
 
 def help_page(request):
