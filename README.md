@@ -93,3 +93,31 @@ $ python manage.py runserver 0.0.0.0:8080
 	```
 	python manage.py runserver 0.0.0.0:8080
 	```
+
+# Deploy2
+
+	```
+	$ sudo apt-get install python3-setuptools libpython-dev python3-dev
+	$ sudo apt-get install nginx
+	$ sudo apt-get install uwsgi uwsgi-plugin-python3
+	
+	#Start the server with uwsgi
+	$uwsgi --socket Class_Scheduler.sock --module Class_Scheduler.wsgi --chmod-socket=666
+	$sudo /etc/init.d/nginx restart #To restart nginx
+	```
+-Test:
+	```
+	$ uwsgi --ini Class_Scheduler_uwsgi.ini
+	```
+
+- Run server guidelines
+	```
+	python manage.py runserver 0.0.0.0:8080
+	```
+
+# Create a Virtual environment
+	```
+	$ sudo apt install virtualenv -y
+	$ virtualenv <envname> -p  python3
+	$
+	```
