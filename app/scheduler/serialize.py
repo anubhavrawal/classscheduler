@@ -82,9 +82,14 @@ class Semesterserializer(serializers.ModelSerializer):
         # Instantiate the parent list serializer.
         return SemesterListserializer(*args, **kwargs)
     
-    def delete(self, request, pk):
+    def delete(self, request, pk, action):
         instance = Semester.objects.get(id = pk)
-        instance.deleted = True
+        if (action == 'RECOVER'):
+            instance.deleted = False
+        
+        elif (action == 'DELETE'):
+            instance.deleted = True
+        instance.save()
         return Response({"message":"Record  was sucessfully deleted!!" })
 #-----------------------Semester Searilizer End------------------------------------------
 

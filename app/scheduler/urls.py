@@ -8,6 +8,9 @@ urlpatterns = [
 
     path("semester", views.semester_view, name="semView"),
     path("saveSemster", views.saveSemester, name='saveSemester'),
+
+    path("deleted", views.deleted_view, name="delted_view"),
+    path("deleted_api", views.deleted_api, name='deleted_api'),
     
     path("rooms", views.room_page, name="scheduler-rooms"),
     path("saverooms", views.saveroom, name="saveRoom"),

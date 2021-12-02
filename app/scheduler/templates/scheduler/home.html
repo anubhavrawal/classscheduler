@@ -58,10 +58,11 @@
                         <table id="DataTab" class="table table-bordered table-responsive-md table-striped text-center">
                         <thead>
                             <tr>
-                                <th >id</th> 
-                                <th >Avilable Semester</th> 
-                                <th >Department </th> 
-                                <th ></th> 
+                                <th> id </th> 
+                                <th> Avilable Semester</th> 
+                                <th> Department </th> 
+                                <th> Active </th> 
+                                <th> Deleted </th>
                                 <th class="del_row"></th> 
                             </tr>
                         </thead>
@@ -72,6 +73,7 @@
                                 <td >1</td>
                                 <td class="pt-3-half content last_name"> {{ x.season_year }} </td>
                                 <td class="pt-3-half content" > CS </td>
+                                <td class="pt-3-half content" >   </td>
                                 <td class="pt-3-half content" >   </td>
                                 <td> </td>
                             </tr>
@@ -120,14 +122,26 @@
 <script>
     var track_delete;
 
-    //Handel the get request
-    $('#DataTab').on('click', 'td.getcontent', function (e) {
+    //Handel the get request for Active records
+    $('#DataTab').on('click', 'td.getactive', function (e) {
         e.preventDefault();
         
         var term = $(this).closest('tr').find('td:eq(0)').text()
         console.log(term)
 
         window.location.replace('/semester?term='+ term);
+            
+
+    } );
+
+    //Handel the get request for deleted records
+    $('#DataTab').on('click', 'td.getdeleted', function (e) {
+        e.preventDefault();
+        
+        var term = $(this).closest('tr').find('td:eq(0)').text()
+        console.log(term)
+
+        window.location.replace('/deleted?term='+ term);
             
 
     } );
@@ -204,8 +218,13 @@
                 {data: "season_year"},
                 {data: "dept"},
                 {data: null,
-                    className: 'pt-1-half getcontent',
-                    defaultContent:'<button type="button" class="btn btn-primary">Get</button>', 
+                    className: 'pt-1-half getactive',
+                    defaultContent:'<button type="button" class="btn btn-primary"> Get </button>', 
+                    orderable: false },
+
+                {data: null,
+                    className: 'pt-1-half getdeleted',
+                    defaultContent:'<button type="button" class="btn btn-primary"> Get </button>', 
                     orderable: false },
                 {
                     data: null,
