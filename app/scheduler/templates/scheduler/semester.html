@@ -23,6 +23,7 @@
                             <tr>
                                 <th> id</th> 
                                 <th> CRN</th> 
+                                <th> Dept </th> 
                                 <th> Course ID</th> 
                                 <th> Section</th> 
                                 <th> Status</th> 
@@ -47,7 +48,6 @@
                                 <th> Fee </th> 
                                 <th> Comment </th> 
                                 <th> Meet_time </th> 
-                                <th> Dept </th> 
                                 <th> Deleted</th> 
                                 <th id = 'delete_column'></th> 
                             </tr>
@@ -58,6 +58,7 @@
                             <tr id="{{ x.id }}">
                                 <td >{{x.id}}</td>
                                 <td class="pt-3-half content "contenteditable="false"> {{ x.crn }} </td>
+                                <td class="pt-3-half content" contenteditable="false"> {{ x.dept }} </td>
                                 <td class="pt-3-half content" contenteditable="false"> {{ x.course_id  }} </td>
                                 <td class="pt-3-half content" contenteditable="false"> {{ x.section }} </td>
                                 <td class="pt-3-half content" contenteditable="false"> {{ x.status }} </td>
@@ -74,15 +75,14 @@
                                 <td class="pt-3-half content" contenteditable="false"> {{ x.waitlist_cap }} </td>
                                 <td class="pt-3-half content" contenteditable="false"> {{ x.spec_appr }} </td>
                                 <td class="pt-3-half content" contenteditable="false"> {{ x.meeting_type }} </td>
-                                <td class="pt-3-half content" contenteditable="false"> {{ x.begin_date }} </td>
-                                <td class="pt-3-half content" contenteditable="false"> {{ x.end_date }} </td>
+                                <td class="pt-3-half content" contenteditable="false"> {{ x.begin_date | date:"M d" }} </td>
+                                <td class="pt-3-half content" contenteditable="false"> {{ x.end_date | date:"M d" }} </td>
                                 <td class="pt-3-half content" contenteditable="false"> {{ x.location }} </td>
                                 <td class="pt-3-half content" contenteditable="false"> {{ x.site_code }} </td>
                                 <td class="pt-3-half content" contenteditable="false"> {{ x.primary_instructor }} </td>
                                 <td class="pt-3-half content" contenteditable="false"> {{ x.fee }} </td>
-                                <td class="pt-3-half content" contenteditable="false"> {{ x.comment }} </td>
+                                <td class="pt-3-half content" contenteditable="false" style="text-align: left;"> {{ x.comment }} </td>
                                 <td class="pt-3-half content" contenteditable="false"> {{ x.meet_time }} </td>
-                                <td class="pt-3-half content" contenteditable="false"> {{ x.dept }} </td>
                                 <td >{{x.deleted}}</td>
                                 <td class="delete_row"> </td>
                             </tr>
@@ -138,6 +138,9 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
 
+    <script type="text/javascript" src="{% static 'scheduler/date.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scheduler/parser.js' %}"></script>
+
     <script>
         $(function(){
             var dataArr = [];
@@ -151,32 +154,32 @@
                 $('#DataTab tr').each(function(row, tr){
                     TableData[row]={
                         "id" : $('#DataTab').DataTable().cell( (row-1), 0 ).data() //Fetch the id based on the row number
-                        ,"crn" : $(tr).find('td:eq(0)').text()
-                        , "course_id" :$(tr).find('td:eq(1)').text()
-                        , "section" : $(tr).find('td:eq(2)').text()
-                        , "status" : $(tr).find('td:eq(3)').text()
-                        , "title" : $(tr).find('td:eq(4)').text()
-                        , "link1" : $(tr).find('td:eq(5)').text()
-                        , "link2" : $(tr).find('td:eq(6)').text()
-                        , "schedule_type" : $(tr).find('td:eq(7)').text()
-                        , "reserved" : $(tr).find('td:eq(8)').text()
-                        , "credit_hours" : $(tr).find('td:eq(9)').text()
-                        , "billing_hours" : $(tr).find('td:eq(10)').text()
-                        , "contact_hours" : $(tr).find('td:eq(11)').text()
-                        , "grad_able" : $(tr).find('td:eq(12)').text()
-                        , "cap" : $(tr).find('td:eq(13)').text()
-                        , "waitlist_cap" : $(tr).find('td:eq(14)').text()
-                        , "spec_appr" : $(tr).find('td:eq(15)').text()
-                        , "meeting_type" : $(tr).find('td:eq(16)').text()
-                        , "begin_date" : $(tr).find('td:eq(17)').text()
-                        , "end_date" : $(tr).find('td:eq(18)').text()
-                        , "location" : $(tr).find('td:eq(19)').text()
-                        , "site_code" : $(tr).find('td:eq(20)').text()
-                        , "primary_instructor" : $(tr).find('td:eq(21)').text()
-                        , "fee" : $(tr).find('td:eq(22)').text()
-                        , "comment" : $(tr).find('td:eq(23)').text()
-                        , "meet_time" : $(tr).find('td:eq(24)').text()
-                        , "dept" : $(tr).find('td:eq(25)').text()
+                        ,"crn" : parseInt($(tr).find('td:eq(0)').text())
+                        , "dept" : $(tr).find('td:eq(1)').text()
+                        , "course_id" :$(tr).find('td:eq(2)').text()
+                        , "section" : $(tr).find('td:eq(3)').text()
+                        , "status" : $(tr).find('td:eq(4)').text()
+                        , "title" : $(tr).find('td:eq(5)').text()
+                        , "link1" : $(tr).find('td:eq(6)').text()
+                        , "link2" : $(tr).find('td:eq(7)').text()
+                        , "schedule_type" : $(tr).find('td:eq(8)').text()
+                        , "reserved" : $(tr).find('td:eq(9)').text()
+                        , "credit_hours" : $(tr).find('td:eq(10)').text()
+                        , "billing_hours" : $(tr).find('td:eq(11)').text()
+                        , "contact_hours" : $(tr).find('td:eq(12)').text()
+                        , "grad_able" : $(tr).find('td:eq(13)').text()
+                        , "cap" : $(tr).find('td:eq(14)').text()
+                        , "waitlist_cap" : $(tr).find('td:eq(15)').text()
+                        , "spec_appr" : $(tr).find('td:eq(16)').text()
+                        , "meeting_type" : $(tr).find('td:eq(17)').text()
+                        , "begin_date" : Date.parse($(tr).find('td:eq(18)').text())
+                        , "end_date" : Date.parse($(tr).find('td:eq(19)').text())
+                        , "location" : $(tr).find('td:eq(20)').text()
+                        , "site_code" : $(tr).find('td:eq(21)').text()
+                        , "primary_instructor" : $(tr).find('td:eq(22)').text()
+                        , "fee" : $(tr).find('td:eq(23)').text()
+                        , "comment" : $(tr).find('td:eq(24)').text()
+                        , "meet_time" : $(tr).find('td:eq(25)').text()
                         , "deleted" : $('#DataTab').DataTable().cell( (row-1), 27 ).data()
                     }    
                 });
@@ -184,11 +187,11 @@
                 TableData.shift();//Remove the first empty cell
                 
                 console.log(TableData);
-        
+
                 $.ajax({
                     type : "POST",
                     contentType:"application/json; charset=utf-8",
-                    url : 'http://127.0.0.1:8000/saveInstructor',
+                    url : 'http://127.0.0.1:8000/saveSemster',
                     dataType:"json",
                     beforeSend: function (xhr, settings) {
                         xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
@@ -218,6 +221,7 @@
             newrow.DT_RowId = ''+counter;
             newrow.id = ''+counter;
             newrow.crn = '00000';
+            newrow.dept = 'CS';
             newrow.course_id  = 'CS 0000';
             newrow.section = '000';
             newrow.status = 'X';
@@ -242,7 +246,6 @@
             newrow.fee = '0';
             newrow.comment = 'Comment here';
             newrow.meet_time = '1';
-            newrow.dept = 'CS';
             newrow.deleted = false;
 
             //Append the row to datatable and redraw the table
@@ -281,31 +284,31 @@
                         rowArray[row]={
                             "id" : parseInt(jQuery(curr_row).attr('id')) //Fetch the id of the currently selected block of table row
                             ,"crn" : $(tr).find('td:eq(0)').text()
-                            , "course_id" :$(tr).find('td:eq(1)').text()
-                            , "section" : $(tr).find('td:eq(2)').text()
-                            , "status" : $(tr).find('td:eq(3)').text()
-                            , "title" : $(tr).find('td:eq(4)').text()
-                            , "link1" : $(tr).find('td:eq(5)').text()
-                            , "link2" : $(tr).find('td:eq(6)').text()
-                            , "schedule_type" : $(tr).find('td:eq(7)').text()
-                            , "reserved" : $(tr).find('td:eq(8)').text()
-                            , "credit_hours" : $(tr).find('td:eq(9)').text()
-                            , "billing_hours" : $(tr).find('td:eq(10)').text()
-                            , "contact_hours" : $(tr).find('td:eq(11)').text()
-                            , "grad_able" : $(tr).find('td:eq(12)').text()
-                            , "cap" : $(tr).find('td:eq(13)').text()
-                            , "waitlist_cap" : $(tr).find('td:eq(14)').text()
-                            , "spec_appr" : $(tr).find('td:eq(15)').text()
-                            , "meeting_type" : $(tr).find('td:eq(16)').text()
-                            , "begin_date" : $(tr).find('td:eq(17)').text()
-                            , "end_date" : $(tr).find('td:eq(18)').text()
-                            , "location" : $(tr).find('td:eq(19)').text()
-                            , "site_code" : $(tr).find('td:eq(20)').text()
-                            , "primary_instructor" : $(tr).find('td:eq(21)').text()
-                            , "fee" : $(tr).find('td:eq(22)').text()
-                            , "comment" : $(tr).find('td:eq(23)').text()
-                            , "meet_time" : $(tr).find('td:eq(24)').text()
-                            , "dept" : $(tr).find('td:eq(25)').text()
+                            , "dept" : $(tr).find('td:eq(1)').text()
+                            , "course_id" :$(tr).find('td:eq(2)').text()
+                            , "section" : $(tr).find('td:eq(3)').text()
+                            , "status" : $(tr).find('td:eq(4)').text()
+                            , "title" : $(tr).find('td:eq(5)').text()
+                            , "link1" : $(tr).find('td:eq(6)').text()
+                            , "link2" : $(tr).find('td:eq(7)').text()
+                            , "schedule_type" : $(tr).find('td:eq(8)').text()
+                            , "reserved" : $(tr).find('td:eq(9)').text()
+                            , "credit_hours" : $(tr).find('td:eq(10)').text()
+                            , "billing_hours" : $(tr).find('td:eq(11)').text()
+                            , "contact_hours" : $(tr).find('td:eq(12)').text()
+                            , "grad_able" : $(tr).find('td:eq(13)').text()
+                            , "cap" : $(tr).find('td:eq(14)').text()
+                            , "waitlist_cap" : $(tr).find('td:eq(15)').text()
+                            , "spec_appr" : $(tr).find('td:eq(16)').text()
+                            , "meeting_type" : $(tr).find('td:eq(17)').text()
+                            , "begin_date" : Date.parse($(tr).find('td:eq(18)').text())
+                            , "end_date" : Date.parse($(tr).find('td:eq(19)').text())
+                            , "location" : $(tr).find('td:eq(20)').text()
+                            , "site_code" : $(tr).find('td:eq(21)').text()
+                            , "primary_instructor" : $(tr).find('td:eq(22)').text()
+                            , "fee" : $(tr).find('td:eq(23)').text()
+                            , "comment" : $(tr).find('td:eq(24)').text()
+                            , "meet_time" : $(tr).find('td:eq(25)').text()
                             , "deleted" : 1
                             
                         } 
@@ -353,6 +356,7 @@
                         visible:false
                     },
                     {data: "crn"},
+                    {data: "dept"},
                     {data: "course_id"},
                     {data: "section"},
                     {data: "status"},
@@ -377,8 +381,6 @@
                     {data: "fee"},
                     {data: "comment"},
                     {data: "meet_time"},
-                    {data: "dept"},
-                    
                     {   data: "deleted",
                         visible:false
                     },

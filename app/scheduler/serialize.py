@@ -24,28 +24,50 @@ class SemesterListserializer(serializers.ListSerializer):
         return Semester.objects.bulk_create(books)
 
     def update(self, instance, validated_data):
-        updated_instances = [] 
-        
         for data in validated_data:
             try:
                 instance = Semester.objects.get(id = data['id'])
-                instance.last_name = data['last_name']
-                instance.first_name = data['first_name']
+                instance.crn = data['crn']
+                instance.dept = data['dept']
+                instance.course_id  = data['course_id']
+                instance.section = data['section']
                 instance.status = data['status']
-                instance.department = data['department']
+                instance.title = data['title']
+                instance.link1 = data['link1']
+                instance.link2 = data['link2']
+                instance.schedule_type = data['schedule_type']
+                instance.reserved = data['reserved']
+                instance.credit_hours = data['credit_hours']
+                instance.billing_hours = data['billing_hours']
+                instance.contact_hours = data['contact_hours']
+                instance.grad_able = data['grad_able']
+                instance.cap = data['cap']
+                instance.waitlist_cap = data['waitlist_cap']
+                instance.spec_appr = data['spec_appr']
+                instance.meeting_type = data['meeting_type']
+                instance.begin_date = data['begin_date']
+                instance.end_date = data['end_date']
+                instance.location = data['location']
+                instance.site_code = data['site_code']
+                instance.primary_instructor = data['primary_instructor']
+                instance.fee = data['fee']
+                instance.comment = data['comment']
+                instance.meet_time = data['meet_time']
+                instance.deleted = data['deleted']
                 instance.save()
             
             except:
                 #validated_data.pop('id')
                 instance = Semester.objects.create(**data)
-            
-
-            updated_instances.append(instance)
         
-        return updated_instances
+        return  Response({"message":"All updates were saved" })
 
 class Semesterserializer(serializers.ModelSerializer):
     id = serializers.IntegerField()
+    crn = serializers.IntegerField()
+    begin_date = serializers.DateTimeField(input_formats=['%m/%d'])
+    end_date = serializers.DateTimeField(input_formats=['%m/%d'])
+
 
     class Meta:
         model = Semester

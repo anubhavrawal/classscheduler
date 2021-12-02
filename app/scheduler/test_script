@@ -1,0 +1,30 @@
+
+
+instance.id =
+instance.crn = 
+instance.dept = 
+instance.course_id  = 
+instance.section = 
+instance.status = 
+instance.title = 
+instance.link1 = 
+instance.link2 = 
+instance.schedule_type = 
+instance.reserved = 
+instance.credit_hours = 
+instance.billing_hours = 
+instance.contact_hours = 
+instance.grad_able = 
+instance.cap = 
+instance.waitlist_cap = 
+instance.spec_appr = 
+instance.meeting_type = 
+instance.begin_date = 
+instance.end_date = 
+instance.location = 
+instance.site_code = 
+instance.primary_instructor = 
+instance.fee = 
+instance.comment = 
+instance.meet_time = 
+instance.deleted = 

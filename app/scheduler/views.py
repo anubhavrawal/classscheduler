@@ -131,22 +131,48 @@ def saveInstructor(request):
 
         saveserialize = Instructorserializer(data=data)
 
-
+@api_view(('POST', 'DELETE',))
+@renderer_classes((TemplateHTMLRenderer, JSONRenderer))
 @permission_classes([AllowAny])
 def saveSemester(request):
+    from_zone = tz.tzutc()
+    to_zone = tz.tzlocal()
+
     if request.method == "POST":
-        saveserialize = Roomsserializer(data=request.data, many=True)
+        
+
+        stream = io.BytesIO(request.body)
+        data = JSONParser().parse(stream)
+        
+        for info in data:
+            tmpdate = datetime.fromisoformat(
+                info['begin_date'][:-1]).replace(tzinfo=from_zone).astimezone(to_zone)
+            info['begin_date'] = tmpdate.strftime('%m/%d')
+            tmpdate = datetime.fromisoformat(
+                info['end_date'][:-1]).replace(tzinfo=from_zone).astimezone(to_zone)
+            info['end_date'] = tmpdate.strftime('%m/%d')
+        
+        saveserialize = Semesterserializer(data=data, many=True)
 
         if saveserialize.is_valid():
-            saveserialize.update(Rooms, saveserialize.validated_data)
-            return Response(saveserialize.data, status=status.HTTP_201_CREATED)
+            tmp = saveserialize.update(Semester, saveserialize.validated_data)
+            return Response(tmp.data, status=status.HTTP_201_CREATED)
 
         else:
             return Response(saveserialize.error_messages, status=status.HTTP_400_BAD_REQUEST)
 
     if request.method == "DELETE":
-        saveserialize = Semesterserializer(data=request.data)
+        
         pk = int(request.query_params['id'])
+
+        tmpdate = datetime.fromisoformat(
+        request.data['begin_date'][:-1]).replace(tzinfo=from_zone).astimezone(to_zone)
+        request.data['begin_date'] = tmpdate.strftime('%m/%d')
+        
+        tmpdate = datetime.fromisoformat(
+        request.data['end_date'][:-1]).replace(tzinfo=from_zone).astimezone(to_zone)
+        request.data['end_date'] = tmpdate.strftime('%m/%d')
+        saveserialize = Semesterserializer(data=request.data)
 
         if saveserialize.is_valid():
             # perform the action
