@@ -110,8 +110,6 @@ def saveSemester(request):
     to_zone = tz.tzlocal()
 
     if request.method == "POST":
-        
-
         stream = io.BytesIO(request.body)
         data = JSONParser().parse(stream)
         
@@ -238,94 +236,7 @@ def upload_view(request):
 
 @api_view(('POST', 'DELETE',))
 @renderer_classes((TemplateHTMLRenderer, JSONRenderer))
-def saveInstructor(request):
-    if request.method == "POST":
-        stream = io.BytesIO(request.body)
-        data = JSONParser().parse(stream)
-
-        saveserialize = Instructorserializer(data=data, many=True)
-
-        if saveserialize.is_valid():
-            saveserialize.update(Instructors, saveserialize.validated_data)
-            return Response(saveserialize.data, status=status.HTTP_201_CREATED)
-
-        else:
-            return Response(saveserialize.error_messages, status=status.HTTP_400_BAD_REQUEST)
-
-    # Handel the delete functionality
-    if request.method == "DELETE":
-        stream = io.BytesIO(request.body)
-        data = JSONParser().parse(stream)
-        pk = data['id']  # fetch primary key to deleate
-
-        saveserialize = Instructorserializer(data=data)
-
-
-@api_view(('POST', 'DELETE',))
-@renderer_classes((TemplateHTMLRenderer, JSONRenderer))
-def saveroom(request):
-    if request.method == "POST":
-        stream = io.BytesIO(request.body)
-        data = JSONParser().parse(stream)
-
-        saveserialize = Roomsserializer(data=data, many=True)
-
-        if saveserialize.is_valid():
-            saveserialize.update(Rooms, saveserialize.validated_data)
-            return Response(saveserialize.data, status=status.HTTP_201_CREATED)
-
-        else:
-            return Response(saveserialize.error_messages, status=status.HTTP_400_BAD_REQUEST)
-
-    # Handel the delete functionality
-    if request.method == "DELETE":
-        stream = io.BytesIO(request.body)
-        data = JSONParser().parse(stream)
-        pk = data['id']  # fetch primary key to deleate
-
-        saveserialize = Roomsserializer(data=data)
-
-        if saveserialize.is_valid():
-            # perform the action
-            saveserialize.delete(saveserialize.validated_data, pk)
-            return Response(pk, status=status.HTTP_204_NO_CONTENT)
-
-        else:
-            return Response(saveserialize.error_messages, status=status.HTTP_400_BAD_REQUEST)
-
-
-@api_view(('POST', 'DELETE',))
-@renderer_classes((TemplateHTMLRenderer, JSONRenderer))
-def saveroom(request):
-    if request.method == "POST":
-        stream = io.BytesIO(request.body)
-        data = JSONParser().parse(stream)
-
-        saveserialize = Roomsserializer(data=data, many=True)
-
-        if saveserialize.is_valid():
-            saveserialize.update(Rooms, saveserialize.validated_data)
-            return Response(saveserialize.data, status=status.HTTP_201_CREATED)
-
-
-def room_page(request):
-    context = {
-        'input': Rooms.objects.all(),
-        'col': list(Header_Map.objects.filter(PageName="scheduler_rooms").values_list('CSVheader', flat='True'))
-    }
-    return render(request, 'scheduler/rooms.html', context)
-
-
-def instructor_page(request):
-    context = {
-        'input': Instructors.objects.all()[1:],
-        'col': fields(Instructors)[1:]
-    }
-    return render(request, 'scheduler/instructors.html', context)
-
-
-@api_view(('POST', 'DELETE',))
-@renderer_classes((TemplateHTMLRenderer, JSONRenderer))
+@permission_classes([AllowAny])
 def saveInstructor(request):
     if request.method == "POST":
         stream = io.BytesIO(request.body)
@@ -357,6 +268,50 @@ def saveInstructor(request):
             return Response(saveserialize.error_messages, status=status.HTTP_400_BAD_REQUEST)
 
 
+@api_view(('POST', 'DELETE',))
+@renderer_classes((TemplateHTMLRenderer, JSONRenderer))
+@permission_classes([AllowAny])
+def saveroom(request):
+    if request.method == "POST":
+        stream = io.BytesIO(request.body)
+        data = JSONParser().parse(stream)
+
+        saveserialize = Roomsserializer(data=data, many=True)
+
+        if saveserialize.is_valid():
+            saveserialize.update(Rooms, saveserialize.validated_data)
+            return Response(saveserialize.data, status=status.HTTP_201_CREATED)
+
+        else:
+            return Response(saveserialize.error_messages, status=status.HTTP_400_BAD_REQUEST)
+
+    # Handel the delete functionality
+    if request.method == "DELETE":
+        stream = io.BytesIO(request.body)
+        data = JSONParser().parse(stream)
+        pk = data['id']  # fetch primary key to deleate
+
+        saveserialize = Roomsserializer(data=data)
+
+        if saveserialize.is_valid():
+            # perform the action
+            saveserialize.delete(saveserialize.validated_data, pk)
+            return Response(pk, status=status.HTTP_204_NO_CONTENT)
+
+        else:
+            return Response(saveserialize.error_messages, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+def instructor_page(request):
+    context = {
+        'input': Instructors.objects.all()[1:],
+        'col': fields(Instructors)[1:]
+    }
+    return render(request, 'scheduler/instructors.html', context)
+
+
+
 def room_page(request):
     context = {
         'input': Rooms.objects.all(),
@@ -376,7 +331,6 @@ def help_page(request):
 def meeting_times_page(request):
     context = {
         'input': Meeting_Times.objects.all(),
-        'temp': list(Meeting_Times.objects.all())[1],
         'col': fields(Meeting_Times)[1:]
     }
     return render(request, 'scheduler/meeting_times.html', context)
@@ -384,6 +338,7 @@ def meeting_times_page(request):
 
 @api_view(('POST', 'DELETE',))
 @renderer_classes((TemplateHTMLRenderer, JSONRenderer))
+@permission_classes([AllowAny])
 def saveMeetingTime(request):
     from_zone = tz.tzutc()
     to_zone = tz.tzlocal()
