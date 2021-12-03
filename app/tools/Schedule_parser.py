@@ -114,6 +114,16 @@ def semParser (semesterName, department, content):
     global temp_days
     global temp_times
 
+    return_status = 0
+
+    classes = []
+    temp = [] 
+    temp_days = ''
+    temp_times = ''
+    day_col = 19
+    time_col = 20
+    comment_col = 24
+
     ### Database connection ###
     # format: engine = sqlalchemy.create_engine('mysql://user:password@server') #
     engine = create_engine("mysql://djangouser:password@127.0.0.1/SCHEDULER")
@@ -262,9 +272,11 @@ def semParser (semesterName, department, content):
     try:
         new_df.to_sql(name='scheduler_semester', if_exists='append' , index_label='id', index= False, con =conn)
         print("Sucessfully Added ")
+        return_status = 1
     except Exception as e :
         print("Failed to add excel information to database....\n Error Message: " + str(e) )
     
     #scheduler_semester
     conn.close()
 
+    return return_status

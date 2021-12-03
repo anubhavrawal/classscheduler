@@ -12,45 +12,61 @@
 
 {% block content %}
 <div class="row mx-auto">
-    <div class="col-md-8 col-sm-12 mx-auto">
+    <div class="col-md-10 col-sm-12 mx-auto">
+
         <div class="card mx-auto">
             <h3 class="card-header text-center font-weight-bold text-uppercase py-4"> HOME </h3>
+
+            {% for message in messages %}
+                <div id = "message" class="container-fluid p-0" >
+                <div class="alert {{ message.tags }} alert-dismissible" role="alert" >
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                    </button>
+                    {{ message }}
+                </div>
+                </div>
+            {% endfor %}
+
+            
+            
             <div class="card-body">
 
-                <div class="clearfix"> <!-- div for the upload modal -->
-                    <form method="POST" enctype="multipart/form-data">
-                    <!-- Button trigger modal -->
-                    <button id='upload_buton' type="button" class="btn btn-primary float-left" data-toggle="modal" data-target="#staticBackdrop">
+                <!-- Button trigger modal -->
+                <button id='upload_buton' type="button" class="btn btn-primary float-left" data-toggle="modal" data-target="#staticBackdrop">
                     Upload Schedule
                     </button>
-                    
 
+                <div> <!-- div for the upload modal -->
                     <!-- Modal -->
                     <div class="modal fade" id="staticBackdrop" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="staticBackdropLabel">Schedule Upload (.xlsx)</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                                </button>
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="staticBackdropLabel">Schedule Upload (.xlsx)</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                
+                                <div class="modal-body">
+                                    <form method="POST" enctype="multipart/form-data">
+                                        
+                                        {% csrf_token %}
+                                        {{ form.as_p }}
+                                        <input type="submit" value="Submit" class="submit-button">
+                                        
+                                    </form>
+                                </div>
+                                
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                </div>
+                                
                             </div>
-                            
-                            <div class="modal-body">
-                              <form>
-                                {% csrf_token %}
-                                {{ form.as_p }}
-                                <input type="submit" value="Submit" class="submit-button">
-                              </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                            </div>
-                            </div>
-                        </div>
                         </div>
                     </div>
-                    </form>
+                    
                 </div> <!-- end of modal -->
                 
                     <div id="table" class="table-editable">
