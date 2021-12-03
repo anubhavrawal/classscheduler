@@ -62,6 +62,7 @@ def main_page(request):
     context = {
         'form' : form,
         'input': Semester.objects.values('season_year').distinct(),
+        'baseURL': request.get_host()
 
     }
     return render(request, 'scheduler/home.html', context)
@@ -97,6 +98,7 @@ def semester_view(request):
             'input': items,
             'col': "id",  # fields(Semester)[1:]
             'edit_mode': "false",
+            'baseURL': request.get_host()
         }
         context['form'] = UploadFileForm()
 
@@ -166,6 +168,7 @@ def deleted_view(request):
             'input': items,
             'col': "id",  # fields(Semester)[1:]
             'edit_mode': "false",
+            'baseURL': request.get_host()
         }
         context['form'] = UploadFileForm()
 
@@ -239,34 +242,43 @@ def upload_view(request):
 @permission_classes([AllowAny])
 def saveInstructor(request):
     if request.method == "POST":
-        stream = io.BytesIO(request.body)
-        data = JSONParser().parse(stream)
+        try:
+            stream = io.BytesIO(request.body)
+            data = JSONParser().parse(stream)
 
-        saveserialize = Instructorserializer(data=data, many=True)
+            saveserialize = Instructorserializer(data=data, many=True)
 
-        if saveserialize.is_valid():
-            resp = saveserialize.update(Instructors, saveserialize.validated_data)
-            return Response(resp, status=status.HTTP_201_CREATED)
+            if saveserialize.is_valid():
+                resp = saveserialize.update(Instructors, saveserialize.validated_data)
+                return Response(resp, status=status.HTTP_201_CREATED)
 
-        else:
-            ret_mess = {"message":"Status: " + saveserialize.errors }
-            return Response(saveserialize.error_messages, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                ret_mess = {"message":"Status: " + saveserialize.errors }
+                return Response(saveserialize.error_messages, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as ex:
+            return Response({"message":"Status: " + ex }, status=status.HTTP_400_BAD_REQUEST)
 
     # Handle the delete functionality
     if request.method == "DELETE":
-        stream = io.BytesIO(request.body)
-        data = JSONParser().parse(stream)
-        pk = data['id']  # fetch primary key to delete
+        try:
+            stream = io.BytesIO(request.body)
+            data = JSONParser().parse(stream)
+            pk = data['id']  # fetch primary key to delete
+            
 
-        saveserialize = Instructorserializer(data=data)
+            saveserialize = Instructorserializer(data=data)
 
-        if saveserialize.is_valid():
-            resp = saveserialize.delete(saveserialize.validated_data, pk)  # perform the action
-            return Response(resp, status=status.HTTP_200_OK)
+            if saveserialize.is_valid():
+                resp = saveserialize.delete(saveserialize.validated_data, pk)  # perform the action
+                return Response(resp, status=status.HTTP_200_OK)
 
-        else:
-            ret_mess = {"message":"Status: " + saveserialize.errors }
-            return Response(ret_mess, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                ret_mess = {"message":"Status: " + saveserialize.errors }
+                return Response(ret_mess, status=status.HTTP_400_BAD_REQUEST)
+        
+        except Exception as ex:
+            return Response({"message":"Status: " + ex }, status=status.HTTP_400_BAD_REQUEST)
+
 
 
 @api_view(('POST', 'DELETE',))
@@ -307,7 +319,8 @@ def saveroom(request):
 def instructor_page(request):
     context = {
         'input': Instructors.objects.all()[1:],
-        'col': fields(Instructors)[1:]
+        'col': fields(Instructors)[1:],
+        'baseURL': request.get_host()
     }
     return render(request, 'scheduler/instructors.html', context)
 
@@ -316,7 +329,8 @@ def instructor_page(request):
 def room_page(request):
     context = {
         'input': Rooms.objects.all(),
-        'col': list(Header_Map.objects.filter(PageName="scheduler_rooms").values_list('CSVheader', flat='True'))
+        'col': list(Header_Map.objects.filter(PageName="scheduler_rooms").values_list('CSVheader', flat='True')),
+        'baseURL': request.get_host()
     }
     return render(request, 'scheduler/rooms.html', context)
 
@@ -332,7 +346,8 @@ def help_page(request):
 def meeting_times_page(request):
     context = {
         'input': Meeting_Times.objects.all(),
-        'col': fields(Meeting_Times)[1:]
+        'col': fields(Meeting_Times)[1:],
+        'baseURL': request.get_host()
     }
     return render(request, 'scheduler/meeting_times.html', context)
 

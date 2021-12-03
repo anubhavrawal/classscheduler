@@ -1,0 +1,15 @@
+#EditorAdd {
+    display: none;
+}
+
+#sendServer{
+    display: none;
+}
+
+.delete_row{
+    display: none;
+}
+
+#delete_column{
+    display: none;
+}

@@ -198,7 +198,7 @@
                 $.ajax({
                     type : "DELETE",
                     contentType:"application/json; charset=utf-8",
-                    url : 'http://127.0.0.1:8000/home_api' ,
+                    url : 'http://{{baseURL}}/home_api' ,
                     dataType:"json",
                     beforeSend: function (xhr, settings) {
                         xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');

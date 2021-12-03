@@ -127,7 +127,7 @@
                 $.ajax({
                     type : "POST",
                     contentType:"application/json; charset=utf-8",
-                    url : 'http://127.0.0.1:8000/saverooms',
+                    url : 'http://{{baseURL}}/saverooms',
                     dataType:"json",
                     beforeSend: function (xhr, settings) {
                         xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
@@ -208,7 +208,7 @@
                     $.ajax({
                         type : "DELETE",
                         contentType:"application/json; charset=utf-8",
-                        url : 'http://127.0.0.1:8000/saverooms' ,
+                        url : 'http://{{baseURL}}/saverooms' ,
                         dataType:"json",
                         beforeSend: function (xhr, settings) {
                             xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');

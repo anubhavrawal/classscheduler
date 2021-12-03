@@ -117,7 +117,7 @@
                 $.ajax({
                     type : "POST",
                     contentType:"application/json; charset=utf-8",
-                    url : 'http://127.0.0.1:8000/saveInstructor',
+                    url : 'http://{{baseURL}}/saveInstructor',
                     dataType:"json",
                     beforeSend: function (xhr, settings) {
                         xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
@@ -128,7 +128,8 @@
                         location.reload();
                     },
                     error : function(data) {
-                        alert("Something went wrong" + data)
+                        debugger;
+                        alert("Something went wrong " + data.message)
                     }
                 });
             });
@@ -199,7 +200,7 @@
                     $.ajax({
                         type : "DELETE",
                         contentType:"application/json; charset=utf-8",
-                        url : 'http://127.0.0.1:8000/saveInstructor' ,
+                        url : 'http://{{baseURL}}/saveInstructor' ,
                         dataType:"json",
                         beforeSend: function (xhr, settings) {
                             xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');

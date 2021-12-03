@@ -29,7 +29,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-)q&khi_t_p-zzsb--#oy_4s2)skmw2ibwq_9+=#kpfe2n)2%d+'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['classscheduler.cs.wmich.edu','35.46.125.39']
 #ALLOWED_HOSTS = []

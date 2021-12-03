@@ -192,7 +192,7 @@
                 $.ajax({
                     type : "POST",
                     contentType:"application/json; charset=utf-8",
-                    url : 'http://127.0.0.1:8000/deleted_api',
+                    url : 'http://{{baseURL}}/deleted_api',
                     dataType:"json",
                     beforeSend: function (xhr, settings) {
                         xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
@@ -322,7 +322,7 @@
                     $.ajax({
                         type : "DELETE",
                         contentType:"application/json; charset=utf-8",
-                        url : 'http://127.0.0.1:8000/deleted_api?id='+rowArray[0]['id'] ,
+                        url : 'http://{{baseURL}}/deleted_api?id='+rowArray[0]['id'] ,
                         dataType:"json",
                         beforeSend: function (xhr, settings) {
                             xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
