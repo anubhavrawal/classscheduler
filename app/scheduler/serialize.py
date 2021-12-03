@@ -2,6 +2,7 @@ from rest_framework import serializers
 from .models import Meeting_Times, Rooms, fields, Instructors, Semester
 from rest_framework.response import Response
 from rest_framework import status
+from django.core.exceptions import ObjectDoesNotExist
 
 
 class Homeserializer(serializers.ModelSerializer):
@@ -102,25 +103,25 @@ class InstructorListserializer(serializers.ListSerializer):
         return Instructors.objects.bulk_create(books)
 
     def update(self, instance, validated_data):
-        updated_instances = [] 
         
-        for data in validated_data:
-            try:
-                instance = Instructors.objects.get(id = data['id'])
-                instance.last_name = data['last_name']
-                instance.first_name = data['first_name']
-                instance.status = data['status']
-                instance.department = data['department']
-                instance.save()
-            
-            except:
-                #validated_data.pop('id')
-                instance = Instructors.objects.create(**data)
-            
-
-            updated_instances.append(instance)
+        message = ''
+        try:
+            for data in validated_data:
+                try:
+                    instance = Instructors.objects.get(id = data['id'])
+                    instance.last_name = data['last_name']
+                    instance.first_name = data['first_name']
+                    instance.status = data['status']
+                    instance.department = data['department']
+                    instance.save()
+                
+                except ObjectDoesNotExist:
+                    instance = Instructors.objects.create(**data)
+            message = "All records were sucessfully added"
+        except Exception as e:
+            message = e
         
-        return updated_instances
+        return {'message': "status: "+message}
 
 class Instructorserializer(serializers.ModelSerializer):
     id = serializers.IntegerField()
@@ -153,9 +154,14 @@ class Instructorserializer(serializers.ModelSerializer):
         return instance
     
     def delete(self, request, pk):
-        instance = Instructors.objects.get(id = pk)
-        instance.delete()
-        return Response({"message":"Record  was sucessfully deleted!!" })
+        try:
+            instance = Instructors.objects.get(id = pk)
+            instance.delete()
+            message = "Record was sucessfully deleted"
+        except Exception as ex:
+            message = ex
+
+        return {"message":"Status: " + message }
 #-----------------------Instructor Searilizer End------------------------------------------
 
 

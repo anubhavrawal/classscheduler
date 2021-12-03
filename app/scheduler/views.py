@@ -245,10 +245,11 @@ def saveInstructor(request):
         saveserialize = Instructorserializer(data=data, many=True)
 
         if saveserialize.is_valid():
-            saveserialize.update(Instructors, saveserialize.validated_data)
-            return Response(saveserialize.data, status=status.HTTP_201_CREATED)
+            resp = saveserialize.update(Instructors, saveserialize.validated_data)
+            return Response(resp, status=status.HTTP_201_CREATED)
 
         else:
+            ret_mess = {"message":"Status: " + saveserialize.errors }
             return Response(saveserialize.error_messages, status=status.HTTP_400_BAD_REQUEST)
 
     # Handle the delete functionality
@@ -260,12 +261,12 @@ def saveInstructor(request):
         saveserialize = Instructorserializer(data=data)
 
         if saveserialize.is_valid():
-            resp = saveserialize.delete(
-                saveserialize.validated_data, pk)  # perform the action
-            return Response(resp, status=status.HTTP_204_NO_CONTENT)
+            resp = saveserialize.delete(saveserialize.validated_data, pk)  # perform the action
+            return Response(resp, status=status.HTTP_200_OK)
 
         else:
-            return Response(saveserialize.error_messages, status=status.HTTP_400_BAD_REQUEST)
+            ret_mess = {"message":"Status: " + saveserialize.errors }
+            return Response(ret_mess, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(('POST', 'DELETE',))

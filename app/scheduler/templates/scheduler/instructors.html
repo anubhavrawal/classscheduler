@@ -124,7 +124,8 @@
                     },
                     data : JSON.stringify(TableData),
                     success: function(data) {
-                        alert("Sucessfully Updated your changes!!");
+                        alert(data.message);
+                        location.reload();
                     },
                     error : function(data) {
                         alert("Something went wrong" + data)
@@ -204,16 +205,18 @@
                             xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
                         },
                         data : JSON.stringify(rowArray[0]),
-                        success: function(data, status) {
-                            console.log(data);
-                            console.log(status);
-                            alert("Sucessfully deleted your record number: " + data);
+                        success: function(data) {
+                            debugger;
+                            alert("Sucessfully deleted your record number: " + data.message);
                             
                             curr_row.remove();
                             counter--;
+                            location.reload();
                         },
                         error : function(data) {
-                            alert("Something went wrong" + data)
+                            debugger;
+                            
+                            alert("Something went wrong" + data.message)
                         }
                     });
 
