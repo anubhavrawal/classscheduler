@@ -27,7 +27,7 @@ from rest_framework.exceptions import APIException
 from dateutil import tz
 from django.http import HttpResponseRedirect
 import json
-
+from django.contrib import messages
 
 def namedtuplefetchall(cursor):
     "Return all rows from a cursor as a namedtuple"
@@ -41,7 +41,17 @@ def main_page(request):
     if request.POST:
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
-            semParser(form['term_Name'].data,form['dept_Name'].data, request.FILES.get('input_file'))
+            parse_status = semParser(form['term_Name'].data,form['dept_Name'].data, request.FILES.get('input_file'))
+
+            if (parse_status == 1):
+                messages.success(request, 'Sucessfully parsed and uploaded submitted file.')
+            else:
+                messages.error(request, 'Cannot properly parse the given file. ')
+                messages.error(request, form.errors)
+
+        else:
+            messages.error(request, 'Invalid form submission.')
+            messages.error(request, form.errors)
     else:
         form = UploadFileForm()
 
